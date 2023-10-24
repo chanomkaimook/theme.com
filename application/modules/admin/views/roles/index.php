@@ -16,19 +16,19 @@
                         <li class="nav-item">
                             <a href="#profile-b1" data-toggle="tab" aria-expanded="true" class="nav-link">
                                 <span class="d-block d-sm-none"><i class="mdi mdi-account"></i></span>
-                                <span class="d-none d-sm-block">Profile</span>
+                                <span class="d-none d-sm-block">data</span>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="#messages-b1" data-toggle="tab" aria-expanded="false" class="nav-link">
                                 <span class="d-block d-sm-none"><i class="mdi mdi-email-outline"></i></span>
-                                <span class="d-none d-sm-block">Messages</span>
+                                <span class="d-none d-sm-block">settings</span>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="#settings-b1" data-toggle="tab" aria-expanded="false" class="nav-link">
                                 <span class="d-block d-sm-none"><i class="mdi mdi-settings"></i></span>
-                                <span class="d-none d-sm-block">Settings</span>
+                                <span class="d-none d-sm-block">log</span>
                             </a>
                         </li>
                     </ul>

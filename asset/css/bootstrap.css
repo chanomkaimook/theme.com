@@ -9070,10 +9070,10 @@ input:focus {
   z-index: 9999; }
 
 .nav-tabs > li > a, .nav-pills > li > a {
-  color: #313a46;
+  color: #adb5bd;
   font-weight: 600; }
   .nav-tabs > li > a.active, .nav-pills > li > a.active {
-    color: #034ea2; }
+    color: #4489e4 !important; }
 
 .nav-pills > a {
   font-weight: 600; }
@@ -9083,7 +9083,7 @@ input:focus {
 
 /* Vertial tab */
 .tabs-vertical-env .nav.tabs-vertical .nav-link {
-  color: #313a46; }
+  color: #adb5bd; }
   .tabs-vertical-env .nav.tabs-vertical .nav-link.active {
     background-color: #034ea2;
     color: #fff; }

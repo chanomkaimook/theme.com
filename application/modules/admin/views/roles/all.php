@@ -6,10 +6,13 @@
         display: -webkit-box;
     }
 
+    .tab-content .card-body-head {
+        min-height: 4rem;
+    }
+
     .tab-content .sub-header {
         overflow: hidden;
         text-overflow: ellipsis;
-        min-height: 2.4rem;
         display: -webkit-box;
         -webkit-line-clamp: 2;
         -webkit-box-orient: vertical;
@@ -18,7 +21,6 @@
     .tab-content .card-title {
         overflow: hidden;
         text-overflow: ellipsis;
-        min-height: 2.4rem;
         display: -webkit-box;
         -webkit-line-clamp: 2;
         -webkit-box-orient: vertical;
@@ -30,8 +32,10 @@
 
         <div class="card">
             <div class="card-body">
-                <h5 class="card-title mb-0 text-info" title="asdasd">Primary Heading</h5>
-                <p class="sub-header" title="asdasd">test permition</p>
+                <div class="card-body-head">
+                    <h5 class="card-title mb-0 text-info" title="asdasd">Primary Heading</h5>
+                    <p class="sub-header" title="asdasd">test permition</p>
+                </div>
 
                 <div class="d-flex">
                     <div class="flex-fill">
@@ -56,8 +60,10 @@
 
         <div class="card">
             <div class="card-body">
-                <h5 class="card-title mb-0 text-info" title="asdasd">Administrator test role & permition </h5>
-                <p class="sub-header" title="asdasd">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Modi rem cum numquam, voluptatum est quo saepe nemo neque laudantium molestiae possimus et totam. Quam inventore pariatur illo? Delectus, quaerat facere?</p>
+                <div class="card-body-head">
+                    <h5 class="card-title mb-0 text-info" title="asdasd">Administrator test role & permition </h5>
+                    <p class="sub-header" title="asdasd">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Modi rem cum numquam, voluptatum est quo saepe nemo neque laudantium molestiae possimus et totam. Quam inventore pariatur illo? Delectus, quaerat facere?</p>
+                </div>
 
                 <div class="d-flex">
                     <div class="flex-fill">
@@ -82,8 +88,10 @@
 
         <div class="card">
             <div class="card-body">
-                <h5 class="card-title mb-0 text-info" title="asdasd">Primary Heading</h5>
-                <p class="sub-header" title="asdasd"></p>
+                <div class="card-body-head">
+                    <h5 class="card-title mb-0 text-info" title="asdasd">Primary Heading</h5>
+                    <p class="sub-header" title="asdasd"></p>
+                </div>
 
                 <div class="d-flex">
                     <div class="flex-fill">
