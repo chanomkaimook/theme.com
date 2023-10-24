@@ -67,7 +67,7 @@ if ($this->session->has_userdata('user_code')) {
                                             <div class="form-group row">
                                                 <div class="col-12">
                                                     <label for="username">ชื่อผู้ใช้</label>
-                                                    <input type="text" id="username" name="username" class="form-control" placeholder="ชื่อผู้ใช้" required>
+                                                    <input type="text" id="username" name="username" class="form-control" placeholder="ชื่อผู้ใช้" required autocomplete="true">
 
                                                 </div>
                                             </div>
@@ -75,7 +75,7 @@ if ($this->session->has_userdata('user_code')) {
                                                 <div class="col-12">
                                                     <a class="text-muted float-right"><small>ลืมรหัสผ่าน?</small></a>
                                                     <label for="password">รหัสผ่าน</label>
-                                                    <input type="password" id="password" name="password" class="form-control" placeholder="รหัสผ่าน" required>
+                                                    <input type="password" id="password" name="password" class="form-control" placeholder="รหัสผ่าน" required autocomplete="true">
 
                                                 </div>
                                             </div>

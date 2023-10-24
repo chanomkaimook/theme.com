@@ -53,6 +53,28 @@
          <!-- Topbar Start -->
          <div class="navbar-custom">
              <ul class="list-unstyled topnav-menu float-right mb-0">
+                 <li class="dropdown notification-list dropdown d-lg-inline-block ml-2">
+                     <a class="nav-link dropdown-toggle mr-0 waves-effect waves-light" data-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
+                         <?php if ($_COOKIE['langadmin'] == 'english') { ?>
+                             <img src="<?= base_url() ?>/asset/images/flags/1x1/us.svg" alt="lang-image" height="20">
+                         <?php } else {  ?>
+                             <img src="<?= base_url() ?>/asset/images/flags/1x1/th.svg" alt="lang-image" height="20">
+                         <?php } ?>
+                     </a>
+                     <div class="dropdown-menu dropdown-menu-right profile-dropdown ">
+                         <!-- item-->
+                         <a onclick="setCookieLanguage('langadmin','thai',365);" data-lang="thailand" class="dropdown-item notify-item">
+                             <img src="<?= base_url() ?>/asset/images/flags/1x1/th.svg" alt="lang-image" class="mr-1" height="20"> <span class="align-middle text-capitalize">thailand</span>
+                         </a>
+
+                         <!-- item-->
+                         <a onclick="setCookieLanguage('langadmin','english',365);" data-lang="english" class="dropdown-item notify-item">
+                             <img src="<?= base_url() ?>/asset/images/flags/1x1/us.svg" alt="lang-image" class="mr-1" height="20"> <span class="align-middle text-capitalize">united states</span>
+                         </a>
+
+                     </div>
+                 </li>
+
                  <li class="dropdown notification-list d-none">
                      <a class="nav-link dropdown-toggle  waves-effect waves-light" data-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
                          <i class="dripicons-bell noti-icon"></i>
@@ -210,8 +232,8 @@
          <!-- end Topbar -->
 
          <script>
-            // check toggle menu
-            checkCookieToggleMenu()
+             // check toggle menu
+             checkCookieToggleMenu()
 
              // =======
              let logoText = "Backend"
@@ -455,6 +477,7 @@
                  //  d.setTime(d.getTime() + 10000);
                  let expires = "expires=" + d.toUTCString();
                  document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+                 console.log('create')
              }
 
              function getCookie(cname) {
@@ -497,6 +520,18 @@
              function setCookieToggleMenu() {
                  let toggleSidebar = document.body.className ? "fullshow" : "enlarged";
                  setCookie("toggleMenu", 30, toggleSidebar);
+             }
+
+             function setCookieLanguage(name, value, days) {
+                 if (days) {
+                     const d = new Date();
+                     d.setTime(d.getTime() + days * 24 * 60 * 60 * 1000);
+                     //  d.setTime(d.getTime() + 10000);
+                     let expires = "expires=" + d.toUTCString();
+                     document.cookie = name + "=" + value + ";" + expires + ";path=/";
+                     console.log('create aa')
+                 }
+                 location.reload();
              }
              //  
              //

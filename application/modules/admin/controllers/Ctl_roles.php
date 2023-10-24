@@ -3,9 +3,13 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class Ctl_roles extends MY_Controller
 {
+    private $model;
+    private $title;
+
     public function __construct()
     {
         parent::__construct();
+        $modelname = 'mdl_page';
 
         $this->load->model('mdl_user');
         $this->load->model('mdl_register');
@@ -13,6 +17,13 @@ class Ctl_roles extends MY_Controller
         $this->load->model('mdl_role_focus');
 
         $this->middleware();
+
+        // set language
+        $this->lang->load('login', $this->langs);
+
+        // setting
+        $this->model = $this->$modelname;
+        $this->title = $this->lang->line('menu_settingroles');
     }
 
     public function index()
@@ -20,7 +31,7 @@ class Ctl_roles extends MY_Controller
         $data['role'] = "";
         $data['level'] = "";
         $this->template->set_layout('lay_main');
-        $this->template->title('ผู้ใช้งาน');
+        $this->template->title($this->title);
         $this->template->build('roles/index',$data);
     }
 

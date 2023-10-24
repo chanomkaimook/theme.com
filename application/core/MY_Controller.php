@@ -3,6 +3,8 @@
 class MY_Controller extends CI_Controller
 {
 
+	public $langs;
+
 	public $site_configs = array();
 	public function __construct()
 	{
@@ -22,6 +24,16 @@ class MY_Controller extends CI_Controller
 		// }
 		// echo '<pre>'; print_r($this->site_configs);
 		// echo '<pre>'; print_r($_POST); exit;
+
+		//
+		//	set language
+		if ($_COOKIE['langadmin'] == NULL) {
+			$this->langs = "thai";
+		} else {
+			$this->langs = $_COOKIE['langadmin'];
+		}
+
+        $this->lang->load('menu', $this->langs);
 	}
 
 	public function middleware()

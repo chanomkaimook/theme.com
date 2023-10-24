@@ -7,7 +7,7 @@ Website: https://coderthemes.com/
 Contact: support@coderthemes.com
 File: Main Css RTl File
 */
-@import url("https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600,700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Prompt:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap");
 html {
   position: relative;
   min-height: 100%; }
@@ -1077,7 +1077,7 @@ Responsive Menu
   min-width: 160px; }
 
 .font-family-secondary {
-  font-family: "Montserrat", sans-serif; }
+  font-family: "IBM Plex Sans", "Prompt", sans-serif; }
 
 .avatar-xs {
   height: 1.5rem;
@@ -1266,8 +1266,8 @@ Responsive Menu
   border-color: #fff; }
 
 .checkbox-info input[type="checkbox"]:checked + label::before {
-  background-color: #34d3eb;
-  border-color: #34d3eb; }
+  background-color: #4489e4;
+  border-color: #4489e4; }
 
 .checkbox-info input[type="checkbox"]:checked + label::after {
   border-color: #fff; }
@@ -1416,13 +1416,13 @@ Responsive Menu
   background-color: #32c861; }
 
 .radio-info input[type="radio"] + label::after {
-  background-color: #34d3eb; }
+  background-color: #4489e4; }
 
 .radio-info input[type="radio"]:checked + label::before {
-  border-color: #34d3eb; }
+  border-color: #4489e4; }
 
 .radio-info input[type="radio"]:checked + label::after {
-  background-color: #34d3eb; }
+  background-color: #4489e4; }
 
 .radio-warning input[type="radio"] + label::after {
   background-color: #ffa91c; }
@@ -1568,7 +1568,7 @@ Responsive Menu
     color: #313a46;
     display: block;
     margin: 0;
-    font-family: "Montserrat", sans-serif; }
+    font-family: "IBM Plex Sans", "Prompt", sans-serif; }
   .inbox-widget .inbox-item .inbox-item-text {
     display: block;
     font-size: 12px;
@@ -1619,7 +1619,7 @@ Responsive Menu
   line-height: 32px;
   text-align: center;
   border-radius: 50%;
-  font-family: "Montserrat", sans-serif;
+  font-family: "IBM Plex Sans", "Prompt", sans-serif;
   font-size: 16px; }
 
 /* Table with Action */
@@ -1794,12 +1794,12 @@ Responsive Menu
 
 .jq-toast-single {
   padding: 15px;
-  font-family: "Montserrat", sans-serif;
+  font-family: "IBM Plex Sans", "Prompt", sans-serif;
   background-color: #313a46;
   font-size: 13px;
   line-height: 22px; }
   .jq-toast-single h2 {
-    font-family: "Montserrat", sans-serif; }
+    font-family: "IBM Plex Sans", "Prompt", sans-serif; }
   .jq-toast-single a {
     font-size: 0.8rem; }
     .jq-toast-single a:hover {
@@ -1843,9 +1843,9 @@ Responsive Menu
   border-color: #32c861; }
 
 .jq-icon-info {
-  background-color: #34d3eb;
+  background-color: #4489e4;
   color: #fff;
-  border-color: #34d3eb; }
+  border-color: #4489e4; }
 
 .jq-icon-warning {
   background-color: #ffa91c;
@@ -2184,7 +2184,7 @@ Slider
 .fc-ltr .fc-basic-view .fc-day-top .fc-day-number {
   float: right;
   margin: 5px;
-  font-family: "Montserrat", sans-serif;
+  font-family: "IBM Plex Sans", "Prompt", sans-serif;
   font-size: 12px; }
 
 .fc-button {
@@ -2530,7 +2530,7 @@ div.dt-button-info {
   .tablesaw thead tr:first-child th {
     border: none;
     font-weight: 500;
-    font-family: "Montserrat", sans-serif; }
+    font-family: "IBM Plex Sans", "Prompt", sans-serif; }
 
 .tablesaw td {
   border-top: 1px solid #f8f8f8 !important; }
@@ -2712,7 +2712,7 @@ div.dt-button-info {
 .autocomplete-group {
   padding: 5px;
   font-weight: 500;
-  font-family: "Montserrat", sans-serif; }
+  font-family: "IBM Plex Sans", "Prompt", sans-serif; }
   .autocomplete-group strong {
     font-weight: 600;
     font-size: 16px;
@@ -2943,7 +2943,7 @@ div.dt-button-info {
 
 .legend tr {
   height: 30px;
-  font-family: "Montserrat", sans-serif; }
+  font-family: "IBM Plex Sans", "Prompt", sans-serif; }
 
 .legendLabel {
   padding-left: 5px !important;
@@ -2962,7 +2962,7 @@ div.dt-button-info {
     display: none; } }
 
 .morris-charts text {
-  font-family: "Montserrat", sans-serif !important;
+  font-family: "IBM Plex Sans", "Prompt", sans-serif !important;
   fill: #adb5bd; }
 
 .morris-hover {
@@ -2975,11 +2975,11 @@ div.dt-button-info {
     padding: 10px 12px;
     background: rgba(49, 58, 70, 0.8);
     color: #f3f3f3;
-    font-family: "Montserrat", sans-serif; }
+    font-family: "IBM Plex Sans", "Prompt", sans-serif; }
     .morris-hover.morris-default-style .morris-hover-row-label {
       font-weight: bold;
       margin: 0.25em 0;
-      font-family: "Montserrat", sans-serif; }
+      font-family: "IBM Plex Sans", "Prompt", sans-serif; }
     .morris-hover.morris-default-style .morris-hover-point {
       white-space: nowrap;
       margin: 0.1em 0;
@@ -3041,7 +3041,7 @@ div.dt-button-info {
 .ct-chart .ct-series.ct-series-g .ct-line,
 .ct-chart .ct-series.ct-series-g .ct-point,
 .ct-chart .ct-series.ct-series-g .ct-slice-donut {
-  stroke: #34d3eb; }
+  stroke: #4489e4; }
 
 .ct-series-a .ct-area,
 .ct-series-a .ct-slice-pie {
@@ -3099,7 +3099,7 @@ div.dt-button-info {
   opacity: 1; }
   .c3-tooltip td {
     border-left: none;
-    font-family: "Montserrat", sans-serif; }
+    font-family: "IBM Plex Sans", "Prompt", sans-serif; }
     .c3-tooltip td > span {
       background: #313a46; }
   .c3-tooltip tr {
@@ -3113,14 +3113,14 @@ div.dt-button-info {
   font-weight: 600; }
 
 .c3 text {
-  font-family: "Montserrat", sans-serif;
+  font-family: "IBM Plex Sans", "Prompt", sans-serif;
   fill: #8c9396; }
 
 .c3 line, .c3 path {
   stroke: #dee2e6; }
 
 .c3-legend-item {
-  font-family: "Montserrat", sans-serif;
+  font-family: "IBM Plex Sans", "Prompt", sans-serif;
   font-size: 14px; }
 
 .c3-chart-arc.c3-target g path {
@@ -3335,7 +3335,7 @@ div.dt-button-info {
   margin-top: 20px; }
 
 .ql-container {
-  font-family: "Montserrat", sans-serif; }
+  font-family: "IBM Plex Sans", "Prompt", sans-serif; }
   .ql-container.ql-snow {
     border-color: #e2e2e2; }
 
@@ -3344,7 +3344,7 @@ div.dt-button-info {
   border-radius: 0.2rem; }
 
 .ql-toolbar {
-  font-family: "Montserrat", sans-serif !important; }
+  font-family: "IBM Plex Sans", "Prompt", sans-serif !important; }
   .ql-toolbar span {
     outline: none !important; }
   .ql-toolbar.ql-snow {
@@ -3459,7 +3459,7 @@ div.dt-button-info {
 
 .tt-suggestion
 .tt-highlight {
-  font-family: "Montserrat", sans-serif; }
+  font-family: "IBM Plex Sans", "Prompt", sans-serif; }
 
 .tt-suggestion
 .typeahead-empty-message {
@@ -3536,7 +3536,7 @@ div.dt-button-info {
   max-width: 200px;
   display: none;
   color: #fff;
-  font-family: "Montserrat", sans-serif; }
+  font-family: "IBM Plex Sans", "Prompt", sans-serif; }
 
 .mapael .zoomIn,
 .mapael .zoomOut,
@@ -3559,14 +3559,14 @@ div.dt-button-info {
   line-height: 24px; }
 
 .mapael .plotLegend text {
-  font-family: "Montserrat", sans-serif !important;
+  font-family: "IBM Plex Sans", "Prompt", sans-serif !important;
   fill: #adb5bd; }
 
 .jvectormap-label {
   border: none;
   background: #313a46;
   color: #fff;
-  font-family: "Montserrat", sans-serif;
+  font-family: "IBM Plex Sans", "Prompt", sans-serif;
   font-size: 0.8rem;
   padding: 5px 8px; }
 
@@ -3718,7 +3718,7 @@ body.authentication-bg.enlarged {
     padding: 5px 12px 5px 12px;
     margin-left: -30px;
     margin-bottom: 15px;
-    font-family: "Montserrat", sans-serif;
+    font-family: "IBM Plex Sans", "Prompt", sans-serif;
     -webkit-box-shadow: 2px 5px 10px rgba(0, 0, 0, 0.12);
             box-shadow: 2px 5px 10px rgba(0, 0, 0, 0.12);
     color: #fff;
@@ -3748,9 +3748,9 @@ body.authentication-bg.enlarged {
     .ribbon-box .ribbon-success:before {
       border-color: #289f4d transparent transparent; }
   .ribbon-box .ribbon-info {
-    background: #34d3eb; }
+    background: #4489e4; }
     .ribbon-box .ribbon-info:before {
-      border-color: #15bdd7 transparent transparent; }
+      border-color: #1f6ed6 transparent transparent; }
   .ribbon-box .ribbon-warning {
     background: #ffa91c; }
     .ribbon-box .ribbon-warning:before {
@@ -3791,7 +3791,7 @@ body.authentication-bg.enlarged {
     .ribbon-box .ribbon-two span {
       font-size: 13px;
       color: #fff;
-      font-family: "Montserrat", sans-serif;
+      font-family: "IBM Plex Sans", "Prompt", sans-serif;
       text-align: center;
       line-height: 20px;
       transform: rotate(-45deg);
@@ -3844,13 +3844,13 @@ body.authentication-bg.enlarged {
       border-right: 3px solid #238b43;
       border-top: 3px solid #238b43; }
   .ribbon-box .ribbon-two-info span {
-    background: #34d3eb; }
+    background: #4489e4; }
     .ribbon-box .ribbon-two-info span:before {
-      border-left: 3px solid #13a9c0;
-      border-top: 3px solid #13a9c0; }
+      border-left: 3px solid #1c62c0;
+      border-top: 3px solid #1c62c0; }
     .ribbon-box .ribbon-two-info span:after {
-      border-right: 3px solid #13a9c0;
-      border-top: 3px solid #13a9c0; }
+      border-right: 3px solid #1c62c0;
+      border-top: 3px solid #1c62c0; }
   .ribbon-box .ribbon-two-warning span {
     background: #ffa91c; }
     .ribbon-box .ribbon-two-warning span:before {
@@ -4047,12 +4047,12 @@ File Manager
   position: relative; }
 
 .pricing-column .plan-title {
-  font-family: "Montserrat", sans-serif;
+  font-family: "IBM Plex Sans", "Prompt", sans-serif;
   letter-spacing: 1px; }
 
 .pricing-column .plan-price {
   font-size: 48px;
-  font-family: "Montserrat", sans-serif; }
+  font-family: "IBM Plex Sans", "Prompt", sans-serif; }
 
 .pricing-column .plan-duration {
   font-size: 15px;
@@ -4083,7 +4083,7 @@ File Manager
 
 .counter-number {
   font-size: 48px;
-  font-family: "Montserrat", sans-serif;
+  font-family: "IBM Plex Sans", "Prompt", sans-serif;
   font-weight: 700;
   color: #fff; }
   .counter-number span {
@@ -4479,7 +4479,7 @@ ul.sitemap-icon ul li a {
       background: #87949b; }
 
 .mail-list a {
-  font-family: "Montserrat", sans-serif;
+  font-family: "IBM Plex Sans", "Prompt", sans-serif;
   vertical-align: middle;
   color: #6c757d;
   padding: 10px 15px;
@@ -6301,10 +6301,10 @@ a.text-success:hover, a.text-success:focus {
   color: #238b43 !important; }
 
 .text-info {
-  color: #34d3eb !important; }
+  color: #4489e4 !important; }
 
 a.text-info:hover, a.text-info:focus {
-  color: #13a9c0 !important; }
+  color: #1c62c0 !important; }
 
 .text-warning {
   color: #ffa91c !important; }
