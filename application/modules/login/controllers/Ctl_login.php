@@ -13,7 +13,7 @@ class Ctl_login extends MY_Controller
 
     public function index()
     {
-        $this->load->driver('cache', array('adapter' => 'apc', 'backup' => 'file'));
+        /* $this->load->driver('cache', array('adapter' => 'apc', 'backup' => 'file'));
         if (!$foo = $this->cache->get('foo')) {
             echo 'Saving to the cache!<br />';
             $foo = 'foobarbaz!';
@@ -22,7 +22,7 @@ class Ctl_login extends MY_Controller
             $this->cache->save('foo', $foo, 10);
         }
 
-        echo $foo;
+        echo $foo; */
         
         // $this->authorization_token->validateToken($headers['Authorization']);
         if ($this->session->userdata('user_code')) {

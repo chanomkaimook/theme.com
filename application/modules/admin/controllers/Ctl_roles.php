@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Ctl_user extends MY_Controller
+class Ctl_roles extends MY_Controller
 {
     public function __construct()
     {
@@ -17,27 +17,11 @@ class Ctl_user extends MY_Controller
 
     public function index()
     {
-        #
-        # session
-        /* $user_level = $this->session->userdata('role_level');
-
-        $role = $this->db->where('level >=',$user_level)->get('roles');
-        $data['role'] = $role->result();
-
-        $optional['select'] = "
-        employee.name as MEMBER_NAME,
-        employee.lastname as MEMBER_LASTNAME,
-        staff.id as STAFF_ID,
-        ";
-
-        $level = $this->db->get('level');
-        $data['level'] = $level->result(); */
-
         $data['role'] = "";
         $data['level'] = "";
-        $this->template->set_layout('lay_datatable');
+        $this->template->set_layout('lay_main');
         $this->template->title('ผู้ใช้งาน');
-        $this->template->build('users',$data);
+        $this->template->build('roles/index',$data);
     }
 
     public function fetch_data()

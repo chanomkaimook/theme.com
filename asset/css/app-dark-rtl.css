@@ -68,7 +68,7 @@ body {
 
 .left-side-menu {
   width: 240px;
-  background: #354a6b;
+  background: #fff;
   bottom: 0;
   padding: 20px 0;
   position: fixed;
@@ -90,7 +90,7 @@ body {
   #sidebar-menu > ul > li > a:hover, #sidebar-menu > ul > li > a:focus, #sidebar-menu > ul > li > a:active {
     color: #ffffff;
     text-decoration: none;
-    background-color: #314462; }
+    background-color: #f9f9f9; }
   #sidebar-menu > ul > li > a > span {
     vertical-align: middle; }
   #sidebar-menu > ul > li > a i {
@@ -108,7 +108,7 @@ body {
 
 #sidebar-menu > ul > li > a.active {
   color: #ffffff;
-  background-color: #314462; }
+  background-color: #f9f9f9; }
 
 #sidebar-menu > ul > li > ul {
   padding-left: 37px; }
@@ -195,7 +195,7 @@ body {
       position: relative;
       width: calc(190px + 70px);
       color: #ffffff;
-      background-color: #314462;
+      background-color: #f9f9f9;
       -webkit-transition: none;
       transition: none; }
       .enlarged .left-side-menu #sidebar-menu > ul > li:hover > a span {
@@ -225,7 +225,7 @@ body {
     padding: 5px 0;
     z-index: 9999;
     display: none;
-    background-color: #354a6b; }
+    background-color: #fff; }
     .enlarged .left-side-menu #sidebar-menu > ul ul li:hover > ul {
       display: block;
       left: 190px;
@@ -272,16 +272,16 @@ body.enlarged {
     display: none; } }
 
 .left-side-menu-light .navbar-custom {
-  background-color: #354a6b;
+  background-color: #fff;
   -webkit-box-shadow: 0px 0px 35px 0px rgba(0, 0, 0, 0.15);
           box-shadow: 0px 0px 35px 0px rgba(0, 0, 0, 0.15);
   /* Search */ }
   .left-side-menu-light .navbar-custom .logo-box {
-    background-color: #354a6b; }
+    background-color: #fff; }
   .left-side-menu-light .navbar-custom .app-search .form-control {
-    background: #3c5379; }
+    background: white; }
   .left-side-menu-light .navbar-custom .app-search .btn {
-    background: #3c5379; }
+    background: white; }
 
 .left-side-menu-light .user-box .img-thumbnail {
   background-color: white;
@@ -392,13 +392,13 @@ body.enlarged {
   height: 70px;
   width: 240px;
   float: left;
-  background-color: #354a6b;
+  background-color: #fff;
   -webkit-transition: all .2s ease-out;
   transition: all .2s ease-out;
   color: #fff; }
 
 .navbar-custom {
-  background-color: #bdc2c5;
+  background-color: #343c49;
   padding: 0 10px 0 0;
   position: fixed;
   left: 0;
@@ -410,7 +410,7 @@ body.enlarged {
     float: left; }
   .navbar-custom .topnav-menu .nav-link {
     padding: 0 15px;
-    color: rgba(255, 255, 255, 0.8);
+    color: rgba(75, 75, 75, 0.8);
     min-width: 32px;
     display: block;
     line-height: 70px;
@@ -436,7 +436,7 @@ body.enlarged {
       padding-left: 20px;
       padding-right: 0;
       color: #fff;
-      background: #adb3b7;
+      background: #272d37;
       -webkit-box-shadow: none;
               box-shadow: none;
       border-radius: 30px 0 0 30px; }
@@ -444,7 +444,7 @@ body.enlarged {
       margin-left: 0;
       z-index: 4; }
     .navbar-custom .app-search .btn {
-      background: #adb3b7;
+      background: #272d37;
       color: rgba(255, 255, 255, 0.7);
       border-color: transparent;
       border-radius: 0 30px 30px 0;
@@ -531,7 +531,7 @@ body.enlarged {
 .page-title-box {
   padding: 10px 20px;
   margin: 0 -22px 24px -22px;
-  background-color: #1d3143;
+  background-color: #f4f4f4;
   -webkit-box-shadow: 0px 0px 35px 0px rgba(0, 0, 0, 0.15);
           box-shadow: 0px 0px 35px 0px rgba(0, 0, 0, 0.15); }
   .page-title-box .page-title {

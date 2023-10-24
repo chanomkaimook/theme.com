@@ -70,7 +70,7 @@ body {
   line-height: 1.5;
   color: #6c757d;
   text-align: left;
-  background-color: #344955; }
+  background-color: #f9f9f9; }
 
 [tabindex="-1"]:focus {
   outline: 0 !important; }
@@ -3153,8 +3153,8 @@ input[type="button"].btn-block {
     border-color: #034ea2;
     background-color: #034ea2; }
   .custom-control-input:focus ~ .custom-control-label::before {
-    -webkit-box-shadow: 0 0 0 1px #344955, 0 0 0 0.15rem rgba(3, 78, 162, 0.25);
-            box-shadow: 0 0 0 1px #344955, 0 0 0 0.15rem rgba(3, 78, 162, 0.25); }
+    -webkit-box-shadow: 0 0 0 1px #f9f9f9, 0 0 0 0.15rem rgba(3, 78, 162, 0.25);
+            box-shadow: 0 0 0 1px #f9f9f9, 0 0 0 0.15rem rgba(3, 78, 162, 0.25); }
   .custom-control-input:focus:not(:checked) ~ .custom-control-label::before {
     border-color: #80bdff; }
   .custom-control-input:not(:disabled):active ~ .custom-control-label::before {
@@ -3363,12 +3363,12 @@ input[type="button"].btn-block {
   .custom-range:focus {
     outline: none; }
     .custom-range:focus::-webkit-slider-thumb {
-      -webkit-box-shadow: 0 0 0 1px #344955, 0 0 0 0.15rem rgba(3, 78, 162, 0.25);
-              box-shadow: 0 0 0 1px #344955, 0 0 0 0.15rem rgba(3, 78, 162, 0.25); }
+      -webkit-box-shadow: 0 0 0 1px #f9f9f9, 0 0 0 0.15rem rgba(3, 78, 162, 0.25);
+              box-shadow: 0 0 0 1px #f9f9f9, 0 0 0 0.15rem rgba(3, 78, 162, 0.25); }
     .custom-range:focus::-moz-range-thumb {
-      box-shadow: 0 0 0 1px #344955, 0 0 0 0.15rem rgba(3, 78, 162, 0.25); }
+      box-shadow: 0 0 0 1px #f9f9f9, 0 0 0 0.15rem rgba(3, 78, 162, 0.25); }
     .custom-range:focus::-ms-thumb {
-      box-shadow: 0 0 0 1px #344955, 0 0 0 0.15rem rgba(3, 78, 162, 0.25); }
+      box-shadow: 0 0 0 1px #f9f9f9, 0 0 0 0.15rem rgba(3, 78, 162, 0.25); }
   .custom-range::-moz-focus-outer {
     border: 0; }
   .custom-range::-webkit-slider-thumb {
@@ -4131,7 +4131,7 @@ input[type="button"].btn-block {
   text-decoration: none; }
 
 .breadcrumb-item.active {
-  color: #dee2e6; }
+  color: #adb5bd; }
 
 .pagination {
   display: -webkit-box;

@@ -1,5 +1,10 @@
 <!-- start page title -->
-
+<style>
+    .page-title-box .page-title {
+        font-size: 15px;
+        font-weight: unset;
+    }
+</style>
 <div id="topbar" class="row">
     <div class="col-12">
         <div class="page-title-box">
@@ -10,7 +15,7 @@
                     <li class="breadcrumb-item active"></li>
                 </ol>
             </div>
-            <h4 class="page-title"></h4>
+            <h4 class="page-title text-capitalize"></h4>
         </div>
     </div>
 </div>
@@ -25,7 +30,7 @@ $(document).ready(function(){
     if(menuShow){
         document.getElementsByClassName('breadcrumb-item')[0].innerHTML = 'Backend'
         document.getElementsByClassName('breadcrumb-item')[1].innerHTML = main.text()
-        document.getElementsByClassName('breadcrumb-item')[2].innerHTML = menuShow
+        document.getElementsByClassName('breadcrumb-item')[2].innerHTML = menu.text()
         document.getElementsByClassName('page-title')[0].innerHTML = menuShow
     }
 })
