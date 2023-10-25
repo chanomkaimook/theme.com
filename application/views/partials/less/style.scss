@@ -26,6 +26,14 @@ $color-tool-main-hover: $color-2;
   }
 }
 
+.btn-primarysoft {
+  background-color: $color-tool-main !important;
+  &:hover {
+    background-color: $color-tool-main-hover !important;
+    color:$color-white !important
+  }
+}
+
 //
 // # Datatable
 //

@@ -21,6 +21,19 @@
                         </ul>
                     </li>
 
+                    <li class="<?= check_permit_menu('bill') ?>">
+                        <a href="javascript: void(0);">
+                            <i class="fe-file-text"></i>
+                            <span> เอกสาร </span>
+                            <span class="menu-arrow"></span>
+                        </a>
+                        <ul class="nav-second-level" aria-expanded="false">
+                            <li><a href="<?= site_url('bill/ctl_quotation') ?>" data-show="quotations">ใบเสนอราคา</a></li>
+                            <li><a href="<?= site_url('bill/ctl_bill') ?>" data-show="document bills">ใบขอรับบริการ</a></li>
+                            <li><a href="<?= site_url('bill/ctl_workorder') ?>" data-show="work orders">Work Order</a></li>
+                        </ul>
+                    </li>
+
                     <li class="<?= check_permit_menu('ticket') ?>">
                         <a href="#">
                             <i class="fas fa-calendar-alt"></i>

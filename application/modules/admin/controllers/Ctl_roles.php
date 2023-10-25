@@ -11,6 +11,7 @@ class Ctl_roles extends MY_Controller
         parent::__construct();
         $modelname = 'mdl_page';
 
+        $this->load->model($modelname);
         $this->load->model('mdl_user');
         $this->load->model('mdl_register');
         $this->load->model('mdl_staff');
@@ -19,7 +20,7 @@ class Ctl_roles extends MY_Controller
         $this->middleware();
 
         // set language
-        $this->lang->load('login', $this->langs);
+        $this->lang->load('roles', $this->langs);
 
         // setting
         $this->model = $this->$modelname;
@@ -30,50 +31,78 @@ class Ctl_roles extends MY_Controller
     {
         $data['role'] = "";
         $data['level'] = "";
-        $this->template->set_layout('lay_main');
+        $this->template->set_layout('lay_datatable');
         $this->template->title($this->title);
         $this->template->build('roles/index',$data);
     }
 
-    public function fetch_data()
+    public function get_dataTable()
     {
         $this->load->helper('my_date');
-        $data = $this->mdl_user->get_data_staff();
 
-        $icon_head = '<i class="mdi mdi-star text-warning mdi-18px" title="verified user"></i>';
+        $request = $_REQUEST;
+
+        $data = $this->model->get_dataShow();
+        $count = $this->model->get_data_all();
 
         $data_result = [];
+
         if ($data) {
             foreach ($data as $row) {
-                #
-                # check level
-                # 1 = operator
-                if($row->LEVEL_ID == 1){
-                    $level_name = $row->LEVEL_NAME;
-                }else{
-                    $level_name = $icon_head.$row->LEVEL_NAME;
+
+                $user_active_id = $row->USER_STARTS ? $row->USER_STARTS : $row->USER_UPDATE;
+
+                if ($row->DATE_UPDATE) {
+                    $query_date = $row->DATE_UPDATE;
+                    $user_active = "(แก้) " . whois($row->USER_UPDATE);
+                } else {
+                    $query_date = $row->DATE_STARTS;
+                    $user_active =  whois($row->USER_STARTS);
                 }
+
+                $dom_workstatus = workstatus($row->WORKSTATUS, 'status');
+                $dom_status = status_offview($row->STATUS_OFFVIEW);
 
                 $sub_data = [];
 
-                $date_start = toThaiDateTimeString($row->DATE_START, 'datetime');
-                $date_update = $row->DATE_UPDATE ? toThaiDateTimeString($row->DATE_UPDATE, 'datetime') : "";
-
                 $sub_data['ID'] = $row->ID;
-                $sub_data[] = $row->ROLES_NAME;
-                $sub_data[] = $level_name;
-                $sub_data[] = $row->NAME;
-                $sub_data[] = $row->LASTNAME;
-                $sub_data[] = $row->USERNAME;
-                $sub_data[] = $date_start;
-                $sub_data[] = $date_update;
-                $sub_data[] = $row->VERIFY;
+                $sub_data['CODE'] = textShow($row->CODE);
+                $sub_data['NAME'] = textShow($row->NAME);
+
+                $sub_data['WORKSTATUS'] = array(
+                    "display"   => $dom_workstatus,
+                    "data"      =>  array(
+                        'id'    => $row->WORKSTATUS,
+                    ),
+                );
+
+                $sub_data['STATUS'] = array(
+                    "display"   => $dom_status,
+                    "data"   => array(
+                        'id'    => $row->STATUS_OFFVIEW,
+                    ),
+                );
+
+                $sub_data['USER_ACTIVE'] = array(
+                    "display"   => $user_active,
+                    "data"   => array(
+                        'id'    => $user_active_id,
+                    ),
+                );
+
+                $sub_data['DATE_ACTIVE'] = array(
+                    "display"   => toThaiDateTimeString($query_date, 'datetime'),
+                    "timestamp" => date('Y-m-d H:i:s', strtotime($query_date))
+                );
 
                 $data_result[] = $sub_data;
             }
         }
+
         $result = array(
-            'data' => $data_result
+            "recordsTotal"      =>     count($data),
+            "recordsFiltered"   =>     $count,
+            "data"              =>     $data_result
         );
 
         echo json_encode($result);

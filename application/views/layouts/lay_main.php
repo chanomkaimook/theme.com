@@ -18,6 +18,9 @@ $path_script_end = 'application/views/partials/e_script_end.php';
     <?php include($path_head_title); ?>
 
     <!-- Link main -->
+    <?php
+    echo $template['partials']['headlink'];
+    ?>
     <?php include($path_head_link); ?>
 </head>
 
@@ -54,6 +57,9 @@ $path_script_end = 'application/views/partials/e_script_end.php';
 
     <!-- Script Begin -->
     <?php include($path_script_begin); ?>
+    <?php
+    echo $template['partials']['footerscript'];
+    ?>
 
     <!-- Script End -->
     <?php include($path_script_end); ?>

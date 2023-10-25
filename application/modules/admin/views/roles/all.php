@@ -7,7 +7,7 @@
     }
 
     .tab-content .card-body-head {
-        min-height: 4rem;
+        min-height: 5rem;
     }
 
     .tab-content .sub-header {
@@ -28,7 +28,7 @@
 </style>
 <div class="row">
 
-    <div class="col-md-4">
+    <div class="col-md-3">
 
         <div class="card">
             <div class="card-body">
@@ -40,15 +40,15 @@
                 <div class="d-flex">
                     <div class="flex-fill">
                         <p class="mb-0 text-danger">Ban</p>
-                        <h1 class="text-center text-secondary">10</h1>
+                        <h3 class="text-center text-secondary">10</h3>
                     </div>
                     <div class="flex-fill">
                         <p class="mb-0 text-info">Assign</p>
-                        <h1 class="text-center text-secondary">5</h1>
+                        <h3 class="text-center text-secondary">5</h3>
                     </div>
                     <div class="flex-fill">
                         <p class="mb-0">Total</p>
-                        <h2 class="text-center text-secondary">0</h2>
+                        <h3 class="text-center text-secondary">0</h3>
                     </div>
                 </div>
             </div>
@@ -56,7 +56,7 @@
 
     </div>
 
-    <div class="col-md-4">
+    <div class="col-md-3">
 
         <div class="card">
             <div class="card-body">
@@ -68,15 +68,15 @@
                 <div class="d-flex">
                     <div class="flex-fill">
                         <p class="mb-0 text-danger">Ban</p>
-                        <h1 class="text-center text-secondary">0</h1>
+                        <h3 class="text-center text-secondary">0</h3>
                     </div>
                     <div class="flex-fill">
                         <p class="mb-0 text-info">Assign</p>
-                        <h1 class="text-center text-secondary">0</h1>
+                        <h3 class="text-center text-secondary">0</h3>
                     </div>
                     <div class="flex-fill">
                         <p class="mb-0">Total</p>
-                        <h1 class="text-center text-secondary">27</h1>
+                        <h3 class="text-center text-secondary">27</h3>
                     </div>
                 </div>
             </div>
@@ -84,7 +84,7 @@
 
     </div>
 
-    <div class="col-md-4">
+    <div class="col-md-3">
 
         <div class="card">
             <div class="card-body">
@@ -96,15 +96,43 @@
                 <div class="d-flex">
                     <div class="flex-fill">
                         <p class="mb-0 text-danger">Ban</p>
-                        <h1 class="text-center text-secondary">0</h1>
+                        <h3 class="text-center text-secondary">0</h3>
                     </div>
                     <div class="flex-fill">
                         <p class="mb-0 text-info">Assign</p>
-                        <h1 class="text-center text-secondary">0</h1>
+                        <h3 class="text-center text-secondary">0</h3>
                     </div>
                     <div class="flex-fill">
                         <p class="mb-0">Total</p>
-                        <h1 class="text-center text-secondary">0</h1>
+                        <h3 class="text-center text-secondary">0</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="col-md-3">
+
+        <div class="card">
+            <div class="card-body">
+                <div class="card-body-head">
+                    <h5 class="card-title mb-0 text-info" title="asdasd">Primary Heading</h5>
+                    <p class="sub-header" title="asdasd"></p>
+                </div>
+
+                <div class="d-flex">
+                    <div class="flex-fill">
+                        <p class="mb-0 text-danger">Ban</p>
+                        <h3 class="text-center text-secondary">0</h3>
+                    </div>
+                    <div class="flex-fill">
+                        <p class="mb-0 text-info">Assign</p>
+                        <h3 class="text-center text-secondary">0</h3>
+                    </div>
+                    <div class="flex-fill">
+                        <p class="mb-0">Total</p>
+                        <h3 class="text-center text-secondary">0</h3>
                     </div>
                 </div>
             </div>

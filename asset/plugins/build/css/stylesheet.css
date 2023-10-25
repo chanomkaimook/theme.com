@@ -6,6 +6,14 @@
   color: #fff;
 }
 
+.btn-primarysoft {
+  background-color: #a7b6c8 !important;
+}
+.btn-primarysoft:hover {
+  background-color: #ffbf00 !important;
+  color: #fff !important;
+}
+
 .dataTables_wrapper .dt-buttons button {
   background-color: #a7b6c8;
   border-color: #fff;

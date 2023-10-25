@@ -1,0 +1,17 @@
+.tool-btn button {
+  background-color: #d11ab9;
+}
+.tool-btn button:hover {
+  background-color: #ffbf00;
+  color: #fff;
+}
+
+.dataTables_wrapper .dt-buttons button {
+  background-color: #d11ab9;
+  border-color: #fff;
+}
+.dataTables_wrapper .dt-buttons button:hover {
+  background-color: #ffbf00;
+}
+
+/*# sourceMappingURL=style.css.map */

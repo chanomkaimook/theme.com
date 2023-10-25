@@ -64,9 +64,7 @@ $path_script_end = 'application/views/partials/e_script_end.php';
 
     <!-- Script Begin -->
     <?php include($path_script_begin); ?>
-    <?php
-    echo $template['partials']['footerscript'];
-    ?>
+
 
     <!-- Required datatable js -->
     <script src="<?= base_url('') ?>asset/libs/datatables/jquery.dataTables.min.js"></script>
@@ -77,6 +75,10 @@ $path_script_end = 'application/views/partials/e_script_end.php';
     <!-- Responsive examples -->
     <script src="<?= base_url('') ?>asset/libs/datatables/dataTables.responsive.min.js"></script>
     <script src="<?= base_url('') ?>asset/libs/datatables/responsive.bootstrap4.min.js"></script>
+    
+    <?php
+    echo $template['partials']['footerscript'];
+    ?>
 
     <!-- Datatables init -->
     <script src="<?= base_url('') ?>asset/js/pages/datatables.init.js"></script>
