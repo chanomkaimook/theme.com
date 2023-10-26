@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Mdl_permit extends CI_Model
+class Mdl_permit_delete extends CI_Model
 
 {
 

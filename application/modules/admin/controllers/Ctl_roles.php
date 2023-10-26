@@ -12,10 +12,10 @@ class Ctl_roles extends MY_Controller
         $modelname = 'mdl_page';
 
         $this->load->model($modelname);
-        $this->load->model('mdl_user');
-        $this->load->model('mdl_register');
-        $this->load->model('mdl_staff');
-        $this->load->model('mdl_role_focus');
+        // $this->load->model('mdl_user');
+        // $this->load->model('mdl_register');
+        // $this->load->model('mdl_staff');
+        $this->load->model('mdl_permit');
 
         $this->middleware();
 
@@ -29,8 +29,40 @@ class Ctl_roles extends MY_Controller
 
     public function index()
     {
-        $data['role'] = "";
-        $data['level'] = "";
+        // permit variable
+        $array_permit = [];
+
+        $q_permit = $this->mdl_permit->get_dataJoinMenus();
+        // ksort($q_permit);
+
+        $array_group = array_unique(array_column($q_permit,'MENUS_CODE'));
+        // ksort($array_group);
+
+        if($array_group){
+            foreach($array_group as $g_index => $g_value){
+                $array_list_detail = [];
+
+                // find permit have menu_id = g_index
+                $array_list = array_keys(array_column($q_permit,'MENUS_CODE'),$g_value);
+
+                if($array_list){
+                    foreach($array_list as $l_index => $l_value){
+                        $array_permit[$g_value][] = $q_permit[$l_value];
+
+                    }
+                }
+                // $array_permit[$g_value] = 
+                
+            }
+        }
+
+echo "<pre>";
+print_r($q_permit);
+echo "=======";
+// print_r($array_permit);
+exit;
+$data['q_permit'] = $q_permit;
+$data['permit_group'] = $array_group;
         $this->template->set_layout('lay_datatable');
         $this->template->title($this->title);
         $this->template->build('roles/index',$data);

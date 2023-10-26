@@ -2,7 +2,6 @@
 
     <!-- Start Content-->
     <div class="container-fluid">
-
         <div class="row">
             <div class="col-md-12">
                 <div class="card-box">
@@ -60,9 +59,59 @@
     </div> <!-- end container-fluid -->
 
 </div> <!-- end content -->
+
+<!-- Modal -->
+<?php require_once('component/modal_roles.php'); ?>
+
 <script>
     let data_1_ready = 0,
         data_2_ready = 0;
+    //  =========================
+    //  =========================
+    //  Setting
+    //  =========================
+    //  =========================
+
+    //  *
+    //  * Dom
+    //  * setting variable
+    //  *
+    const d = document
+    const datatable_name = '#datatable'
+
+    //  *
+    //  * Button
+    //  * setting variable
+    //  *
+    const btn_view = ".btn-view"
+    const btn_add = '.btn-add'
+    const btn_edit = '.btn-edit'
+    const btn_del = '.btn-del'
+    const btn_submit = 'button[type=submit]'
+    const btn_print = '.btn-print'
+
+    //  *
+    //  * Form
+    //  * setting variable
+    //  *
+    const form_name = '#frm'
+    const form_hidden_id = '[name=frm_hidden_id]'
+
+    //  *
+    //  * Modal
+    //  * setting variable
+    //  *
+    const modal_roles = '#modal_roles'
+    const modal = '.modal'
+    const modal_body = '.modal .modal-body'
+    const modal_body_view = '.modal .modal-body-view'
+    const modal_body_form = '.modal .modal-body-form'
+
+    //  =========================
+    //  =========================
+    //  End Setting
+    //  =========================
+    //  =========================
 
     $('body .content:first').append(loading)
     $('body .container-fluid').css('display', 'none')
@@ -94,143 +143,8 @@
             checkReady()
         }
 
-        function getData() {
-            let datatable = $('#datatable')
-
-            let last_columntable = datatable.find('th').length - 1
-            let last_defaultSort = last_columntable - 1
-
-            //
-            // get data to data table
-            //
-            // # domain = form e_navbar.php
-            // # url_moduleControl = form e_navbar.php
-            // # dataTableHeight() = form e_navbar.php
-            // # dataFillterFunc() = form e_navbar.php
-            // # datatable_dom     = form e_navbar.php
-            // # datatable_button  = form e_navbar.php
-            //
-            let urlname = new URL(path(url_moduleControl + '/get_dataTable'), domain);
-
-            let table = datatable.DataTable({
-                scrollY: dataTableHeight(),
-                scrollCollapse: false,
-                autoWidth: false,
-                // searchDelay: datatable_searchdelay_time,
-                lengthMenu: [
-                    [10, 25, 50, 100, -1],
-                    [10, 25, 50, 100, "All"]
-                ],
-                ajax: {
-                    url: urlname,
-                    type: 'get',
-                    dataType: 'json',
-                    data: dataFillterFunc()
-                },
-                order: [],
-                columnDefs: [{
-                        responsivePriority: 1,
-                        targets: 0
-                    },
-
-                    {
-                        responsivePriority: 2,
-                        targets: last_columntable
-                    },
-                    {
-                        "targets": [2, 3, 4],
-                        "className": "truncate"
-                    },
-                ],
-                columns: [{
-                        "data": "CODE",
-                        "width": "60px",
-                        "render": function(data, type, row, meta) {
-                            let code = data
-                            if (!code) {
-                                code = ""
-                            }
-                            return "<b>#" + code + "</b>"
-                        }
-                    },
-                    {
-                        "data": "NAME",
-                        "width": "",
-                        "createdCell": function(td, cellData, rowData, row, col) {
-                            $(td).css('min-width', '150px')
-                        },
-                        "render": function(data, type, row, meta) {
-
-                            let task = `${data}`
-                            if (row.CODE) {
-                                task += `<a href=# data-target="#modal_ticket" class="text-info" data-toggle="modal" data-code="${row.CODE}">#${row.CODE}</a> `
-                            }
-
-                            return task
-                        }
-                    },
-                    {
-                        "data": "WORKSTATUS.display",
-                    },
-                    {
-                        "data": "STATUS.display",
-                    },
-                    {
-                        "data": {
-                            _: 'USER_ACTIVE.display', // default show
-                        }
-                    },
-                    {
-                        "data": {
-                            _: 'DATE_ACTIVE.display', // default show
-                            sort: 'DATE_ACTIVE.timestamp'
-                        }
-                    },
-                    {
-                        "data": "ID",
-                        "render": function(data, type, row, meta) {
-                            let btn_view = `<a data-id="${data}" class="btn-view dropdown-item" href="#" data-code="${row.CODE}" ><i class="mdi mdi-magnify mr-2 text-info font-18 vertical-middle"></i>รายละเอียด</a>`
-                            let btn_edit = `<a data-id="${data}" class="btn-edit dropdown-item" href="#"><i class="mdi mdi-wrench mr-2 text-warning font-18 vertical-middle"></i>แก้ไข</a>`
-                            let btn_del = `<a data-id="${data}" class="btn-del dropdown-item" href="#" ><i class="mdi mdi-delete mr-2 text-danger font-18 vertical-middle"></i>ลบรายการ</a>`
-
-                            if (row.STATUS.data.id == 1) {
-                                btn_edit = ''
-                            }
-
-                            let table_action = `
-                                <div class="btn-group dropdown">
-                                    <a href="javascript: void(0);" class="table-action-btn dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="mdi mdi-dots-horizontal"></i></a>
-                                    <div class="dropdown-menu dropdown-menu-right">
-                                        ${btn_view}
-                                        ${btn_edit}
-                                        ${btn_del}
-                                    </div>
-                                </div>
-                            `
-                            return table_action
-                        },
-                        "width": "60px",
-                        "orderable": false
-                    }
-                ],
-
-                dom: datatable_dom,
-                buttons: datatable_button,
-            })
-        }
-
-        /*  function getData_2() {
-             let url = new URL(path(url_moduleControl + '/get_user'), domain)
-             fetch(url)
-                 .then(res => res.json())
-                 .then(resp => {
-                     data_2_ready = 1
-
-                     checkReady()
-
-                     console.log('data_2')
-                 })
-         } */
-
     })
 </script>
+<?php include('script.php') ?>
+<?php include('script_crud.php') ?>
+<?php include('script_datatable.php') ?>
