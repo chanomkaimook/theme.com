@@ -6,8 +6,11 @@
         data-toggle="select2" multiple="multiple" data-placeholder="Choose ..." required>
             <?php
             foreach ($q_permit as $r_permit) :
+
+                $array_group = array_
                 $name = $r_permit->NAME;
             ?>
+            <optgroup label="Alaskan/Hawaiian Time Zone">
                 <option value="<?= $r_permit->ID; ?>"><?= $name; ?></option>
             <?php
             endforeach;
