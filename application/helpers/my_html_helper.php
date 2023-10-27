@@ -59,7 +59,7 @@ function imageis(String $path = null, String $name = null, String $type = null, 
   return $result;
 }
 
-function workstatus(int $status = null,string $text = null, array $optional = ['html' => true])
+function workstatus(int $status = null, string $text = null, array $optional = ['html' => true])
 {
   $ci = &get_instance();
   $ci->load->database();
@@ -68,19 +68,19 @@ function workstatus(int $status = null,string $text = null, array $optional = ['
 
   switch ($status) {
     case 1:
-      $result = '<span class="badge badge-primary"> '.$text.' </span>';
+      $result = '<span class="badge badge-primary"> ' . $text . ' </span>';
       break;
     case 2:
-      $result = '<span class="badge badge-warning"> '.$text.' </span>';
+      $result = '<span class="badge badge-warning"> ' . $text . ' </span>';
       break;
     case 3:
-      $result = '<span class="badge badge-success"> '.$text.' </span>';
+      $result = '<span class="badge badge-success"> ' . $text . ' </span>';
       break;
     case 4:
-      $result = '<span class="badge badge-danger"> '.$text.' </span>';
+      $result = '<span class="badge badge-danger"> ' . $text . ' </span>';
       break;
-    default :
-      $result = '<span class="badge badge-primary"> '.$text.' </span>';
+    default:
+      $result = '<span class="badge badge-primary"> ' . $text . ' </span>';
       break;
   }
 
@@ -89,4 +89,57 @@ function workstatus(int $status = null,string $text = null, array $optional = ['
   }
 
   return $result;
+}
+
+/**
+ * creat role by jstree
+ *
+ * @param array $array = [menu name] = array(
+ *  [index]=> 
+ *    array(
+ *      [column] => value
+ *    )
+ *  )
+ * @return void
+ */
+function html_roles_jstree(array $array = null)
+{
+  $ci = &get_instance();
+  $ci->load->database();
+
+  $ci->load->helper('cookie');
+
+  $jstree = '';
+
+  if ((array)$array && count($array)) {
+    foreach ($array as $index => $array_one) {
+
+      // DOM li sub
+      $li_permit = '';
+
+      foreach ($array_one as $key => $array_two) {
+        $permit_id = $array_two['ID'];
+        $permit_name = textLang($array_two['NAME'],$array_two['NAME_US']);
+        $menus_name = textLang($array_two['MENUS_NAME'],$array_two['MENUS_NAME_US']);
+
+        $li_permit .= '<li data-jstree=\'{"icon":"mdi mdi-file-outline"}\' 
+        data-id="'.$permit_id.'">'.$permit_name.'</li>';
+        
+      }
+
+      // DOM ul sub
+      $ul_permit_name = '<ul>' . $li_permit . '</ul>';
+
+      // DOM li head
+      $li_menus = '<li data-jstree=\'{"opened":true}\'>' . $menus_name . $ul_permit_name . '</li>';
+
+      // DOM ul head
+      $ul_menus = '<ul>' . $li_menus . '</ul>';
+
+      // DOM jstree
+      $jstree .= '<div class="" data-plugin="jstree_checkbox">' . $ul_menus . '</div>';
+    }
+  }
+
+  return $jstree;
 }

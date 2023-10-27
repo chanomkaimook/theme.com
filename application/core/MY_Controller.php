@@ -33,6 +33,7 @@ class MY_Controller extends CI_Controller
 			$this->langs = $_COOKIE['langadmin'];
 		}
 
+        $this->lang->load('main', $this->langs);
         $this->lang->load('menu', $this->langs);
 	}
 

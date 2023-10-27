@@ -9,13 +9,13 @@ class Ctl_roles extends MY_Controller
     public function __construct()
     {
         parent::__construct();
-        $modelname = 'mdl_page';
+        $modelname = 'mdl_roles';
 
-        $this->load->model($modelname);
+        $this->load->model('admin/mdl_roles');
+        // $this->load->model($modelname,'admin');
         // $this->load->model('mdl_user');
         // $this->load->model('mdl_register');
         // $this->load->model('mdl_staff');
-        $this->load->model('mdl_permit');
 
         $this->middleware();
 
@@ -29,45 +29,47 @@ class Ctl_roles extends MY_Controller
 
     public function index()
     {
+        $this->load->library('roles');
         // permit variable
-        $array_permit = [];
+        $array_permit = $this->roles->get_data();
+        $data['permit'] = $array_permit;
 
-        $q_permit = $this->mdl_permit->get_dataJoinMenus();
-        // ksort($q_permit);
-
-        $array_group = array_unique(array_column($q_permit,'MENUS_CODE'));
-        // ksort($array_group);
-
-        if($array_group){
-            foreach($array_group as $g_index => $g_value){
-                $array_list_detail = [];
-
-                // find permit have menu_id = g_index
-                $array_list = array_keys(array_column($q_permit,'MENUS_CODE'),$g_value);
-
-                if($array_list){
-                    foreach($array_list as $l_index => $l_value){
-                        $array_permit[$g_value][] = $q_permit[$l_value];
-
-                    }
-                }
-                // $array_permit[$g_value] = 
-                
-            }
-        }
-
-echo "<pre>";
-print_r($q_permit);
-echo "=======";
-// print_r($array_permit);
-exit;
-$data['q_permit'] = $q_permit;
-$data['permit_group'] = $array_group;
         $this->template->set_layout('lay_datatable');
         $this->template->title($this->title);
-        $this->template->build('roles/index',$data);
+        $this->template->set_partial(
+            'headlink',
+            'partials/link/page',
+            array(
+                'data'  => array(
+                    '<link href="' . base_url('') . 'asset/libs/treeview/style.css" rel="stylesheet" type="text/css" />',
+                )
+            )
+        );
+        $this->template->set_partial(
+            'footerscript',
+            'partials/script/page',
+            array(
+                'data'  => array(
+                    '<script src="' . base_url('') . 'asset/libs/treeview/jstree.min.js"></script>',
+                )
+            )
+        );
+        $this->template->build('roles/index', $data);
     }
 
+    /**
+     *
+     * get data to datatable
+     * non-severside (load all data before display)
+     *
+     * # whois() = my_sql_helper
+     * # textShow() = my_text_helper
+     * # workstatus() = my_html_helper
+     * # status_offview() = my_html_helper
+     * # toThaiDateTimeString() = my_date_helper
+     * 
+     * @return void
+     */
     public function get_dataTable()
     {
         $this->load->helper('my_date');
@@ -140,34 +142,68 @@ $data['permit_group'] = $array_group;
         echo json_encode($result);
     }
 
-    public function get_user()
+    //  *
+    //  * CRUD
+    //  * read
+    //  * 
+    //  * get data for item id
+    //  *
+    public function get_data()
     {
-        $data = $this->mdl_user->get_data_staff();
-        $data_role_focus = $this->mdl_role_focus->get_data();
-        $result = array(
-            'data' => $data,
-            'data_role_focus' => $data_role_focus
-        );
+        $request = $_REQUEST;
+        $item_id = $request['id'];
+        $data = $this->model->get_data($item_id);
+
+        $result = $data;
         echo json_encode($result);
     }
 
-    public function update_user()
+    //  *
+    //  * CRUD
+    //  * insert
+    //  * 
+    //  * insert data
+    //  *
+    public function insert_data()
     {
-        $data = $this->mdl_user->update_user();
-        $result = array(
-            'data' => $data
-        );
+        # code...
+        if ($this->input->server('REQUEST_METHOD') == 'POST') {
 
-        echo json_encode($result);
+            $returns = $this->model->insert_data();
+            echo json_encode($returns);
+        } 
     }
 
-    public function delete_user()
+    //  *
+    //  * CRUD
+    //  * update
+    //  * 
+    //  * update data
+    //  *
+    public function update_data()
     {
-        $data = $this->mdl_user->delete_user();
-        $result = array(
-            'data' => $data
-        );
+        # code...
+        if ($this->input->server('REQUEST_METHOD') == 'POST') {
 
-        echo json_encode($result);
+            $returns = $this->model->update_data();
+            echo json_encode($returns);
+        } 
+    }
+
+
+    //  *
+    //  * CRUD
+    //  * delete
+    //  * 
+    //  * delete data
+    //  *
+    public function delete_data()
+    {
+        # code...
+        if ($this->input->server('REQUEST_METHOD') == 'POST') {
+
+            $returns = $this->model->delete_data();
+            echo json_encode($returns);
+        } 
     }
 }

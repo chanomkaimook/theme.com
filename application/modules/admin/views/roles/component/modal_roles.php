@@ -16,7 +16,7 @@
             }
         }
     </style>
-    <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title mt-0 modal_text_header"></h4>
@@ -45,9 +45,9 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">ปิด</button>
-                    <button type="button" class="btn-edit btn btn-warning waves-effect waves-light px-4">แก้ไข</button>
-                    <button type="submit" class="btn btn-success waves-effect waves-light px-4">บันทึก</button>
+                    <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal"><?= mb_ucfirst($this->lang->line('_form_btn_close')) ?></button>
+                    <button type="button" class="btn-edit btn btn-warning waves-effect waves-light px-4"><?= mb_ucfirst($this->lang->line('_form_btn_edit')) ?></button>
+                    <button type="submit" class="btn btn-success waves-effect waves-light px-4"><?= mb_ucfirst($this->lang->line('_form_btn_submit')) ?></button>
                 </div>
             </form>
             <!-- End Form -->
@@ -59,5 +59,9 @@
 <script>
     $(document).ready(function() {
         $('[data-toggle=select2]').select2()
+
+        $('[data-plugin=jstree_checkbox]').jstree({
+            "plugins": ["checkbox"]
+        })
     })
 </script>

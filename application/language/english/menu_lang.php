@@ -1,2 +1,2 @@
 <?php
-	$lang['menu_settingroles'] = "setting roles";
+	$lang['_menu_settingroles'] = "roles";

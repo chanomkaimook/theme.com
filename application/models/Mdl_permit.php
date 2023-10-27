@@ -41,7 +41,7 @@ class Mdl_permit extends CI_Model
      *                           ]
      * @return void
      */
-    public function get_data(int $id = null, array $optionnal = [], string $type = "result")
+    public function get_data(int $id = null, array $optionnal = null, string $type = "result")
     {
         $sql = (object) $this->get_sql($id, $optionnal);
         $query = $sql->get();
@@ -55,7 +55,7 @@ class Mdl_permit extends CI_Model
 
     #
     # count data to show all
-    public function get_data_all(int $id = null, array $optionnal = [])
+    public function get_data_all(int $id = null, array $optionnal = null)
     {
         # code...
         $optionnal['select'] = 'count(' . $this->table . '.id) as total';
@@ -79,21 +79,25 @@ class Mdl_permit extends CI_Model
      *                           ]
      * @return void
      */
-    public function get_dataJoinMenus(int $id = null, array $optionnal = [], string $type = "result")
+    public function get_dataJoinMenus(int $id = null, array $optionnal = null, string $type = "result")
     {
         $optionnal['select'] = $this->table.".*,
         menus.name as MENUS_NAME,
-        menus.name_us as MENUS_NAME_US";
+        menus.name_us as MENUS_NAME_US
+        ";
 
-        $$optionnal['order_by'] = array($this->table.'.sort','asc');
+        $optionnal['order_by'] = array(
+            'menus.sort' => 'asc',
+            $this->table.'.sort' => 'asc',
+        );
         $sql = (object) $this->get_sql($id, $optionnal);
         $sql->join('menus',$this->table.'.menus_id=menus.id','left');
         $query = $sql->get();
 
-        if ($type == "row" || $id) {
+        if ($id) {
             return $query->row();
         } else {
-            return $query->result();
+            return $query->$type();
         }
     }
     //  =========================
@@ -117,7 +121,7 @@ class Mdl_permit extends CI_Model
      * @param string $type
      * @return void
      */
-    function get_sql(int $id = null, array $optionnal = [], string $type = 'result')
+    function get_sql(int $id = null, array $optionnal = null, string $type = 'result')
     {
         $request = $_REQUEST;
 

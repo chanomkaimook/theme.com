@@ -1,43 +1,99 @@
 <script>
-    //  *
-    //  * CRUD
-    //  * click button add
-    //  * 
-    //  * call function open form for add data
-    //  *
-    $(d).on('click', btn_add, function(e) {
-        e.preventDefault()
-        add_data()
+    $(d).ready(function() {
 
-        // $(form_name).find(form_hidden_id).val('')
+        //  =========================
+        //  =========================
+        //  Event
+        //  =========================
+        //  =========================
+
+        //  *
+        //  * Form
+        //  * click button submit
+        //  * 
+        //  * call function submit data on form
+        //  * #async_insert_data() = script_crud.php
+        //  * #async_update_data() = script_crud.php
+        //  *
+        $(d).on('submit', form_name, function(e) {
+            e.preventDefault()
+            let f = $(modal_body_form)
+            let item_id = $(modal).find(form_hidden_id).val()
+
+            let data = $(form_name).serializeArray()
+            let func
+
+            if (item_id) {
+                func = async_update_data(item_id, data)
+            } else {
+                func = async_insert_data(data)
+
+            }
+
+            func
+                .then((resp) => {
+                    if (resp.error == 1) {
+                        swalalert('error', resp.txt, {
+                            auto: false
+                        })
+                    } else {
+                        Swal.fire({
+                            type: 'success',
+                            title: 'สำเร็จ',
+                            text: resp.txt,
+                            timer: swal_autoClose,
+                        }).then((result) => {
+
+                            dataReload()
+
+                        })
+                    }
+                });
+
+
+            return false
+        })
+
+        //  *
+        //  * CRUD
+        //  * click button add
+        //  * 
+        //  * call function open form for add data
+        //  *
+        $(d).on('click', btn_add, function(e) {
+            e.preventDefault()
+            add_data()
+
+            // $(form_name).find(form_hidden_id).val('')
+        })
+
+        //  *
+        //  * Modal
+        //  * Modal Hide
+        //  * 
+        //  * call reset form when modal hide
+        //  *
+        $(modal).on('hidden.bs.modal', function(e) {
+            e.preventDefault()
+
+            resetForm()
+        })
+
+        //  *
+        //  * Modal
+        //  * Modal Show
+        //  * 
+        //  * add DOM loading when modal to show
+        //  *
+        $(modal).on('show.bs.modal', function() {
+            modalLoading()
+        })
     })
-
-
-
-
-
-
-    //  *
-    //  * Modal
-    //  * Modal Hide
-    //  * 
-    //  * call reset form when modal hide
-    //  *
-    $(modal).on('hidden.bs.modal', function(e) {
-        e.preventDefault()
-
-        resetForm()
-    })
-
-    //  *
-    //  * Modal
-    //  * Modal Show
-    //  * 
-    //  * add DOM loading when modal to show
-    //  *
-    $(modal).on('show.bs.modal', function() {
-        modalLoading()
-    })
+    //  =========================
+    //  =========================
+    //  End Event
+    //  =========================
+    //  =========================
 
     //  =========================
     //  =========================
@@ -118,7 +174,7 @@
     //  Base Function
     //  =========================
     //  =========================
-    
+
     //  *
     //  * Form
     //  * add
@@ -143,6 +199,8 @@
         form.forEach((item, key) => {
             document.getElementsByTagName('form')[key].reset();
         })
+
+        $('[data-plugin=jstree_checkbox]').jstree("deselect_all");
     }
 
     //  *
@@ -180,4 +238,82 @@
     //  End Base Function
     //  =========================
     //  =========================
+</script>
+
+<script>
+    $(document).ready(function() {
+        $("#basicTree").jstree({
+            core: {
+                themes: {
+                    responsive: !1
+                }
+            },
+            types: {
+                default: {
+                    icon: "mdi mdi-folder-star"
+                },
+                file: {
+                    icon: "mdi mdi-file"
+                }
+            },
+            plugins: ["types"]
+        }), $("#checkTree").jstree({
+            core: {
+                themes: {
+                    responsive: !1
+                }
+            },
+            types: {
+                default: {
+                    icon: "fa fa-folder"
+                },
+                file: {
+                    icon: "fa fa-file"
+                }
+            },
+            plugins: ["types", "checkbox"]
+        }), $("#dragTree").jstree({
+            core: {
+                check_callback: !0,
+                themes: {
+                    responsive: !1
+                }
+            },
+            types: {
+                default: {
+                    icon: "fa fa-folder"
+                },
+                file: {
+                    icon: "fa fa-file"
+                }
+            },
+            plugins: ["types", "dnd"]
+        }), $("#ajaxTree").jstree({
+            core: {
+                check_callback: !0,
+                themes: {
+                    responsive: !1
+                },
+                data: {
+                    url: function(e) {
+                        return "#" === e.id ? "assets/data/ajax_roots.json" : "assets/data/ajax_children.json"
+                    },
+                    data: function(e) {
+                        return {
+                            id: e.id
+                        }
+                    }
+                }
+            },
+            types: {
+                default: {
+                    icon: "fa fa-folder"
+                },
+                file: {
+                    icon: "fa fa-file"
+                }
+            },
+            plugins: ["contextmenu", "dnd", "search", "state", "types", "wholerow"]
+        })
+    });
 </script>

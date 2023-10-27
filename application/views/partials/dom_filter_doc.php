@@ -2,9 +2,9 @@
 <div class="form-inline flex-fill">
     <div class="form-group w-100">
 
-        <label class="d-none d-sm-block">สถานะ </label>
+        <label class="d-none d-sm-block"><?= mb_ucfirst($this->lang->line('_fillter_status')) ?></label>
         <select class="form-control form-control-sm" id="item_statusbill">
-            <option value="" selected>สถานะ</option>
+            <option value="" selected><?= mb_ucfirst($this->lang->line('_fillter_text_all')) ?></option>
 
             <option value="1">รอ</option>
             <option value="2">กำลังทำ</option>
