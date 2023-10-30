@@ -55,4 +55,6 @@
     
     jstree-anchor jstree-clicked : jstree-icon jstree-checkbox
     jstree-anchor : jstree-icon jstree-checkbox
+
+    li[aria-level=2][selected=true]
  -->

@@ -21,6 +21,15 @@
             let item_id = $(modal).find(form_hidden_id).val()
 
             let data = $(form_name).serializeArray()
+            data.push({'name':'test','value':'12346798'})
+
+console.log(data)
+            // set variable checkbox
+            // permit
+            let a = $('.jstree-grid-container li[aria-level=2][aria-selected=true]')
+            $.each(a,function(index,item){
+                // data.append('a',$(item).attr('data-id'))
+            })
             let func
 
             if (item_id) {

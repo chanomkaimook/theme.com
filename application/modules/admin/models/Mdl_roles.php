@@ -91,7 +91,8 @@ class Mdl_roles extends CI_Model
     //  *
     public function insert_data()
     {
-
+        print_r($this->input->post());
+        exit;
         $result = array(
             'error'     => 1,
             'txt'       => 'ไม่มีการทำรายการ',
