@@ -9,8 +9,21 @@
 <style>
     .jstree-grid-container {
         display: grid;
-        grid-template-columns: auto auto auto;
-        grid-gap: 10px;
+        grid-template-columns: auto;
+    }
+
+    @media (min-width: 427px) {
+        .jstree-grid-container {
+            grid-template-columns: auto auto;
+            grid-gap: 10px;
+        }
+    }
+
+    @media (min-width: 992px) {
+        .jstree-grid-container {
+            grid-template-columns: auto auto auto;
+            grid-gap: 10px;
+        }
     }
 </style>
 <div class="row">
