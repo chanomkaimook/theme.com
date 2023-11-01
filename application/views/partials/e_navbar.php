@@ -264,7 +264,8 @@
                      extend: 'collection',
                      text: 'Export',
                      buttons: ['excel', 'pdf', 'copy'],
-                     fade: true
+                     fade: true,
+                     style:'padding-top:0px'
                  },
                  {
                      extend: 'collection',

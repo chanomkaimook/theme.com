@@ -1,8 +1,23 @@
 <div class="row">
-    <div class="form-group col-md-12">
+    <div class="form-group col-md-6">
         <span class="required"><i class="mdi mdi-svg"></i></span>
-        <label class="text-capitalize"><?= mb_ucfirst($this->lang->line('form_roles_roles_name')) ?></label>
-        <input type="text" class="form-control" name="roles_name" placeholder="<?= mb_ucfirst($this->lang->line('form_roles_roles_name_placeholder')) ?>" value="" required>
+        <label class="text-capitalize"><?= mb_ucfirst($this->lang->line('form_roles_roles_name_th')) ?></label>
+        <input type="text" class="form-control" name="roles_name_th" placeholder="<?= mb_ucfirst($this->lang->line('form_roles_roles_name_placeholder')) ?>" value="" required>
+    </div>
+    <div class="form-group col-md-6">
+        <label class="text-capitalize"><?= mb_ucfirst($this->lang->line('form_roles_roles_name_us')) ?></label>
+        <input type="text" class="form-control" name="roles_name_us" placeholder="<?= mb_ucfirst($this->lang->line('form_roles_roles_name_placeholder')) ?>" value="">
+    </div>
+</div>
+
+<div class="row">
+    <div class="form-group col-md-6">
+        <label class="text-capitalize"><?= mb_ucfirst($this->lang->line('_form_descrip_th')) ?></label>
+        <textarea class="form-control" name="roles_descrip_th"></textarea>
+    </div>
+    <div class="form-group col-md-6">
+        <label class="text-capitalize"><?= mb_ucfirst($this->lang->line('_form_descrip_us')) ?></label>
+        <textarea class="form-control" name="roles_descrip_us"></textarea>
     </div>
 </div>
 
@@ -43,18 +58,13 @@
 
         <div class="jstree-grid-container">
             <?php
-            echo html_roles_jstree($permit);
+            echo html_roles_jstree($permit,'jstree_checkbox');
             ?>
         </div>
 
     </div>
 </div>
 <!-- 
-    jstree-anchor jstree-clicked : jstree-icon jstree-checkbox
-    jstree-anchor : jstree-icon jstree-checkbox jstree-undetermined
-    
-    jstree-anchor jstree-clicked : jstree-icon jstree-checkbox
-    jstree-anchor : jstree-icon jstree-checkbox
-
-    li[aria-level=2][selected=true]
+    // selected
+    li[aria-level=2][aria-selected=true]
  -->

@@ -21,14 +21,17 @@
             let item_id = $(modal).find(form_hidden_id).val()
 
             let data = $(form_name).serializeArray()
-            data.push({'name':'test','value':'12346798'})
 
-console.log(data)
+
             // set variable checkbox
             // permit
             let a = $('.jstree-grid-container li[aria-level=2][aria-selected=true]')
-            $.each(a,function(index,item){
+            $.each(a, function(index, item) {
                 // data.append('a',$(item).attr('data-id'))
+                data.push({
+                    'name': 'permit_id[]',
+                    'value': $(item).attr('data-id')
+                })
             })
             let func
 
@@ -53,6 +56,8 @@ console.log(data)
                             timer: swal_autoClose,
                         }).then((result) => {
 
+                            modalHide()
+                            
                             dataReload()
 
                         })
@@ -62,6 +67,37 @@ console.log(data)
 
             return false
         })
+
+        //  *
+        //  * CRUD
+        //  * click button view
+        //  * 
+        //  * call function view data
+        //  *
+        $(d).on('click', btn_view, function(e) {
+            e.preventDefault()
+
+            let id = $(this).attr('data-id')
+            view_data(id)
+
+            $(form_name).find(form_hidden_id).val(id)
+            $(form_name).find(btn_edit).attr('data-id', id)
+        })
+
+        //  *
+        //  * CRUD
+        //  * click button edit
+        //  * 
+        //  * call function open form for edit data
+        //  *
+        /* $(d).on('click', btn_edit, function(e) {
+            e.preventDefault()
+
+            let id = $(this).attr('data-id')
+            edit_data(id)
+
+            $(form_name).find(form_hidden_id).val(id)
+        }) */
 
         //  *
         //  * CRUD
@@ -119,15 +155,18 @@ console.log(data)
     //  * @data = array[key=>[column=>value]]
     //  *
     function modalActive(data = [], action = 'view') {
-        if (data.length) {
-            let header = data[0].CODE
+        if (action != 'add' && data.NAME) {
+            let header = data.NAME
             $(modal).find('.modal_text_header').html(header)
         }
 
         switch (action) {
             case 'view':
                 $(modal_body_view)
-                    .find('.label_1').text(data[0].NAME).end()
+                    .find('.roles_name_th').text(data.NAME).end()
+                    .find('.roles_name_us').text(data.NAME_US).end()
+                    .find('.roles_descrip_th').text(data.DESCRIPTION).end()
+                    .find('.roles_descrip_us').text(data.DESCRIPTION_US).end()
 
                 break
             case 'edit':
@@ -186,6 +225,41 @@ console.log(data)
 
     //  *
     //  * Form
+    //  * view
+    //  * 
+    //  * get data
+    //  * #async_get_data() = script_crud.php
+    //  *
+    function view_data(item_id = 0) {
+        // item_id = 0
+        async_get_data(item_id)
+            .then((resp) => {
+                modalActive(resp, 'view')
+            })
+            .then(() => {
+                modalLoading_clear()
+            })
+    }
+
+    //  *
+    //  * DataTable
+    //  * reload
+    //  * 
+    //  @param bool $reload = reload datatable
+    //  * refresh data on datatable
+    //  *
+    function dataReload(reload=true) {
+        modalHide()
+
+        if(reload == false){
+            $(datatable_name).DataTable().ajax.reload(false)
+        }else{
+            $(datatable_name).DataTable().ajax.reload()
+        }
+    }
+
+    //  *
+    //  * Form
     //  * add
     //  * 
     //  * open form add data
@@ -210,6 +284,8 @@ console.log(data)
         })
 
         $('[data-plugin=jstree_checkbox]').jstree("deselect_all");
+
+        $('.modal').find('.slimScrollDiv').slimScroll();
     }
 
     //  *

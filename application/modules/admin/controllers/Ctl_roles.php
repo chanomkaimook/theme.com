@@ -94,7 +94,8 @@ class Ctl_roles extends MY_Controller
                     $user_active =  whois($row->USER_STARTS);
                 }
 
-                $dom_workstatus = workstatus($row->WORKSTATUS, 'status');
+                // $dom_workstatus = workstatus($row->WORKSTATUS, 'status');
+                $dom_workstatus = "--";
                 $dom_status = status_offview($row->STATUS_OFFVIEW);
 
                 $sub_data = [];
@@ -106,7 +107,7 @@ class Ctl_roles extends MY_Controller
                 $sub_data['WORKSTATUS'] = array(
                     "display"   => $dom_workstatus,
                     "data"      =>  array(
-                        'id'    => $row->WORKSTATUS,
+                        'id'    => 0,
                     ),
                 );
 
@@ -150,9 +151,12 @@ class Ctl_roles extends MY_Controller
     //  *
     public function get_data()
     {
+        $this->load->library('roles');
+        
         $request = $_REQUEST;
         $item_id = $request['id'];
         $data = $this->model->get_data($item_id);
+        $data->PERMIT = $this->roles->get_dataRoles($item_id);
 
         $result = $data;
         echo json_encode($result);

@@ -7,7 +7,7 @@
                 <div class="card-box">
                     <ul class="nav nav-tabs tabs-bordered">
                         <li class="nav-item">
-                            <a href="#table" data-toggle="tab" aria-expanded="false" class="nav-link ">
+                            <a href="#table" data-toggle="tab" aria-expanded="false" class="nav-link active">
                                 <span class="d-block d-sm-none"><i class="mdi mdi-home-variant"></i></span>
                                 <span class="d-none d-sm-block text-capitalize"><?= mb_ucfirst($this->lang->line('table')) ?></span>
                             </a>
@@ -19,7 +19,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="#setting" data-toggle="tab" aria-expanded="false" class="nav-link active">
+                            <a href="#setting" data-toggle="tab" aria-expanded="false" class="nav-link">
                                 <span class="d-block d-sm-none"><i class="mdi mdi-email-outline"></i></span>
                                 <span class="d-none d-sm-block"><?= mb_ucfirst($this->lang->line('setting')) ?></span>
                             </a>
@@ -32,7 +32,7 @@
                         </li>
                     </ul>
                     <div class="tab-content">
-                        <div class="tab-pane " id="table">
+                        <div class="tab-pane active" id="table">
                             <?php
                             require('datatable.php');
                             ?>
@@ -42,7 +42,7 @@
                             require('all.php');
                             ?>
                         </div>
-                        <div class="tab-pane active" id="setting">
+                        <div class="tab-pane" id="setting">
                             <?php
                             require('setting.php');
                             ?>

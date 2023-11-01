@@ -100,9 +100,10 @@ function workstatus(int $status = null, string $text = null, array $optional = [
  *      [column] => value
  *    )
  *  )
+ * @param array $classplugin = [jstree_checkbox,jstree]
  * @return void
  */
-function html_roles_jstree(array $array = null)
+function html_roles_jstree(array $array = null, string $classplugin = "jstree")
 {
   $ci = &get_instance();
   $ci->load->database();
@@ -119,12 +120,11 @@ function html_roles_jstree(array $array = null)
 
       foreach ($array_one as $key => $array_two) {
         $permit_id = $array_two['ID'];
-        $permit_name = textLang($array_two['NAME'],$array_two['NAME_US']);
-        $menus_name = textLang($array_two['MENUS_NAME'],$array_two['MENUS_NAME_US']);
+        $permit_name = textLang($array_two['NAME'], $array_two['NAME_US']);
+        $menus_name = textLang($array_two['MENUS_NAME'], $array_two['MENUS_NAME_US']);
 
         $li_permit .= '<li data-jstree=\'{"icon":"mdi mdi-file-outline"}\' 
-        data-id="'.$permit_id.'">'.$permit_name.'</li>';
-        
+        data-id="' . $permit_id . '">' . $permit_name . '</li>';
       }
 
       // DOM ul sub
@@ -137,7 +137,7 @@ function html_roles_jstree(array $array = null)
       $ul_menus = '<ul>' . $li_menus . '</ul>';
 
       // DOM jstree
-      $jstree .= '<div class="" data-plugin="jstree_checkbox">' . $ul_menus . '</div>';
+      $jstree .= '<div class="" data-plugin="'.$classplugin.'">' . $ul_menus . '</div>';
     }
   }
 

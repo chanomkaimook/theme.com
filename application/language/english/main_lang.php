@@ -10,3 +10,8 @@
 	$lang['_fillter_calendar_dayto'] = "to";
 	$lang['_fillter_status'] = "status";
 	$lang['_fillter_text_all'] = "all";
+	
+	// form
+	$lang['_form_descrip'] = "description";
+	$lang['_form_descrip_th'] = "description TH";
+	$lang['_form_descrip_us'] = "description US";

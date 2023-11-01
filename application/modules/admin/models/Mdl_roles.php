@@ -4,12 +4,19 @@ defined('BASEPATH') or exit('No direct script access allowed');
 class Mdl_roles extends CI_Model
 
 {
-    private $table = "blank";
-    private $fildstatus = "status";
+    private $table = "roles";
+    private $fildstatus = "status_offview";
+
+    private $roles_control = "roles_control";
 
     public function __construct()
     {
         parent::__construct();
+    }
+
+    public function __destruct()
+    {
+        // $this->db->free_result();
     }
 
     //  =========================
@@ -56,7 +63,7 @@ class Mdl_roles extends CI_Model
         # code...
         $optionnal['select'] = 'count(' . $this->table . '.id) as total';
 
-        $data = (object) $this->get_dataShow($id, $optionnal,'row');
+        $data = (object) $this->get_dataShow($id, $optionnal, 'row');
         $num = $data->total;
 
         return $num;
@@ -72,7 +79,7 @@ class Mdl_roles extends CI_Model
     {
         # code...
         $sql = (object) $this->get_sql($id, $optionnal, $type);
-        $sql->where($this->table . '.'.$this->fildstatus, 1);
+        $sql->where($this->table . '.' . $this->fildstatus, null);
 
         $query = $sql->get();
 
@@ -91,18 +98,19 @@ class Mdl_roles extends CI_Model
     //  *
     public function insert_data()
     {
-        print_r($this->input->post());
-        exit;
+        // print_r($this->input->post());
+        // exit;
         $result = array(
             'error'     => 1,
             'txt'       => 'ไม่มีการทำรายการ',
         );
 
-        if (textShow($this->input->post('label_6'))) {
+        if ($this->input->post()) {
             $data = array(
-                'code'  => textShow($this->input->post('label_2')),
-                'name'  => textShow($this->input->post('label_6')),
-                'workstatus'  => $this->input->post('label_1'),
+                'name'  => textShow($this->input->post('roles_name_th')),
+                'name_us'  => textShow($this->input->post('roles_name_us')),
+                'description'  => textShow($this->input->post('roles_descrip_th')),
+                'description_us'  => textShow($this->input->post('roles_descrip_us')),
 
                 'user_starts'  => $this->session->userdata('user_code'),
             );
@@ -111,7 +119,29 @@ class Mdl_roles extends CI_Model
             $new_id = $this->db->insert_id();
 
             // keep log
-            log_data(array('insert ' . $this->table, 'insert', $this->db->last_query()));
+            log_data(array('insert' . $this->table, 'insert', $this->db->last_query()));
+
+
+            // 
+            // if find variable permit_id
+            if ($new_id && $this->input->post('permit_id')) {
+                $data_permit = [];
+                $list_permit = $this->input->post('permit_id');
+                foreach ($list_permit as $value) {
+                    $data_permit[] = array(
+                        'roles_id'  => $new_id,
+                        'permit_id'  => $value,
+                        'user_starts'  => $this->session->userdata('user_code'),
+                    );
+                }
+
+                if (count($data_permit)) {
+                    $this->db->insert_batch($this->roles_control, $data_permit);
+
+                    // keep log
+                    log_data(array('insert' . $this->roles_control, 'insert', $this->db->last_query()));
+                }
+            }
 
             if ($new_id) {
 
@@ -124,7 +154,6 @@ class Mdl_roles extends CI_Model
                 );
             }
         }
-
 
         return $result;
     }
@@ -192,7 +221,7 @@ class Mdl_roles extends CI_Model
         }
 
         $data_array = array(
-            $this->fildstatus     => 0,
+            $this->fildstatus     => 1,
 
             'date_update'  => date('Y-m-d H:i:s'),
             'user_update'  => $this->session->userdata('user_code'),
@@ -242,7 +271,8 @@ class Mdl_roles extends CI_Model
         $hidden_start = "";
         $hidden_end = "";
 
-        $sql = $this->db->from($this->table);
+        $sql = $this->db->from($this->table)
+            ->where($this->table . '.id >=', 1);
 
         if (textShow($request['hidden_datestart'])) {
             $hidden_start = textShow($request['hidden_datestart']);

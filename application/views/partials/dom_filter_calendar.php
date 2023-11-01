@@ -43,8 +43,12 @@
             $('#hidden_dateend').val(date_end)
         })
 
-        $(document).on('click', '.button_search', function() {
-            $('#datatable').DataTable().ajax.reload(null, false);
+        $(document).on('click', '.button_search', function(reload=true) {
+            if(reload == false){
+                $('#datatable').DataTable().ajax.reload(false);
+            }else{
+                $('#datatable').DataTable().ajax.reload();
+            }
         })
     })
 </script>

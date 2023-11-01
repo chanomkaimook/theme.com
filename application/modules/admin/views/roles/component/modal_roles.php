@@ -19,9 +19,9 @@
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title mt-0 modal_text_header"></h4>
+                <h4 class="modal-title mt-0 modal_text_header text-info"></h4>
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <button type="button" class="btn btn-print btn-primary btn-sm" onclick="printDiv('modal_view')">ปริ้น</button>
+                <!-- <button type="button" class="btn btn-print btn-primary btn-sm" onclick="printDiv('modal_view')">ปริ้น</button> -->
             </div>
             <!-- Form -->
             <form class="form-horizontal" id="frm">
@@ -63,5 +63,6 @@
         $('[data-plugin=jstree_checkbox]').jstree({
             "plugins": ["checkbox"]
         })
+        $('[data-plugin=jstree]').jstree()
     })
 </script>

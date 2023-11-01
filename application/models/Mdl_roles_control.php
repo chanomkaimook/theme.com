@@ -1,11 +1,14 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Mdl_page extends CI_Model
+class Mdl_roles_control extends CI_Model
 
 {
-    private $table = "blank";
-    private $fildstatus = "status";
+    private $table = "roles_control";
+    private $fildstatus = "status_offview";
+
+    private $roles = "roles";
+    private $permit = "permit";
 
     public function __construct()
     {
@@ -61,7 +64,7 @@ class Mdl_page extends CI_Model
         # code...
         $optionnal['select'] = 'count(' . $this->table . '.id) as total';
 
-        $data = (object) $this->get_dataShow($id, $optionnal,'row');
+        $data = (object) $this->get_dataShow($id, $optionnal, 'row');
         $num = $data->total;
 
         return $num;
@@ -77,7 +80,7 @@ class Mdl_page extends CI_Model
     {
         # code...
         $sql = (object) $this->get_sql($id, $optionnal, $type);
-        $sql->where($this->table . '.'.$this->fildstatus, 1);
+        $sql->where($this->table . '.' . $this->fildstatus, null);
 
         $query = $sql->get();
 
@@ -88,6 +91,32 @@ class Mdl_page extends CI_Model
         }
     }
 
+    /**
+     * roles data from roles_control
+     *
+     * @param integer|null $id  = roles_id
+     * @param array|null $optionnal
+     * @param string $type
+     * @return void
+     */
+    public function get_dataRoles(int $roles_id = null, array $optionnal = null, string $type = "result")
+    {
+        # code...
+        $roles = $this->roles;
+        $permit = $this->permit;
+
+        $optionnal['where'] = array(
+            $this->table.'.roles_id'  => $roles_id
+        );
+        $sql = (object) $this->get_sql(null, $optionnal, $type);
+        $sql->join($roles,$roles.'.id='.$this->table.'.roles_id','left')
+        ->join($permit,$permit.'.id='.$this->table.'.permit_id','left')
+        ->where($this->table . '.' . $this->fildstatus, null);
+        $query = $sql->get();
+
+        return $query->$type();
+    }
+
     //  *
     //  * CRUD
     //  * insert
@@ -96,17 +125,19 @@ class Mdl_page extends CI_Model
     //  *
     public function insert_data()
     {
-
+        // print_r($this->input->post());
+        // exit;
         $result = array(
             'error'     => 1,
             'txt'       => 'ไม่มีการทำรายการ',
         );
 
-        if (textShow($this->input->post('label_6'))) {
+        if ($this->input->post()) {
             $data = array(
-                'code'  => textShow($this->input->post('label_2')),
-                'name'  => textShow($this->input->post('label_6')),
-                'workstatus'  => $this->input->post('label_1'),
+                'name'  => textShow($this->input->post('roles_name_th')),
+                'name_us'  => textShow($this->input->post('roles_name_us')),
+                'description'  => textShow($this->input->post('roles_descrip_th')),
+                'description_us'  => textShow($this->input->post('roles_descrip_us')),
 
                 'user_starts'  => $this->session->userdata('user_code'),
             );
@@ -115,7 +146,29 @@ class Mdl_page extends CI_Model
             $new_id = $this->db->insert_id();
 
             // keep log
-            log_data(array('insert ' . $this->table, 'insert', $this->db->last_query()));
+            log_data(array('insert' . $this->table, 'insert', $this->db->last_query()));
+
+
+            // 
+            // if find variable permit_id
+            if ($new_id && $this->input->post('permit_id')) {
+                $data_permit = [];
+                $list_permit = $this->input->post('permit_id');
+                foreach ($list_permit as $value) {
+                    $data_permit[] = array(
+                        'roles_id'  => $new_id,
+                        'permit_id'  => $value,
+                        'user_starts'  => $this->session->userdata('user_code'),
+                    );
+                }
+
+                if (count($data_permit)) {
+                    $this->db->insert_batch($this->roles_control, $data_permit);
+
+                    // keep log
+                    log_data(array('insert' . $this->roles_control, 'insert', $this->db->last_query()));
+                }
+            }
 
             if ($new_id) {
 
@@ -128,7 +181,6 @@ class Mdl_page extends CI_Model
                 );
             }
         }
-
 
         return $result;
     }
@@ -196,7 +248,7 @@ class Mdl_page extends CI_Model
         }
 
         $data_array = array(
-            $this->fildstatus     => 0,
+            $this->fildstatus     => 1,
 
             'date_update'  => date('Y-m-d H:i:s'),
             'user_update'  => $this->session->userdata('user_code'),

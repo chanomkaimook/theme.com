@@ -6,7 +6,8 @@
 	$lang['log'] = "log";
 
 	// form
-	$lang['form_roles_roles_name'] = "role name";
+	$lang['form_roles_roles_name_th'] = "role name TH";
+	$lang['form_roles_roles_name_us'] = "role name US";
 	$lang['form_roles_label_permit'] = "permission list";
 	
 	// detail

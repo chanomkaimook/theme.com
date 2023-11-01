@@ -59,4 +59,27 @@ class Roles
 		return $result;
 	}
 
+	/**
+	 * get roles data
+	 *
+	 * @param integer|null $id = roles_id from roles_control
+	 * @return void
+	 */
+	function get_dataRoles(int $id = null){
+		//=	 call database	=//
+		$ci = &get_instance();
+		$ci->load->database();
+		//===================//
+
+		$result = [];
+		
+		if($id){
+			$ci->load->model('mdl_roles_control');
+			
+			$result = $ci->mdl_roles_control->get_dataRoles($id);
+		}
+
+		return $result;
+	}
+
 }
