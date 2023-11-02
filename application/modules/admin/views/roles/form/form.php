@@ -67,4 +67,6 @@
 <!-- 
     // selected
     li[aria-level=2][aria-selected=true]
+    
+    aria-level=1 : jstree-undetermined
  -->

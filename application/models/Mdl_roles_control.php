@@ -9,6 +9,7 @@ class Mdl_roles_control extends CI_Model
 
     private $roles = "roles";
     private $permit = "permit";
+    private $menu = "menus";
 
     public function __construct()
     {
@@ -104,14 +105,27 @@ class Mdl_roles_control extends CI_Model
         # code...
         $roles = $this->roles;
         $permit = $this->permit;
+        $menus = $this->menu;
 
-        $optionnal['where'] = array(
-            $this->table.'.roles_id'  => $roles_id
+        if (!$optionnal['select']) {
+            $optionnal['select'] = "*,
+            ".$permit.".name as NAME,
+            ".$permit.".name_us as NAME_US,
+            ".$menus.".name as MENUS_NAME,
+            ".$menus.".name_us as MENUS_NAME_US";
+        }
+        $optionnal['where'][$this->table . '.roles_id'] = $roles_id;
+
+        $optionnal['order_by'] = array(
+            $menus.'.sort' => 'asc',
+            $permit.'.sort' => 'asc',
         );
+
         $sql = (object) $this->get_sql(null, $optionnal, $type);
-        $sql->join($roles,$roles.'.id='.$this->table.'.roles_id','left')
-        ->join($permit,$permit.'.id='.$this->table.'.permit_id','left')
-        ->where($this->table . '.' . $this->fildstatus, null);
+        $sql->join($roles, $roles . '.id=' . $this->table . '.roles_id', 'left')
+            ->join($permit, $permit . '.id=' . $this->table . '.permit_id', 'left')
+            ->join($menus, $menus . '.id=' . $permit . '.menus_id', 'left')
+            ->where($this->table . '.' . $this->fildstatus, null);
         $query = $sql->get();
 
         return $query->$type();

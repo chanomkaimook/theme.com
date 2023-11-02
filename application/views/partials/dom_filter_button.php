@@ -1,5 +1,5 @@
 <div class="filter-button px-2 px-sm-0 rounded">
-    <button class="btn px-1 py-0 btn-light button_search btn-block btn-lg h-100 mb-2 mb-sm-0" type="button">
+    <button class="btn px-1 py-0 btn-primarysoft button_search btn-block btn-lg h-100 mb-2 mb-sm-0" type="button">
         <i class="fas fa-search"></i>
     </button>
 </div>
@@ -22,7 +22,7 @@
     if ($('.filter-button').length) {
         let ele = $('.filter-button')
 
-        ele.addClass('bg-light')
+        // ele.addClass('btn-primarysoft')
     }
 
     if ($('.filter').length) {
@@ -32,7 +32,7 @@
         ele.addClass('d-flex')
         // ele.addClass('w-100')
         ele.addClass('ml-md-auto')
-        ele.addClass('bg-light')
+        // ele.addClass('btn-primarysoft')
         ele.addClass('rounded')
         ele.addClass('px-2')
         ele.addClass('p-1')
@@ -45,7 +45,7 @@
         eleadd.addClass('flex-fill')
         // eleadd.addClass('w-100')
         // eleadd.addClass('ml-auto')
-        eleadd.addClass('bg-light')
+        // eleadd.addClass('btn-primarysoft')
         eleadd.addClass('rounded')
         eleadd.addClass('px-2')
         eleadd.addClass('p-sm-1')

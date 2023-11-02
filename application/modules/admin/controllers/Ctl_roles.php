@@ -155,9 +155,13 @@ class Ctl_roles extends MY_Controller
         
         $request = $_REQUEST;
         $item_id = $request['id'];
-        $data = $this->model->get_data($item_id);
-        $data->PERMIT = $this->roles->get_dataRoles($item_id);
+        $array_permit = $this->roles->get_dataRoles($item_id,null,"result_array");
 
+        $data = $this->model->get_data($item_id);
+        $data->PERMIT = $array_permit;
+        $data->PERMIT_HTML = html_roles_jstree($array_permit);
+
+        // echo html_roles_jstree($array_permit);die;
         $result = $data;
         echo json_encode($result);
     }

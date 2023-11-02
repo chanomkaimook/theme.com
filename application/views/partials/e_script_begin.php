@@ -27,6 +27,13 @@
         /* var dateTypeVar = $('#datestart-autoclose').datepicker('getDate');
         $.datepicker.formatDate('Y-m-d', dateTypeVar); */
 
+        $(document).on('click', '.button_search', function(reload=true) {
+            if(reload == false){
+                $('#datatable').DataTable().ajax.reload(false);
+            }else{
+                $('#datatable').DataTable().ajax.reload();
+            }
+        })
     })
 
 
