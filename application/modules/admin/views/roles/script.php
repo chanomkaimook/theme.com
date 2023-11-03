@@ -109,7 +109,20 @@
             e.preventDefault()
             add_data()
 
-            // $(form_name).find(form_hidden_id).val('')
+            $(form_name).find(form_hidden_id).val('')
+        })
+
+        //  *
+        //  * CRUD
+        //  * click button delete
+        //  * 
+        //  * call function form delete
+        //  *
+        $(d).on('click', btn_del, function(e) {
+            e.preventDefault()
+
+            let id = $(this).attr('data-id')
+            delete_data(id)
         })
 
         //  *
@@ -178,34 +191,26 @@
                     .find('[name=roles_descrip_th]').val(data.DESCRIPTION).end()
                     .find('[name=roles_descrip_us]').val(data.DESCRIPTION_US).end()
 
-                console.log(data.PERMIT)
                 let t = data.PERMIT
-                /* t.forEach(function(item,index){
-                    console.log(item)
-                }) */
+
                 if (t) {
                     let permit_id
+
                     $.each(t, function(key, arraypermit) {
                         if (arraypermit.length) {
                             $.each(arraypermit, function(index, column) {
                                 permit_id = column.PERMIT_ID
-                                if(permit_id){
+                                if (permit_id) {
 
-                                    console.log(
-                                        $(modal_body_form)
-                                        .find('.jstree-grid-container li[aria-level=1] a').text()
-                                    )
-                                    $(modal_body_form)
-                                    .find('.jstree-grid-container li[aria-level=2][data-id='+permit_id+']')
-                                    .attr('aria-selected', "true").find('a').addClass('jstree-clicked').end()
+                                    let js_checkbox = $(modal_body_form)
+                                        .find('.jstree-grid-container li[aria-level=2][data-id=' + permit_id + ']')
+                                    let js_id = js_checkbox.attr('id')
+                                    js_checkbox.jstree("check_node", "#" + js_id);
                                 }
                             })
                         }
                     })
                 }
-
-
-
                 break
             default:
                 break
@@ -426,7 +431,7 @@
     //  =========================
     //  =========================
 
-    $(document).on('click','.btn-insert',function(e){
+    $(document).on('click', '.btn-insert', function(e) {
         e.preventDefault()
 
         let error = 0
@@ -436,15 +441,15 @@
             '#id_input_3',
         ]
 
-        validvalue.forEach(function(item){
-            if(!$(item).val()){
+        validvalue.forEach(function(item) {
+            if (!$(item).val()) {
                 error = 1
 
                 $(item).addClass('bg-warning')
             }
         })
 
-        if(error === 0){
+        if (error === 0) {
             func_insert(data);
         }
 

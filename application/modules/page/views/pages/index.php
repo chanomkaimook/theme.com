@@ -7,7 +7,7 @@
             <div class="mb-1 mb-md-0">
                 <div class="d-flex gap-2">
                     <div class="tool-btn">
-                        <button type="button" class="btn-add btn">เพิ่มรายการ</button>
+                        <button type="button" class="btn-add btn"><?= mb_ucfirst($this->lang->line('_form_btn_add')) ?></button>
                     </div>
                 </div>
             </div>
@@ -23,12 +23,12 @@
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>Name</th>
-                            <th>Work</th>
-                            <th>Status</th>
-                            <th>User</th>
-                            <th>Date</th>
-                            <th class="hidden-sm">Action</th>
+                            <th><?= mb_ucfirst($this->lang->line('_name')) ?></th>
+                            <th><?= mb_ucfirst($this->lang->line('_status')) ?></th>
+                            <th><?= mb_ucfirst($this->lang->line('_display')) ?></th>
+                            <th><?= mb_ucfirst($this->lang->line('_usernow')) ?></th>
+                            <th><?= mb_ucfirst($this->lang->line('_datenow')) ?></th>
+                            <th class="hidden-sm"><?= mb_ucfirst($this->lang->line('_action')) ?></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -152,9 +152,9 @@
                 {
                     "data": "ID",
                     "render": function(data, type, row, meta) {
-                        let btn_view = `<a data-id="${data}" class="btn-view dropdown-item" href="#" data-code="${row.CODE}" ><i class="mdi mdi-magnify mr-2 text-info font-18 vertical-middle"></i>รายละเอียด</a>`
-                        let btn_edit = `<a data-id="${data}" class="btn-edit dropdown-item" href="#"><i class="mdi mdi-wrench mr-2 text-warning font-18 vertical-middle"></i>แก้ไข</a>`
-                        let btn_del = `<a data-id="${data}" class="btn-del dropdown-item" href="#" ><i class="mdi mdi-delete mr-2 text-danger font-18 vertical-middle"></i>ลบรายการ</a>`
+                        let btn_view = `<a data-id="${data}" class="btn-view text-capitalize dropdown-item" href="#" data-code="${row.CODE}" ><i class="mdi mdi-magnify mr-2 text-info font-18 vertical-middle"></i>${table_column_view[setlang]}</a>`
+                        let btn_edit = `<a data-id="${data}" class="btn-edit text-capitalize dropdown-item" href="#"><i class="mdi mdi-wrench mr-2 text-warning font-18 vertical-middle"></i>${table_column_edit[setlang]}</a>`
+                        let btn_del = `<a data-id="${data}" class="btn-del text-capitalize dropdown-item" href="#" ><i class="mdi mdi-delete mr-2 text-danger font-18 vertical-middle"></i>${table_column_del[setlang]}</a>`
 
                         if (row.STATUS.data.id == 1) {
                             btn_edit = ''

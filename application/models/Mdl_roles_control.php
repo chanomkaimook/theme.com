@@ -137,67 +137,6 @@ class Mdl_roles_control extends CI_Model
     //  * 
     //  * insert data
     //  *
-    public function insert_data()
-    {
-        // print_r($this->input->post());
-        // exit;
-        $result = array(
-            'error'     => 1,
-            'txt'       => 'ไม่มีการทำรายการ',
-        );
-
-        if ($this->input->post()) {
-            $data = array(
-                'name'  => textShow($this->input->post('roles_name_th')),
-                'name_us'  => textShow($this->input->post('roles_name_us')),
-                'description'  => textShow($this->input->post('roles_descrip_th')),
-                'description_us'  => textShow($this->input->post('roles_descrip_us')),
-
-                'user_starts'  => $this->session->userdata('user_code'),
-            );
-
-            $this->db->insert($this->table, $data);
-            $new_id = $this->db->insert_id();
-
-            // keep log
-            log_data(array('insert' . $this->table, 'insert', $this->db->last_query()));
-
-
-            // 
-            // if find variable permit_id
-            if ($new_id && $this->input->post('permit_id')) {
-                $data_permit = [];
-                $list_permit = $this->input->post('permit_id');
-                foreach ($list_permit as $value) {
-                    $data_permit[] = array(
-                        'roles_id'  => $new_id,
-                        'permit_id'  => $value,
-                        'user_starts'  => $this->session->userdata('user_code'),
-                    );
-                }
-
-                if (count($data_permit)) {
-                    $this->db->insert_batch($this->roles_control, $data_permit);
-
-                    // keep log
-                    log_data(array('insert' . $this->roles_control, 'insert', $this->db->last_query()));
-                }
-            }
-
-            if ($new_id) {
-
-                $result = array(
-                    'error'     => 0,
-                    'txt'       => 'ทำรายการสำเร็จ',
-                    'data'      => array(
-                        'id'    => $new_id
-                    )
-                );
-            }
-        }
-
-        return $result;
-    }
 
     //  *
     //  * CRUD

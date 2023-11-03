@@ -21,6 +21,40 @@ class Mdl_roles extends CI_Model
 
     //  =========================
     //  =========================
+    //  Function
+    //  =========================
+    //  =========================
+    function update_roles_control(array $data = null, int $roles_id = null)
+    {
+        if ($roles_id && $data) {
+            $data_permit = [];
+            $list_permit = $data;
+            foreach ($list_permit as $value) {
+                $data_permit[] = array(
+                    'roles_id'  => $roles_id,
+                    'permit_id'  => $value,
+                    'user_starts'  => $this->session->userdata('user_code'),
+                );
+            }
+
+            if (count($data_permit)) {
+                $this->db->insert_batch($this->roles_control, $data_permit);
+
+                // keep log
+                log_data(array('insert' . $this->roles_control, 'insert', $this->db->last_query()));
+            }
+        }
+
+        return true;
+    }
+    //  =========================
+    //  =========================
+    //  End Function
+    //  =========================
+    //  =========================
+
+    //  =========================
+    //  =========================
     //  CRUD
     //  =========================
     //  =========================
@@ -121,27 +155,9 @@ class Mdl_roles extends CI_Model
             // keep log
             log_data(array('insert' . $this->table, 'insert', $this->db->last_query()));
 
-
             // 
             // if find variable permit_id
-            if ($new_id && $this->input->post('permit_id')) {
-                $data_permit = [];
-                $list_permit = $this->input->post('permit_id');
-                foreach ($list_permit as $value) {
-                    $data_permit[] = array(
-                        'roles_id'  => $new_id,
-                        'permit_id'  => $value,
-                        'user_starts'  => $this->session->userdata('user_code'),
-                    );
-                }
-
-                if (count($data_permit)) {
-                    $this->db->insert_batch($this->roles_control, $data_permit);
-
-                    // keep log
-                    log_data(array('insert' . $this->roles_control, 'insert', $this->db->last_query()));
-                }
-            }
+            $this->update_roles_control($this->input->post('permit_id'), $new_id);
 
             if ($new_id) {
 
@@ -167,17 +183,11 @@ class Mdl_roles extends CI_Model
     public function update_data()
     {
         $item_id = $this->input->post('item_id');
-
-        /* $begin_date = "";
-        if ($this->input->post('item_begin_date')) {
-            $ex = explode('-', $this->input->post('item_begin_date'));
-            $begin_date = $ex[2] . "-" . $ex[1] . "-" . $ex[0];
-        } */
-
         $data = array(
-            'code'  => textShow($this->input->post('label_2')),
-            'name'  => textShow($this->input->post('label_6')),
-            'workstatus'  => $this->input->post('label_1'),
+            'name'  => textShow($this->input->post('roles_name_th')),
+            'name_us'  => textShow($this->input->post('roles_name_us')),
+            'description'  => textShow($this->input->post('roles_descrip_th')),
+            'description_us'  => textShow($this->input->post('roles_descrip_us')),
 
             'date_update'  => date('Y-m-d H:i:s'),
             'user_update'  => $this->session->userdata('user_code'),
@@ -188,6 +198,19 @@ class Mdl_roles extends CI_Model
 
         // keep log
         log_data(array('update ' . $this->table, 'update', $this->db->last_query()));
+
+        // 
+        // if find variable permit_id
+        // roles_control update
+
+        // roles_control will delete permit before update
+        $this->db->delete($this->roles_control, array('roles_id' => $item_id));
+
+        // keep log
+        log_data(array('delete' . $this->roles_control, 'delete', $this->db->last_query()));
+
+        // roles_control update
+        $this->update_roles_control($this->input->post('permit_id'), $item_id);
 
         $result = array(
             'error'     => 0,
@@ -238,7 +261,7 @@ class Mdl_roles extends CI_Model
 
         $result = array(
             'error'     => 0,
-            'txt'       => 'ทำรายการสำเร็จ'
+            'txt'       => 'ลบการสำเร็จ'
         );
 
         return $result;

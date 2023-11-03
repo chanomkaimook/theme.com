@@ -24,7 +24,7 @@ class Ctl_roles extends MY_Controller
 
         // setting
         $this->model = $this->$modelname;
-        $this->title = $this->lang->line('menu_settingroles');
+        $this->title = $this->lang->line('__menu_settingroles');
     }
 
     public function index()

@@ -93,7 +93,7 @@ class Ctl_page extends MY_Controller
 
                 $sub_data['ID'] = $row->ID;
                 $sub_data['CODE'] = textShow($row->CODE);
-                $sub_data['NAME'] = textShow($row->NAME);
+                $sub_data['NAME'] = textLang($row->NAME,$row->NAME_US,false);
 
                 $sub_data['WORKSTATUS'] = array(
                     "display"   => $dom_workstatus,

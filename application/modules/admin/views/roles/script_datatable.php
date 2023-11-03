@@ -94,9 +94,9 @@
                 {
                     "data": "ID",
                     "render": function(data, type, row, meta) {
-                        let btn_view = `<a data-id="${data}" class="btn-view dropdown-item" href="#" data-code="${row.CODE}" ><i class="mdi mdi-magnify mr-2 text-info font-18 vertical-middle"></i>รายละเอียด</a>`
-                        let btn_edit = `<a data-id="${data}" class="btn-edit dropdown-item" href="#"><i class="mdi mdi-wrench mr-2 text-warning font-18 vertical-middle"></i>แก้ไข</a>`
-                        let btn_del = `<a data-id="${data}" class="btn-del dropdown-item" href="#" ><i class="mdi mdi-delete mr-2 text-danger font-18 vertical-middle"></i>ลบรายการ</a>`
+                        let btn_view = `<a data-id="${data}" class="btn-view text-capitalize dropdown-item" href="#" data-code="${row.CODE}" ><i class="mdi mdi-magnify mr-2 text-info font-18 vertical-middle"></i>${table_column_view[setlang]}</a>`
+                        let btn_edit = `<a data-id="${data}" class="btn-edit text-capitalize dropdown-item" href="#"><i class="mdi mdi-wrench mr-2 text-warning font-18 vertical-middle"></i>${table_column_edit[setlang]}</a>`
+                        let btn_del = `<a data-id="${data}" class="btn-del text-capitalize dropdown-item" href="#" ><i class="mdi mdi-delete mr-2 text-danger font-18 vertical-middle"></i>${table_column_del[setlang]}</a>`
 
                         if (row.STATUS.data.id == 1) {
                             btn_edit = ''

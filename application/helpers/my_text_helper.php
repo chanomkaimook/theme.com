@@ -11,7 +11,7 @@ error_reporting(E_ALL & ~E_NOTICE);
 function textShow(String $text = null, String $replace = null)
 {
   # code...
-  $result = trim($text) ? trim($text) : null;
+  $result = trim($text) ? trim($text) : '';
 
   if ($replace && !$result) {
     $result = $replace;

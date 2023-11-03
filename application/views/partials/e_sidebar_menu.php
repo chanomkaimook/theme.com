@@ -65,15 +65,15 @@
                     <li class="<?= check_permit_menu('admin') ?>">
                         <a href="#">
                             <i class="fas fa-tools"></i>
-                            <span>ผู้ดูแล</span>
+                            <span><?= $this->lang->line('__menu_admin') ?></span>
                             <span class="menu-arrow"></span>
                         </a>
                         <ul class="nav-second-level text-capitalize" aria-expanded="false">
                             <li><a href="<?= site_url('admin/ctl_register') ?>" data-show="ลงทะเบียน">ลงทะเบียน</a></li>
                             <li><a href="<?= site_url('admin/ctl_user') ?>" data-show="ผู้ใช้งาน">ผู้ใช้งาน</a></li>
-                            <li><a href="<?= site_url('admin/ctl_roles') ?>" data-show="setting roles"><?= $this->lang->line('_menu_settingroles') ?></a></li>
+                            <li><a href="<?= site_url('admin/ctl_roles') ?>" data-show="setting roles"><?= $this->lang->line('__menu_settingroles') ?></a></li>
                             <li><a href="<?= site_url('staff/ctl_page') ?>" data-show="พนักงาน">พนักงาน</a></li>
-                            <li><a href="<?= site_url('page/ctl_page') ?>" data-show="Blank">Blank</a></li>
+                            <li><a href="<?= site_url('page/ctl_page') ?>" data-show="blank"><?= $this->lang->line('__menu_blank') ?></a></li>
                         </ul>
                     </li>
 

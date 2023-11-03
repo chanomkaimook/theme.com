@@ -239,6 +239,29 @@
              let logoText = "Backend"
              let menuTitle = "menu bar" // e_sidebar
 
+             // default language
+             let setlang = 'thai' 
+             if (getCookie("langadmin") != setlang) {
+                 setlang = getCookie("langadmin")
+             }
+
+             //
+             // Language
+             let table_column_view = {
+                 'thai': 'รายละเอียด',
+                 'english': 'view'
+             }
+             let table_column_edit = {
+                 'thai': 'แก้ไข',
+                 'english': 'edit'
+             }
+             let table_column_del = {
+                 'thai': 'ลบรายการ',
+                 'english': 'delete'
+             }
+             //
+             //
+
              document.getElementsByClassName('logo-lg')[0].getElementsByTagName('span')[0].innerHTML = logoText
              // =======
              // =======
@@ -265,7 +288,7 @@
                      text: 'Export',
                      buttons: ['excel', 'pdf', 'copy'],
                      fade: true,
-                     style:'padding-top:0px'
+                     style: 'padding-top:0px'
                  },
                  {
                      extend: 'collection',

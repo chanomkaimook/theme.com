@@ -5,14 +5,14 @@
     <div class="form-group w-100">
 
         <label class="d-none d-sm-block"><?= mb_ucfirst($this->lang->line('_fillter_calendar_day')) ?></label>
-        <input type="text" class="form-control form-control-sm " placeholder="วันที่" data-date-format='yy-mm-dd' id="datestart-autoclose" name="datestart-autoclose">
+        <input type="text" class="form-control form-control-sm " placeholder="<?= mb_ucfirst($this->lang->line('_fillter_calendar_day_placeholder')) ?>" data-date-format='yy-mm-dd' id="datestart-autoclose" name="datestart-autoclose">
     </div>
 </div>
 
 <div class="form-inline flex-fill">
     <div class="form-group w-100">
         <label class="d-none d-sm-block"><?= mb_ucfirst($this->lang->line('_fillter_calendar_dayto')) ?></label>
-        <input type="text" class="form-control form-control-sm " placeholder="วันที่สิ้นสุด" id="dateend-autoclose" name="dateend-autoclose">
+        <input type="text" class="form-control form-control-sm " placeholder="<?= mb_ucfirst($this->lang->line('_fillter_calendar_dayto_placeholder')) ?>" id="dateend-autoclose" name="dateend-autoclose">
 
     </div>
 

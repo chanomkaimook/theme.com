@@ -213,7 +213,7 @@ class Mdl_page extends CI_Model
 
         $result = array(
             'error'     => 0,
-            'txt'       => 'ทำรายการสำเร็จ'
+            'txt'       => 'ลบการสำเร็จ'
         );
 
         return $result;

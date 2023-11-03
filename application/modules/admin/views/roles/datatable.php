@@ -19,12 +19,12 @@
         <thead>
             <tr>
                 <th>#</th>
-                <th>Name</th>
-                <th>Work</th>
-                <th>Status</th>
-                <th>User</th>
-                <th>Date</th>
-                <th class="hidden-sm">Action</th>
+                <th><?= mb_ucfirst($this->lang->line('_name')) ?></th>
+                <th><?= mb_ucfirst($this->lang->line('_status')) ?></th>
+                <th><?= mb_ucfirst($this->lang->line('_display')) ?></th>
+                <th><?= mb_ucfirst($this->lang->line('_usernow')) ?></th>
+                <th><?= mb_ucfirst($this->lang->line('_datenow')) ?></th>
+                <th class="hidden-sm"><?= mb_ucfirst($this->lang->line('_action')) ?></th>
             </tr>
         </thead>
         <tbody>
