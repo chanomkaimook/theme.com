@@ -49,9 +49,9 @@ function whois(String $value = null)
   $result = "";
   if ($value) {
     $sql = $ci->db->select('NAME,LASTNAME')
-      ->from('employee')
-      ->join('staff','employee.id=staff.employee_id','left')
-      ->where('staff.employee_id', $value);
+      ->from('staff')
+      ->join('employee','employee.id=staff.employee_id','left')
+      ->where('staff.id', $value);
     $count = $sql->count_all_results(null, false);
     $q = $sql->get();
     if ($count) {

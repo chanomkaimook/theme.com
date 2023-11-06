@@ -24,8 +24,7 @@ class mdl_login extends CI_Model
 
                 staff.ID as ID,
                 staff.USERNAME as USERNAME,
-                staff.ROLES_ID as ROLES_ID,
-                staff.DATE_START as DATE_START,
+                staff.DATE_STARTS as DATE_STARTS,
                 section.ID as SECTION_ID,
                 department.ID as DEPARTMENT_ID,
             ')
@@ -34,7 +33,7 @@ class mdl_login extends CI_Model
                 ->join('department', 'department.name = employee.department', 'left')
                 ->where('staff.username', $user_name)
                 ->where('staff.password', $user_password)
-                ->where('staff.verify is not null',null,false)
+                ->where('staff.verify is not null', null, false)
                 ->where('staff.status', 1)
                 ->get('staff');
             $number = $sql->num_rows();  //num_rows() นับจำนวนแถว
@@ -88,26 +87,35 @@ class mdl_login extends CI_Model
 
                     #
                     # fill data ban out
-                    $permit = array_values(array_diff($permit_allow,$permit_ban));
+                    $permit = array_values(array_diff($permit_allow, $permit_ban));
 
                     #
                     # set permit convert to json data
                     $permit_json = json_encode($permit);
-
-                    
                 }
                 $array = array(
                     'permit'    => '123456789'
                 );
-                
+
                 if (strnatcmp($user_name, $row->USERNAME) == 0) {
+
+                    $token = $this->authorization_token->generateToken($array);
 
                     $result = array(
                         'error' => 0,
                         'data' => $sql->row(),
                         'permit' => $permit_json,
-                        'token' => $this->authorization_token->generateToken($array)
+                        'token' => $token
                     );
+
+                    //
+                    // caching
+                    if (!$this->caching->get('authorization')) {
+                        $authorization = $token;
+            
+                        // Save into the cache for 5 minutes
+                        $this->caching->save('authorization', $authorization);
+                    }
                 } else {
                     $result = array(
                         'error' => 1,

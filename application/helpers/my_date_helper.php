@@ -43,6 +43,43 @@ function toThaiDateTimeString($date, $typereturn=null)
   return $result;
 }
 
+function toEngDateTimeString($date, $typereturn=null)
+{
+
+  $day_arr = array("Su", "M", "T", "W", "Th", "F", "Sa");
+  $month_arr = array(
+    "00" => "",
+    "01" => "Jan",
+    "02" => "Feb",
+    "03" => "Mar",
+    "04" => "Apr",
+    "05" => "May",
+    "06" => "Jun",
+    "07" => "Jul",
+    "08" => "Aug",
+    "09" => "Sep",
+    "10" => "Oct",
+    "11" => "Nov",
+    "12" => "Dec"
+  );
+
+  $time = strtotime($date);
+  $time_day = date("j", $time);
+  $time_month = date("m", $time);
+  $time_year = date("Y", $time);
+
+  $date_return = $time_day . " " . $month_arr[$time_month] . " " . $time_year;
+  $time_return = date('H:i:s', $time);
+
+  if ($typereturn == "datetime") {
+    $result = $date_return . " " . $time_return;
+  } else {
+    $result = $date_return;
+  }
+
+  return $result;
+}
+
 /**
  * return time
  *

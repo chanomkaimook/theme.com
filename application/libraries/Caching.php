@@ -4,6 +4,7 @@ class Caching
 {
 	public $name = "";
 	public $ci = "";
+	public $cache_expire_time = "";
 
 	public function __construct()
 	{
@@ -21,10 +22,18 @@ class Caching
 		return $result;
 	}
 
-	public function save(string $var = "", mixed $data)
+	public function save(string $var = "", string $data, int $time = null)
 	{
+		$this->ci->load->config('jwt');
+
+		if($time){
+			$this->cache_expire_time = $time;
+		}else{
+			$this->cache_expire_time  = $this->ci->config->item('token_expire_time');
+		}
+
 		$name = $var;
-		$result = $this->ci->cache->save($name, $data);
+		$result = $this->ci->cache->save($name, $data,$this->cache_expire_time);
 		return $result;
 	}
 

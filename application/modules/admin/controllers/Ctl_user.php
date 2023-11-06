@@ -8,8 +8,9 @@ class Ctl_user extends MY_Controller
         parent::__construct();
 
         $this->load->model('mdl_user');
-        $this->load->model('mdl_register');
-        $this->load->model('mdl_staff');
+        $this->load->model('mdl_roles');
+        // $this->load->model('mdl_register');
+        // $this->load->model('mdl_staff');
         $this->load->model('mdl_role_focus');
 
         $this->middleware();
@@ -33,7 +34,7 @@ class Ctl_user extends MY_Controller
         $level = $this->db->get('level');
         $data['level'] = $level->result(); */
 
-        $data['role'] = "";
+        $data['role'] = $this->mdl_roles->get_dataShow();
         $data['level'] = "";
         $this->template->set_layout('lay_datatable');
         $this->template->title('ผู้ใช้งาน');
@@ -50,29 +51,41 @@ class Ctl_user extends MY_Controller
         $data_result = [];
         if ($data) {
             foreach ($data as $row) {
-                #
-                # check level
-                # 1 = operator
-                if($row->LEVEL_ID == 1){
-                    $level_name = $row->LEVEL_NAME;
-                }else{
-                    $level_name = $icon_head.$row->LEVEL_NAME;
+                $user_active_id = $row->USER_STARTS ? $row->USER_STARTS : $row->USER_UPDATE;
+
+                if ($row->DATE_UPDATE) {
+                    $query_date = $row->DATE_UPDATE;
+                    $user_active = "(แก้) " . whois($row->USER_UPDATE);
+                } else {
+                    $query_date = $row->DATE_STARTS;
+                    $user_active =  whois($row->USER_STARTS);
                 }
 
                 $sub_data = [];
-
-                $date_start = toThaiDateTimeString($row->DATE_START, 'datetime');
-                $date_update = $row->DATE_UPDATE ? toThaiDateTimeString($row->DATE_UPDATE, 'datetime') : "";
+                $date_start = toThaiDateTimeString($row->DATE_STARTS, 'datetime');
+                $date_update = textNull($row->DATE_UPDATE) ? toThaiDateTimeString($row->DATE_UPDATE, 'datetime') : null;
 
                 $sub_data['ID'] = $row->ID;
-                $sub_data[] = $row->ROLES_NAME;
-                $sub_data[] = $level_name;
-                $sub_data[] = $row->NAME;
-                $sub_data[] = $row->LASTNAME;
-                $sub_data[] = $row->USERNAME;
-                $sub_data[] = $date_start;
-                $sub_data[] = $date_update;
-                $sub_data[] = $row->VERIFY;
+                $sub_data['LEVEL'] = "";
+                $sub_data['NAME'] = textLang($row->NAME,$row->NAME_US,false);
+                $sub_data['LASTNAME'] = textLang($row->LASTNAME,$row->LASTNAME_US,false);
+                $sub_data['USERNAME'] = $row->USERNAME;
+                $sub_data['DATE_STARTS'] = array(
+                    "display"   => $date_start,
+                    "timestamp" => date('Y-m-d H:i:s', strtotime($row->DATE_STARTS))
+                );
+
+                $sub_data['DATE_ACTIVE'] = array(
+                    "display"   => $date_update,
+                    "timestamp" => date('Y-m-d H:i:s', strtotime($row->DATE_UPDATE))
+                );
+
+                $sub_data['USER_ACTIVE'] = array(
+                    "display"   => $user_active,
+                    "data"   => array(
+                        'id'    => $user_active_id,
+                    ),
+                );
 
                 $data_result[] = $sub_data;
             }

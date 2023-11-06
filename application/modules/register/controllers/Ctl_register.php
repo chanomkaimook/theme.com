@@ -54,7 +54,7 @@ class Ctl_register extends MY_Controller
                 # ตรวจสอบ username
                 $sql = $this->db->from('staff')
                     ->where('username', trim($request['input_username']))
-                    ->where('verify is not null', null,false)
+                    ->where('verify is not null', null, false)
                     ->where('status', 1)
                     ->get();
                 $num = $sql->num_rows();
@@ -71,38 +71,33 @@ class Ctl_register extends MY_Controller
                 #
                 # setting
                 $request = $_REQUEST;
-                $roles_default_id = 5;  // user value default
-                $level_default_id = null;  // technician value default
+                $data_roles = [];
 
                 #
                 # check value
 
                 # roles
-                $roles_id = trim($request['role']) ? trim($request['role']) : $roles_default_id;
-                $sql_roles = $this->db->where('id', $roles_id)->get('roles');
-                $row_roles = $sql_roles->row();
-                $data_roles_id = $row_roles->ID;
-                $data_roles_level = $row_roles->LEVEL;
-                $data_roles_name = $row_roles->NAME;
+                $array_roles = trim($request['group_role']);
+                // $sql_roles = $this->db->where('id', $roles_id)->get('roles');
 
-                # level
-                if(trim($request['level'])){
-                    $level_id = trim($request['level']);
-                    $sql_level = $this->db->where('id', $level_id)->get('level');
-                    $row_level = $sql_level->row();
-                    $data_level_id = $row_level->ID;
-                    $data_level_name = $row_level->NAME;
-                }else{
-                    $data_level_id = null;
-                    $data_level_name = null;
+                if ($array_roles) {
+                    $array = explode(",", $array_roles);
+                    if ($array) {
+                        foreach ($array as $value) {
+                            $data_roles_sub = array(
+                                'roles_id'  => $value
+                            );
+                            $data_roles[] = $data_roles_sub;
+                        }
+                    }
                 }
+                $this->db->trans_begin();
 
                 # 
                 # employee
                 $data_employee = array(
-                    'name'      => trim($request['name']),
-                    'lastname'  => trim($request['lastname']),
-                    'lastname'  => trim($request['lastname']),
+                    'name'      => textNull($request['name']),
+                    'lastname'  => textNull($request['lastname']),
                 );
                 $this->db->insert('employee', $data_employee);
                 $new_em_id = $this->db->insert_id();
@@ -110,12 +105,7 @@ class Ctl_register extends MY_Controller
                 # level
                 $data_staff = array(
                     'employee_id'       => $new_em_id,
-                    'level_id'          => $data_level_id,               // value from table level 
-                    'level_name'        => $data_level_name,      // value from table level 
-                    'roles_id'          => $data_roles_id,               // value from table role 
-                    'roles_name'        => $data_roles_name,          // value from table role 
-                    'roles_level'        => $data_roles_level,              // value from table role 
-                    'username'  => trim($request['input_username']),
+                    'username'  => textNull($request['input_username']),
                     'password'  => md5(trim($request['input_password'])),
                 );
                 $this->db->insert('staff', $data_staff);
@@ -123,21 +113,26 @@ class Ctl_register extends MY_Controller
                 if ($new_id) {
 
                     #
-                    # update staff id on data employee
-                    $data_update = array(
-                        'staff_id' => $new_id
-                    );
-                    $this->db->where('id', $new_em_id);
-                    $this->db->update('employee', $data_update);
+                    # insert user roles
+                    if ($data_roles) {
+                        $this->load->library('permit');
+                        $this->permit->insert_batch_data($data_roles, $new_id);
+                    }
+
+                    if ($this->db->trans_status() === FALSE) {
+                        $this->db->trans_rollback();
+                    } else {
+                        $this->db->trans_commit();
+                    }
 
                     #
                     # helpdesk only
                     # insert user for helpdesk
-                    if($request['userfocus'] && !empty($this->session->userdata('user_code'))){
-                        $explode_userfocus = explode(",",$request['userfocus']);
-                        if($explode_userfocus && count($explode_userfocus)){
-                            foreach($explode_userfocus as $value){
-    
+                    if ($request['userfocus'] && !empty($this->session->userdata('user_code'))) {
+                        $explode_userfocus = explode(",", $request['userfocus']);
+                        if ($explode_userfocus && count($explode_userfocus)) {
+                            foreach ($explode_userfocus as $value) {
+
                                 $data_rolefocus = array(
                                     'staff_child'       => trim($value),
                                     'staff_owner'       => $new_id,
@@ -158,6 +153,8 @@ class Ctl_register extends MY_Controller
                     exit;
                 }
             }
+
+            $this->db->free_result();
 
 
 

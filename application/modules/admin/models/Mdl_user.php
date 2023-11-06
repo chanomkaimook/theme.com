@@ -25,7 +25,7 @@ class Mdl_user extends CI_Model
             staff.ID as ID,
             staff.USERNAME as USERNAME,
             staff.VERIFY as VERIFY,
-            staff.DATE_START as DATE_START,
+            staff.DATE_STARTS as DATE_STARTS,
             staff.DATE_UPDATE as DATE_UPDATE,
         ')
             ->join('employee', 'staff.employee_id = employee.id', 'left')

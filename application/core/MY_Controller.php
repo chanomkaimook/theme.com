@@ -5,6 +5,9 @@ class MY_Controller extends CI_Controller
 
 	public $langs;
 
+	// for check authentications
+	public $auth = true;
+
 	public $site_configs = array();
 	public function __construct()
 	{
@@ -35,22 +38,50 @@ class MY_Controller extends CI_Controller
 
         $this->lang->load('main', $this->langs);
         $this->lang->load('menu', $this->langs);
+
+		// echo "auth :".$this->auth;
+		// echo "token :".$this->caching->get('authorization');;
+		// print_r($this->session->userdata());
 	}
 
-	public function middleware()
+	/**
+	 * middle ware
+	 *
+	 * @param integer|null $level 1 = check login only not check permit
+	 * @return void
+	 */
+	public function middleware(int $level = null)
 	{
-		$this->is_logged_in();
-
-		$this->is_permit_in();
-
 		$this->is_alive_in();
+
+		if($level and $level == 1){
+			$this->is_logged_in();
+		} else{
+			$this->is_logged_in();
+
+			// $this->is_permit_in();
+		}
+
+
 	}
 
 	public function is_logged_in()
 	{
-		$user = $this->session->userdata('user_code');
-		if (!isset($user)) {
-			// User is logged in.  Do something.
+		$result = false;
+
+		// Load Authorization Library
+        $this->load->library('authorization_token');
+		// check from library auth session and API
+		$this->auth = $this->authorization_token->validateToken();
+
+		if (isset($this->auth['status']) and $this->auth['status'] === true) {
+           $result = true;
+        }
+
+		if($result == false){
+			// User is token expire in.  Do something.
+			session_destroy();
+
 			redirect(site_url('login/ctl_login'));
 		}
 	}

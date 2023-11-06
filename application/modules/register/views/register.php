@@ -57,16 +57,6 @@
 
                                             <div class="form-group row">
                                                 <div class="col-12">
-                                                    <label for="">สิทธิ์</label>
-                                                    <select name="role" id="role" class="form-control" required>
-                                                        <option value="">ระบุสิทธิ์</option>
-                                                        <option value="4" selected>user</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-
-                                            <div class="form-group row">
-                                                <div class="col-12">
                                                     <label for="">ชื่อ</label>
                                                     <input class="form-control" type="text" id="name" name="name" placeholder="ชื่อภาษาไทย" required>
                                                 </div>

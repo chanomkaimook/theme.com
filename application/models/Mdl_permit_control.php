@@ -1,13 +1,15 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Mdl_roles extends CI_Model
+class Mdl_permit_control extends CI_Model
 
 {
-    private $table = "roles";
+    private $table = "permit_control";
     private $fildstatus = "status_offview";
 
-    private $roles_control = "roles_control";
+    private $roles = "roles";
+    private $permit = "permit";
+    private $menu = "menus";
 
     public function __construct()
     {
@@ -18,40 +20,6 @@ class Mdl_roles extends CI_Model
     {
         // $this->db->free_result();
     }
-
-    //  =========================
-    //  =========================
-    //  Function
-    //  =========================
-    //  =========================
-    function update_roles_control(array $data = null, int $roles_id = null)
-    {
-        if ($roles_id && $data) {
-            $data_permit = [];
-            $list_permit = $data;
-            foreach ($list_permit as $value) {
-                $data_permit[] = array(
-                    'roles_id'  => $roles_id,
-                    'permit_id'  => $value,
-                    'user_starts'  => $this->session->userdata('user_code'),
-                );
-            }
-
-            if (count($data_permit)) {
-                $this->db->insert_batch($this->roles_control, $data_permit);
-
-                // keep log
-                log_data(array('insert' . $this->roles_control, 'insert', $this->db->last_query()));
-            }
-        }
-
-        return true;
-    }
-    //  =========================
-    //  =========================
-    //  End Function
-    //  =========================
-    //  =========================
 
     //  =========================
     //  =========================
@@ -124,51 +92,134 @@ class Mdl_roles extends CI_Model
         }
     }
 
+    /**
+     * roles data from roles_control
+     *
+     * @param integer|null $id  = roles_id
+     * @param array|null $optionnal
+     * @param string $type
+     * @return void
+     */
+    public function get_dataRoles(int $roles_id = null, array $optionnal = null, string $type = "result")
+    {
+        # code...
+        $roles = $this->roles;
+        $permit = $this->permit;
+        $menus = $this->menu;
+
+        if (!$optionnal['select']) {
+            $optionnal['select'] = "*,
+            " . $permit . ".name as NAME,
+            " . $permit . ".name_us as NAME_US,
+            " . $menus . ".name as MENUS_NAME,
+            " . $menus . ".name_us as MENUS_NAME_US";
+        }
+        $optionnal['where'][$this->table . '.roles_id'] = $roles_id;
+
+        $optionnal['order_by'] = array(
+            $menus . '.sort' => 'asc',
+            $permit . '.sort' => 'asc',
+        );
+
+        $sql = (object) $this->get_sql(null, $optionnal, $type);
+        $sql->join($roles, $roles . '.id=' . $this->table . '.roles_id', 'left')
+            ->join($permit, $permit . '.id=' . $this->table . '.permit_id', 'left')
+            ->join($menus, $menus . '.id=' . $permit . '.menus_id', 'left')
+            ->where($this->table . '.' . $this->fildstatus, null);
+        $query = $sql->get();
+
+        return $query->$type();
+    }
+
     //  *
     //  * CRUD
     //  * insert
     //  * 
     //  * insert data
     //  *
-    public function insert_data()
+    /**
+     * insert permit
+     *
+     * @param array|null $data = data[col=>value]
+     * @return void
+     */
+    public function insert_data(array $data = null)
     {
-        // print_r($this->input->post());
-        // exit;
+
         $result = array(
             'error'     => 1,
             'txt'       => 'ไม่มีการทำรายการ',
         );
 
-        if ($this->input->post()) {
-            $data = array(
-                'name'  => textNull($this->input->post('roles_name_th')),
-                'name_us'  => textNull($this->input->post('roles_name_us')),
-                'description'  => textNull($this->input->post('roles_descrip_th')),
-                'description_us'  => textNull($this->input->post('roles_descrip_us')),
-
-                'user_starts'  => $this->session->userdata('user_code'),
-            );
+        if ((array) $data) {
 
             $this->db->insert($this->table, $data);
             $new_id = $this->db->insert_id();
 
             // keep log
-            log_data(array('insert' . $this->table, 'insert', $this->db->last_query()));
+            log_data(array('insert ' . $this->table, 'insert', $this->db->last_query()));
 
-            // 
-            // if find variable permit_id
-            $this->update_roles_control($this->input->post('permit_id'), $new_id);
+            $result = array(
+                'error'     => 0,
+                'txt'       => 'ทำรายการสำเร็จ',
+                'data'      => array(
+                    'id'    => $new_id
+                )
+            );
+        } else {
+            $request = $_REQUEST;
+            
+            if (textShow($request['roles_id']) || textShow($request['permit_id'])) {
 
-            if ($new_id) {
+                $this->db->insert($this->table, $data);
+                $new_id = $this->db->insert_id();
 
-                $result = array(
-                    'error'     => 0,
-                    'txt'       => 'ทำรายการสำเร็จ',
-                    'data'      => array(
-                        'id'    => $new_id
-                    )
-                );
+                // keep log
+                log_data(array('insert ' . $this->table, 'insert', $this->db->last_query()));
+
+                if ($new_id) {
+                    $result = array(
+                        'error'     => 0,
+                        'txt'       => 'ทำรายการสำเร็จ',
+                        'data'      => array(
+                            'id'    => $new_id
+                        )
+                    );
+                }
             }
+        }
+
+        return $result;
+    }
+    /**
+     * insert permit
+     *
+     * @param array|null $data = data[key] => array(col=>value)
+     * @return void
+     */
+    public function insert_batch_data(array $data = null)
+    {
+
+        $result = array(
+            'error'     => 1,
+            'txt'       => 'ไม่มีการทำรายการ',
+        );
+
+        if ((array) $data) {
+
+            $this->db->insert_batch($this->table, $data);
+            $new_id = $this->db->insert_id();
+
+            // keep log
+            log_data(array('insert ' . $this->table, 'insert', $this->db->last_query()));
+
+            $result = array(
+                'error'     => 0,
+                'txt'       => 'ทำรายการสำเร็จ',
+                'data'      => array(
+                    'id'    => $new_id
+                )
+            );
         }
 
         return $result;
@@ -183,11 +234,17 @@ class Mdl_roles extends CI_Model
     public function update_data()
     {
         $item_id = $this->input->post('item_id');
+
+        /* $begin_date = "";
+        if ($this->input->post('item_begin_date')) {
+            $ex = explode('-', $this->input->post('item_begin_date'));
+            $begin_date = $ex[2] . "-" . $ex[1] . "-" . $ex[0];
+        } */
+
         $data = array(
-            'name'  => textNull($this->input->post('roles_name_th')),
-            'name_us'  => textNull($this->input->post('roles_name_us')),
-            'description'  => textNull($this->input->post('roles_descrip_th')),
-            'description_us'  => textNull($this->input->post('roles_descrip_us')),
+            'code'  => textShow($this->input->post('label_2')),
+            'name'  => textShow($this->input->post('label_6')),
+            'workstatus'  => $this->input->post('label_1'),
 
             'date_update'  => date('Y-m-d H:i:s'),
             'user_update'  => $this->session->userdata('user_code'),
@@ -198,19 +255,6 @@ class Mdl_roles extends CI_Model
 
         // keep log
         log_data(array('update ' . $this->table, 'update', $this->db->last_query()));
-
-        // 
-        // if find variable permit_id
-        // roles_control update
-
-        // roles_control will delete permit before update
-        $this->db->delete($this->roles_control, array('roles_id' => $item_id));
-
-        // keep log
-        log_data(array('delete' . $this->roles_control, 'delete', $this->db->last_query()));
-
-        // roles_control update
-        $this->update_roles_control($this->input->post('permit_id'), $item_id);
 
         $result = array(
             'error'     => 0,
@@ -231,8 +275,8 @@ class Mdl_roles extends CI_Model
     //  *
     public function delete_data()
     {
-        $item_id = textNull($this->input->post('item_id'));
-        $item_remark = textNull($this->input->post('item_remark'));
+        $item_id = textShow($this->input->post('item_id'));
+        $item_remark = textShow($this->input->post('item_remark'));
 
         $result = array(
             'error' => 1,
@@ -261,7 +305,7 @@ class Mdl_roles extends CI_Model
 
         $result = array(
             'error'     => 0,
-            'txt'       => 'ลบการสำเร็จ'
+            'txt'       => 'ทำรายการสำเร็จ'
         );
 
         return $result;
@@ -294,14 +338,13 @@ class Mdl_roles extends CI_Model
         $hidden_start = "";
         $hidden_end = "";
 
-        $sql = $this->db->from($this->table)
-            ->where($this->table . '.id >=', 1);
+        $sql = $this->db->from($this->table);
 
-        if (textNull($request['hidden_datestart'])) {
-            $hidden_start = textNull($request['hidden_datestart']);
+        if (textShow($request['hidden_datestart'])) {
+            $hidden_start = textShow($request['hidden_datestart']);
         }
-        if (textNull($request['hidden_dateend'])) {
-            $hidden_end = textNull($request['hidden_dateend']);
+        if (textShow($request['hidden_dateend'])) {
+            $hidden_end = textShow($request['hidden_dateend']);
         }
 
         if ($hidden_start && $hidden_end) {

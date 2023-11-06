@@ -20,14 +20,25 @@ function check_session(string $module_name = null)
   $ci->load->database();
   # code...
 
-  // echo "<pre>";
-  // print_r($ci->session->userdata());exit;
   $role = $ci->session->userdata('role');
 
   $module = $module_name ? $module_name : $ci->uri->segment(1);
   $result = false;
 
-  // echo $module;
+/*   echo "<pre>";
+  print_r($ci->session->userdata());
+    echo $module;
+
+    $default = array('name', 'index','gender', 'location', 'type', 'sort');
+$array = $ci->uri->segment_array();
+if($ci->uri->segment(3) == false){
+  $array[3] = 'view';
+}
+echo "<pre>";
+print_r($array);
+  exit; */
+
+
 
   if ($ci->session->userdata('role_level') <= 1) {
     $result = true;

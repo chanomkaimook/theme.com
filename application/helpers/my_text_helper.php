@@ -36,11 +36,11 @@ function textLang(String $text_th = null, String $text_en = null, bool $switch =
 
   $ci->load->helper('cookie');
 
-  $result = textShow($text_th);
+  $result = textNull($text_th);
   if (get_cookie('langadmin')) {
     $lang = get_cookie('langadmin');
     if ($lang != 'thai') {
-      $result = textShow($text_en);
+      $result = textNull($text_en);
     }
   }
 

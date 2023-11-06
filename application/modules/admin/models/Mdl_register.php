@@ -22,7 +22,7 @@ class Mdl_register extends CI_Model
             staff.ID as ID,
             staff.USERNAME as USERNAME,
             staff.VERIFY as VERIFY,
-            staff.DATE_START as DATE_START,
+            staff.DATE_STARTS as DATE_STARTS,
         ')
             ->join('employee', 'staff.employee_id = employee.id', 'left')
             ->where('staff.verify is null')
@@ -37,7 +37,7 @@ class Mdl_register extends CI_Model
         # code...
         $sql = $this->db->select('ID,EMPLOYEE_ID')
             ->from('staff')
-            ->where('DATEDIFF(NOW(), DATE_START) > 0', null, false)
+            ->where('DATEDIFF(NOW(), DATE_STARTS) > 0', null, false)
             ->where('verify is null', null, false)
             ->get();
         $number = $sql->num_rows();
@@ -52,7 +52,7 @@ class Mdl_register extends CI_Model
 
             #
             # delete staff
-            $this->db->query("DELETE FROM staff WHERE DATEDIFF(NOW(), DATE_START) > 0 and verify is null");
+            $this->db->query("DELETE FROM staff WHERE DATEDIFF(NOW(), DATE_STARTS) > 0 and verify is null");
         }
 
         return true;

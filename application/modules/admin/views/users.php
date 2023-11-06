@@ -13,8 +13,7 @@
                 <table id="datatable_users" class="table  dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                     <thead>
                         <tr>
-                            <th>role</th>
-                            <th>level</th>
+                            <th>ระดับ</th>
                             <th>ชื่อ</th>
                             <th>นามสกุล</th>
                             <th>username</th>
@@ -58,13 +57,46 @@
             order: [
                 [5, 'desc']
             ],
+            /* columnDefs: [{
+                "targets": [6],
+                "data": null
+            }], */
+            columns: [
+                {
+                    "data": "LEVEL",
+                },
+                {
+                    "data": "NAME",
+                },
+                {
+                    "data": "LASTNAME",
+                },
+                {
+                    "data": "USERNAME",
+                },
+                {
+                    "data": {
+                        _: 'DATE_STARTS.display', // default show
+                        sort: 'DATE_STARTS.timestamp'
+                    }
+                },
+                {
+                    "data": {
+                        _: 'DATE_ACTIVE.display', // default show
+                        sort: 'DATE_ACTIVE.timestamp'
+                    }
+                },
+                {
+                    "data": null,
+                },
+            ],
             "createdRow": function(row, data, index) {
                 let table_btn_edit_user =
                     `
                 <button type="button" class="btn btn-warning btn_edit_user btn-sm" data-id="${data['ID']}" data-toggle="modal" data-target="#btn_register_user_modal">แก้ไข</button>
                 <button type="button" class="btn btn-danger btn_delete_user btn-sm" data-id="${data['ID']}">ลบ</button>
                 `
-                $('td', row).eq(7).html(table_btn_edit_user)
+                $('td', row).eq(6).html(table_btn_edit_user)
             },
 
 
@@ -138,10 +170,11 @@
 
             let data = new FormData();
             for (i = 0; i < len; i++) {
+
                 data.append(dataArray[i].name, dataArray[i].value);
             }
 
-            data.append('userfocus', $('[data-toggle=select2]').val())
+            data.append('group_role', $('#role[data-toggle=select2]').val())
 
             fetch(url, {
                     method: 'POST',

@@ -91,7 +91,7 @@ class Authorization_Token
         $headers = $this->CI->input->request_headers();
        
         /**
-         * Begin Modifyer
+         * todo Begin Modifyer
          * work with session
          * Request from session
          */
