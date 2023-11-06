@@ -10,6 +10,30 @@ class Roles
 	}
 
 	/**
+	 * get roles data
+	 *
+	 * @param integer|null $id = roles_id from roles_control
+	 * @return void
+	 */
+	function get_data(int $id = null, array $optional = null, $type = "result_array")
+	{
+		//=	 call database	=//
+		$ci = &get_instance();
+		$ci->load->database();
+		//===================//
+
+		$result = [];
+
+		if ($id) {
+			$ci->load->model('mdl_roles_control');
+
+			$sql = $ci->mdl_roles_control->get_dataRoles($id, $optional, $type);
+		}
+
+		return $result;
+	}
+
+	/**
 	 * data status
 	 *
 	 * @param string $select
@@ -19,7 +43,7 @@ class Roles
 	 * @param integer $start
 	 * @return void
 	 */
-	function get_data(String $select = '*', array $optional = [], String $order = 'id asc', int $limit = null, int $start = 0)
+	function get_dataJS(String $select = '*', array $optional = [], String $order = 'id asc', int $limit = null, int $start = 0)
 	{
 		//=	 call database	=//
 		$ci = &get_instance();
@@ -81,7 +105,7 @@ class Roles
 	 * @param integer|null $id = roles_id from roles_control
 	 * @return void
 	 */
-	function get_dataRoles(int $id = null, array $optional = null, $type = "result")
+	function get_dataRolesJS(int $id = null, array $optional = null, $type = "result")
 	{
 		//=	 call database	=//
 		$ci = &get_instance();

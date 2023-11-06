@@ -7,6 +7,7 @@ class mdl_login extends CI_Model
     {
         parent::__construct();
         $this->load->library('Authorization_token');
+        $this->load->library('Permit');
     }
 
     public function check_login()
@@ -43,19 +44,11 @@ class mdl_login extends CI_Model
 
                 $staff_id = $row->ID;
 
-                $sql_permit = $this->db->select('*')
-                    ->from('permit_control')
-                    ->where('staff_id', $staff_id)
-                    ->where('status_offview is null', null, false);
-
-                $query_permit = $sql_permit->get();
-                $num_permit = $query_permit->num_rows();
+                $array_permit = $this->permit->get_dataPermitSet($staff_id);
 
                 $permit_json = "";
 
-                if ($num_permit) {
-                    $permit_allow = [];
-                    $permit_ban = [];
+                if ($array_permit) {
                     /* foreach ($query_permit->result() as $row_permit) {
 
                         #
@@ -87,16 +80,19 @@ class mdl_login extends CI_Model
 
                     #
                     # fill data ban out
-                    $permit = array_values(array_diff($permit_allow, $permit_ban));
+                    // $permit = array_values(array_diff($permit_allow, $permit_ban));
 
                     #
                     # set permit convert to json data
-                    $permit_json = json_encode($permit);
+                    $permit_json = json_encode($array_permit);
                 }
                 $array = array(
-                    'permit'    => '123456789'
+                    'staff_id'    => $staff_id
                 );
-
+                echo "<pre> Permit";
+print_r($array_permit);
+print_r($permit_json);
+exit;
                 if (strnatcmp($user_name, $row->USERNAME) == 0) {
 
                     $token = $this->authorization_token->generateToken($array);
@@ -109,13 +105,22 @@ class mdl_login extends CI_Model
                     );
 
                     //
-                    // caching
+                    // caching token
                     if (!$this->caching->get('authorization')) {
                         $authorization = $token;
             
-                        // Save into the cache for 5 minutes
+                        // Save into the cache for 1 day
                         $this->caching->save('authorization', $authorization);
                     }
+
+                    //
+                    // caching permit
+                    if (!$this->caching->get('permit')) {
+                        // Save into the cache for 1 day
+                        $this->caching->save('permit', $permit_json);
+                    }
+
+                    // exit;
                 } else {
                     $result = array(
                         'error' => 1,

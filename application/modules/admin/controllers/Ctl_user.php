@@ -34,6 +34,10 @@ class Ctl_user extends MY_Controller
         $level = $this->db->get('level');
         $data['level'] = $level->result(); */
 
+        // echo check_role('a');
+        // echo "<pre>";
+        // print_r($this->session->userdata());exit;
+
         $data['role'] = $this->mdl_roles->get_dataShow();
         $data['level'] = "";
         $this->template->set_layout('lay_datatable');
@@ -62,8 +66,8 @@ class Ctl_user extends MY_Controller
                 }
 
                 $sub_data = [];
-                $date_start = toThaiDateTimeString($row->DATE_STARTS, 'datetime');
-                $date_update = textNull($row->DATE_UPDATE) ? toThaiDateTimeString($row->DATE_UPDATE, 'datetime') : null;
+                $date_start = toDateTimeString($row->DATE_STARTS, 'datetime');
+                $date_update = textNull($row->DATE_UPDATE) ? toDateTimeString($row->DATE_UPDATE, 'datetime') : null;
 
                 $sub_data['ID'] = $row->ID;
                 $sub_data['LEVEL'] = "";

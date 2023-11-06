@@ -31,7 +31,7 @@ class Ctl_roles extends MY_Controller
     {
         $this->load->library('roles');
         // permit variable
-        $array_permit = $this->roles->get_data();
+        $array_permit = $this->roles->get_dataJS();
         $data['permit'] = $array_permit;
 
         $this->template->set_layout('lay_datatable');
@@ -155,7 +155,7 @@ class Ctl_roles extends MY_Controller
         
         $request = $_REQUEST;
         $item_id = $request['id'];
-        $array_permit = $this->roles->get_dataRoles($item_id,null,"result_array");
+        $array_permit = $this->roles->get_dataRolesJS($item_id,null,"result_array");
 
         $data = $this->model->get_data($item_id);
         $data->PERMIT = $array_permit;

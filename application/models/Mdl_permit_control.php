@@ -92,40 +92,16 @@ class Mdl_permit_control extends CI_Model
         }
     }
 
-    /**
-     * roles data from roles_control
-     *
-     * @param integer|null $id  = roles_id
-     * @param array|null $optionnal
-     * @param string $type
-     * @return void
-     */
-    public function get_dataRoles(int $roles_id = null, array $optionnal = null, string $type = "result")
+    public function get_dataStaff(int $id = null, array $optionnal = null, string $type = "result")
     {
-        # code...
-        $roles = $this->roles;
-        $permit = $this->permit;
-        $menus = $this->menu;
-
-        if (!$optionnal['select']) {
-            $optionnal['select'] = "*,
-            " . $permit . ".name as NAME,
-            " . $permit . ".name_us as NAME_US,
-            " . $menus . ".name as MENUS_NAME,
-            " . $menus . ".name_us as MENUS_NAME_US";
+        if(!$id){
+            $id = $this->session->userdata('user_code');
         }
-        $optionnal['where'][$this->table . '.roles_id'] = $roles_id;
 
-        $optionnal['order_by'] = array(
-            $menus . '.sort' => 'asc',
-            $permit . '.sort' => 'asc',
+        $optionnal['where'] = array(
+            'staff_id'  => $id
         );
-
-        $sql = (object) $this->get_sql(null, $optionnal, $type);
-        $sql->join($roles, $roles . '.id=' . $this->table . '.roles_id', 'left')
-            ->join($permit, $permit . '.id=' . $this->table . '.permit_id', 'left')
-            ->join($menus, $menus . '.id=' . $permit . '.menus_id', 'left')
-            ->where($this->table . '.' . $this->fildstatus, null);
+        $sql = (object) $this->get_sql(null, $optionnal);
         $query = $sql->get();
 
         return $query->$type();

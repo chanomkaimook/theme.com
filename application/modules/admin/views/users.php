@@ -61,8 +61,7 @@
                 "targets": [6],
                 "data": null
             }], */
-            columns: [
-                {
+            columns: [{
                     "data": "LEVEL",
                 },
                 {
@@ -93,8 +92,8 @@
             "createdRow": function(row, data, index) {
                 let table_btn_edit_user =
                     `
-                <button type="button" class="btn btn-warning btn_edit_user btn-sm" data-id="${data['ID']}" data-toggle="modal" data-target="#btn_register_user_modal">แก้ไข</button>
-                <button type="button" class="btn btn-danger btn_delete_user btn-sm" data-id="${data['ID']}">ลบ</button>
+                <button type="button" class="btn btn-warning text-capitalize btn_edit_user btn-sm" data-id="${data['ID']}" data-toggle="modal" data-target="#btn_register_user_modal">${table_column_edit[setlang]}</button>
+                <button type="button" class="btn btn-danger text-capitalize btn_delete_user btn-sm" data-id="${data['ID']}">${table_column_del[setlang]}</button>
                 `
                 $('td', row).eq(6).html(table_btn_edit_user)
             },

@@ -79,15 +79,11 @@ class Ctl_login extends MY_Controller
                         'user_code' => $result['data']->ID,
                         'user_emp' => $result['data']->EMPLOYEE_ID,
                         'user_name' => $result['data']->NAME . " " . $result['data']->LASTNAME,
-
-                        'level'    => '',
                         'department'    => $result['data']->DEPARTMENT,
                         'department_id' => $result['data']->DEPARTMENT_ID,
                         'section'       => $result['data']->SECTION,
                         'section_id'    => $result['data']->SECTION_ID,
 
-                        'role'          => $result['data']->ROLES_NAME,
-                        'role_level'    => $result['data']->ROLES_LEVEL,
                         'authorization'         => $result['token'],
                     );
                     $this->session->set_userdata($session);

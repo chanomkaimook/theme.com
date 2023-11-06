@@ -1,12 +1,28 @@
 <?php
 error_reporting(E_ALL & ~E_NOTICE);
 
+// convert date time
+// reference language cookie
+function toDateTimeString($date, $typereturn = null)
+{
+  $ci = &get_instance();
+  $ci->load->database();
+
+  $ci->load->helper('cookie');
+
+  $lang = get_cookie('langadmin');
+  if (!$lang || $lang == 'thai') {
+    return toThaiDateTimeString($date, $typereturn);
+  } else {
+    return toEngDateTimeString($date, $typereturn);
+  }
+}
 //	convert thai date
 //	@param	date	@date = date yyyy-mm-dd
 //	@param	typereturn	@text = [date , datetime]
 //	return datetime TH
 //
-function toThaiDateTimeString($date, $typereturn=null)
+function toThaiDateTimeString($date, $typereturn = null)
 {
 
   $thai_day_arr = array("อา", "จ", "อ", "พ", "พฤ", "ศ", "ส");
@@ -43,7 +59,13 @@ function toThaiDateTimeString($date, $typereturn=null)
   return $result;
 }
 
-function toEngDateTimeString($date, $typereturn=null)
+
+//	convert thai date
+//	@param	date	@date = date yyyy-mm-dd
+//	@param	typereturn	@text = [date , datetime]
+//	return datetime US
+//
+function toEngDateTimeString($date, $typereturn = null)
 {
 
   $day_arr = array("Su", "M", "T", "W", "Th", "F", "Sa");
@@ -122,7 +144,7 @@ function dateRange_fromDate(string $dateset = null)
   $end_week = '';
 
   if ($dateset) {
-  
+
     $date = new DateTime($dateset);
     $numberToWeek = (int) $date->format("N");
     if ($numberToWeek == 1) {
@@ -158,7 +180,7 @@ function monthRange_fromDate(string $dateset = null)
   $end = '';
 
   if ($dateset) {
-  
+
     $start = date("Y-m-01", strtotime($dateset));
     $end = date("Y-m-t", strtotime($dateset));
     // $end = new \DateTime('last day of this month');
@@ -184,7 +206,7 @@ function yearRange_fromDate(string $dateset = null)
   $end = '';
 
   if ($dateset) {
-  
+
     $start = date("Y-01-01", strtotime($dateset));
     $end = date("Y-12-31", strtotime($dateset));
   }

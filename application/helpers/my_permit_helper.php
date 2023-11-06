@@ -1,19 +1,42 @@
 <?php
 error_reporting(E_ALL & ~E_NOTICE);
 
+function check_role(string $role_name = null)
+{
+  $ci = &get_instance();
+  $ci->load->database();
+
+  # code...
+  $result = false;
+
+  if ($role_name) {
+    // convert json data permit to array
+    //
+    // caching
+    if (!$ci->caching->get('permit')) {
+      // $permit = $ci->session->userdata('permit');
+
+      // Save into the cache for 1 days
+      // $ci->caching->save('permit', $permit);
+
+      // $data_permit = json_decode($ci->session->userdata('permit'));
+    } else {
+      // $data_permit = json_decode($ci->caching->get('authorization'));
+      $data_permit = $ci->caching->get('permit');
+    }
+    echo "<pre>";
+    print_r($data_permit);
+    /* if (is_numeric(array_search($role_name, $data_permit))) {
+      $result = true;
+    } */
+  }
+
+  return $result;
+}
 #
 # role    | value
 #
 # 1       | administrator
-# 1       | VIP
-# 2       | supervisor
-# 3       | operator
-# 4       | user
-# 5       | guest
-
-/**
- * 
- */
 function check_session(string $module_name = null)
 {
   $ci = &get_instance();
@@ -25,7 +48,7 @@ function check_session(string $module_name = null)
   $module = $module_name ? $module_name : $ci->uri->segment(1);
   $result = false;
 
-/*   echo "<pre>";
+  /*   echo "<pre>";
   print_r($ci->session->userdata());
     echo $module;
 
@@ -39,12 +62,11 @@ print_r($array);
   exit; */
 
 
-
-  if ($ci->session->userdata('role_level') <= 1) {
+  if ($ci->session->userdata('user_code') == 1) {
     $result = true;
   } else {
-    #
-    # convert json data permit to array
+    // role administrator
+    // convert json data permit to array
     $data_permit = json_decode($ci->session->userdata('permit'));
 
     if (is_numeric(array_search($module, $data_permit)) && $ci->session->userdata('permit')) {
@@ -74,22 +96,30 @@ function check_userlive()
   }
 }
 
-function check_permit()
+function check_permit(string $module_name = null, string $controller = null, string $method = null)
 {
   $ci = &get_instance();
   $ci->load->database();
   # code...
 
-  $result = check_session();
+  $result = false;
+  $result = true;
+  $module = $module_name ? $module_name : $ci->uri->segment(1);
+
+  if (check_admin()) {
+    $result = true;
+  } else {
+
+  }
 
   if (!$result) {
     redirect(site_url('error_permit'));
   }
 }
 
-function check_permit_menu(string $module = null)
+function check_permit_menu(string $module = null, string $controller = null, string $method = null)
 {
-  $result = check_session($module);
+  $result = check_permit($module, $controller, $method);
   $css_name = '';
 
   if (!$result) {
@@ -99,6 +129,9 @@ function check_permit_menu(string $module = null)
   return $css_name;
 }
 
+// 
+// Function
+// 
 function check_operator()
 {
   $ci = &get_instance();
@@ -127,7 +160,7 @@ function check_supervisor()
   }
 }
 
-function check_admin()
+function check_admin(int $staff_id = null)
 {
   $ci = &get_instance();
   $ci->load->database();
@@ -135,9 +168,24 @@ function check_admin()
 
   $result = false;
 
-  if ($ci->session->userdata('role_level') <= 1) {
+  // master admin
+  if ($ci->session->userdata('user_code') == 1) {
     $result = true;
-    return $result;
+  }
+
+  return $result;
+}
+
+function check_adminRole(int $staff_id = null)
+{
+  $ci = &get_instance();
+  $ci->load->database();
+  # code...
+
+  // role administrator
+  if (check_role('administrator')) {
+    // check_role('administrator');
+    $result = true;
   }
 }
 
@@ -166,3 +214,7 @@ function check_helpdesk()
     return $result;
   }
 }
+
+// 
+// End Function
+// 
