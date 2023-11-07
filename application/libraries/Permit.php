@@ -39,39 +39,60 @@ class Permit
 		$roles_id_list = [];
 		$permit_id_list = [];
 		$permit_name_list = [];
+		$menu_name_list = [];
 
 		if ($staff_id) {
 			$query_permit = $this->control->get_dataStaff($staff_id);
-			print_r($query_permit);
-			if($query_permit){
+
+			if ($query_permit) {
 				foreach ($query_permit as $row_permit) {
-					if($row_permit->ROLES_ID){
+					if ($row_permit->ROLES_ID) {
 						$role_id = $row_permit->ROLES_ID;
 						$roles_id_list[] =  $role_id;
 
-						$row_in_1 = $this->roles->get_dataRoles($role_id);
-						print_r($row_in_1);
-						$permit_name_list[] = $row_in_1->CODE;
-					}
+						$q_in_1 = $this->roles->get_dataRoles($role_id);
 
-					if($row_permit->PERMIT_ID){
+						if ($q_in_1) {
+							foreach ($q_in_1 as $row_in_1) {
+								if ($row_in_1->CODE) {
+									$permit_name_list[] = $row_in_1->CODE;
+								}
+
+								if ($row_in_1->MENUS_CODE) {
+									$menu_name_list[] = $row_in_1->MENUS_CODE;
+								}
+							}
+						}
+					}	// end role list
+
+					if ($row_permit->PERMIT_ID) {
 						$permit_id = $row_permit->PERMIT_ID;
 						$permit_id_list[] =  $permit_id;
 
-						$row_in_2 = $this->permit->get_data($permit_id);
-						$permit_name_list[] = $row_in_2->CODE;
-					}
+						$q_in_2 = $this->permit->get_data($permit_id);
+
+						if ($q_in_2) {
+							foreach ($q_in_2 as $row_in_2) {
+								if ($row_in_2->CODE) {
+									$permit_name_list[] = $row_in_2->CODE;
+								}
+
+								if ($row_in_2->MENUS_CODE) {
+									$menu_name_list[] = $row_in_2->MENUS_CODE;
+								}
+							}
+						}
+					}	// end permit list
 				}
-
 			}
-
-			
 		}
 
 		$result = array(
-			'roles_id_list'		=> $roles_id_list,
-			'permit_id_list'	=> $permit_id_list, 	
-			'permit_name_list'	=> $permit_name_list
+			'user_id'			=> $staff_id,
+			'roles_id_list'		=> array_unique($roles_id_list),
+			'permit_id_list'	=> array_unique($permit_id_list),
+			'permit_name_list'	=> array_unique($permit_name_list),
+			'menu_name_list'	=> array_unique($menu_name_list)
 		);
 
 		return $result;

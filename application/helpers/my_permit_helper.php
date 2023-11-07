@@ -1,7 +1,20 @@
 <?php
 error_reporting(E_ALL & ~E_NOTICE);
+#
+# Function recommended
+# 
+# check admin or master admin
+# check_admin()
+#
 
-function check_role(string $role_name = null)
+/**
+ * check role data
+ *
+ * @param string|null $role_name
+ * @param integer|null $staff_id = It's will be user login if not found
+ * @return void
+ */
+function check_role(string $role_name = null, int $staff_id = null)
 {
   $ci = &get_instance();
   $ci->load->database();
@@ -9,11 +22,11 @@ function check_role(string $role_name = null)
   # code...
   $result = false;
 
-  if ($role_name) {
+  if ($role_name && !$staff_id) {
     // convert json data permit to array
     //
     // caching
-    if (!$ci->caching->get('permit')) {
+    if (!$ci->caching->get('permit_' . $ci->session->userdata('user_code'))) {
       // $permit = $ci->session->userdata('permit');
 
       // Save into the cache for 1 days
@@ -21,105 +34,213 @@ function check_role(string $role_name = null)
 
       // $data_permit = json_decode($ci->session->userdata('permit'));
     } else {
-      // $data_permit = json_decode($ci->caching->get('authorization'));
-      $data_permit = $ci->caching->get('permit');
+      $data_permit = (array)json_decode($ci->caching->get('permit_' . $ci->session->userdata('user_code')));
     }
-    echo "<pre>";
-    print_r($data_permit);
-    /* if (is_numeric(array_search($role_name, $data_permit))) {
+
+    if (is_numeric(array_search($role_name, $data_permit['roles_id_list']))) {
       $result = true;
-    } */
-  }
-
-  return $result;
-}
-#
-# role    | value
-#
-# 1       | administrator
-function check_session(string $module_name = null)
-{
-  $ci = &get_instance();
-  $ci->load->database();
-  # code...
-
-  $role = $ci->session->userdata('role');
-
-  $module = $module_name ? $module_name : $ci->uri->segment(1);
-  $result = false;
-
-  /*   echo "<pre>";
-  print_r($ci->session->userdata());
-    echo $module;
-
-    $default = array('name', 'index','gender', 'location', 'type', 'sort');
-$array = $ci->uri->segment_array();
-if($ci->uri->segment(3) == false){
-  $array[3] = 'view';
-}
-echo "<pre>";
-print_r($array);
-  exit; */
-
-
-  if ($ci->session->userdata('user_code') == 1) {
-    $result = true;
+    }
   } else {
-    // role administrator
-    // convert json data permit to array
-    $data_permit = json_decode($ci->session->userdata('permit'));
-
-    if (is_numeric(array_search($module, $data_permit)) && $ci->session->userdata('permit')) {
-      $result = true;
-    }
+    // set staff_id
+    # codeing
   }
-
-
 
   return $result;
 }
 
-function check_userlive()
+/**
+ * check permit data
+ *
+ * @param array|string|null $permit_value = module/controler/method || permit id
+ * @param integer|null $staff_id
+ * @param string $type = permit_name_list || permit_id_list
+ * @return void
+ */
+function check_permit($permit_value = null, int $staff_id = null, string $type = "permit_name_list")
 {
   $ci = &get_instance();
   $ci->load->database();
-  # code...
-  $userid = $ci->session->userdata('user_code');
 
-  $sql = $ci->db->from('staff')
-    ->where('id', $userid)
-    ->where('(status !=1 or verify is null)', null, false)
-    ->get();
-  $num = $sql->num_rows();
-  if ($num) {
-    redirect(site_url('error_permit'));
+  # code...
+  $result = false;
+
+  if ($permit_value && !$staff_id) {
+    // convert json data permit to array
+    //
+    // caching
+    if (!$ci->caching->get('permit_' . $ci->session->userdata('user_code'))) {
+      // $permit = $ci->session->userdata('permit');
+
+      // Save into the cache for 1 days
+      // $ci->caching->save('permit', $permit);
+
+      // $data_permit = json_decode($ci->session->userdata('permit'));
+    } else {
+      $data_permit = (array)json_decode($ci->caching->get('permit_' . $ci->session->userdata('user_code')));
+    }
+
+    if ($type == "permit_name_list") {
+
+      if (is_array($permit_value)) {
+        foreach ($permit_value as $array_value) {
+          $array_permit = explode('/', $array_value);
+          if ($result != true) {
+            $result = method_find_array($array_permit, $data_permit[$type]);
+          }
+        }
+      } else {
+        $array_permit = explode('/', $permit_value);
+        $result = method_find_array($array_permit, $data_permit[$type]);
+      }
+    }
+  } else {
+    // set staff_id
+    # codeing
   }
+
+  return $result;
 }
 
-function check_permit(string $module_name = null, string $controller = null, string $method = null)
+function method_find_array($value = null, array $dataarray = null)
+{
+  $result = false;
+
+  if ($value && $dataarray) {
+    if (count($value) == 3) {
+      $value = implode("-", $value);
+
+      if (is_numeric(array_search($value, $dataarray))) {
+        $result = true;
+      }
+    } else if (count($value) == 2) {
+
+      //
+      // set default third position value = view
+      $value = implode("-", $value);
+      $value += "/view";
+
+      if (is_numeric(array_search($value, $dataarray))) {
+        $result = true;
+      }
+    } else if (count($value) == 1) {
+      $value = (string) $value[0];
+      //
+      // result from function implode = 1.
+      // It's mean value = menu 
+      if (check_menu($value)) {
+        $result = true;
+      }
+    }
+  }
+
+  return $result;
+}
+
+/**
+ * check user id 
+ *
+ * @param integer|null $id
+ * @return void
+ */
+function check_user(int $id = null)
 {
   $ci = &get_instance();
   $ci->load->database();
+
   # code...
-
   $result = false;
-  $result = true;
-  $module = $module_name ? $module_name : $ci->uri->segment(1);
 
+  if ($id) {
+    // convert json data permit to array
+    //
+    // caching
+    if ($ci->caching->get('permit_' . $ci->session->userdata('user_code'))) {
+
+      $data_permit = (array)json_decode($ci->caching->get('permit_' . $ci->session->userdata('user_code')));
+
+      if ($data_permit['user_id'] == $id) {
+        $result = true;
+      }
+    } else {
+
+      if ($ci->session->userdata('user_code') && $ci->session->userdata('user_code') == $id) {
+        $result = true;
+      }
+    }
+  }
+
+  return $result;
+}
+
+/**
+ * check menu html data
+ *
+ * @param string|null $module_name = module/controler/method || permit id
+ * @param string $type = permit_name_list || permit_id_list
+ * @return void
+ */
+function check_menu(string $module_name = null)
+{
+  $ci = &get_instance();
+  $ci->load->database();
+
+  # code...
+  $result = false;
+
+  // check role admin
   if (check_admin()) {
     $result = true;
   } else {
+    echo $module_name . "------------";
+    if ($module_name) {
+      // convert json data permit to array
+      //
+      // caching
+      if ($ci->caching->get('permit_' . $ci->session->userdata('user_code'))) {
+        $data_permit = (array)json_decode($ci->caching->get('permit_' . $ci->session->userdata('user_code')));
+        print_r($data_permit);
+        /*  if (is_numeric(array_search($module_name, $data_permit['menu_name_list']))) {
+          $result = true;
+        } */
+      }
+    }
+  }
 
+  return $result;
+}
+
+
+
+
+
+
+
+function check_permitssssssss(string $module_name = null, string $controller = null, string $method = null)
+{
+  $ci = &get_instance();
+  $ci->load->database();
+  # code...
+
+  $result = false;
+
+  $module = $module_name ? $module_name : $ci->uri->segment(1);
+
+  // check role admin
+  if (check_admin()) {
+    $result = true;
+  } else {
   }
 
   if (!$result) {
     redirect(site_url('error_permit'));
   }
+
+  return $result;
 }
 
-function check_permit_menu(string $module = null, string $controller = null, string $method = null)
+function check_permit_menu(string $module = null)
 {
-  $result = check_permit($module, $controller, $method);
+  $result = check_permit($module);
   $css_name = '';
 
   if (!$result) {
@@ -130,33 +251,26 @@ function check_permit_menu(string $module = null, string $controller = null, str
 }
 
 // 
-// Function
+// Begin small function
 // 
-function check_operator()
+
+function check_userlive()
 {
   $ci = &get_instance();
   $ci->load->database();
   # code...
 
-  $result = false;
+  if ($ci->session->userdata()) {
+    $userid = $ci->session->userdata('user_code');
 
-  if ($ci->session->userdata('role_level') >= 20 && $ci->session->userdata('role_level') <= 29) {
-    $result = true;
-    return $result;
-  }
-}
-
-function check_supervisor()
-{
-  $ci = &get_instance();
-  $ci->load->database();
-  # code...
-
-  $result = false;
-
-  if ($ci->session->userdata('role_level') <= 19) {
-    $result = true;
-    return $result;
+    $sql = $ci->db->from('staff')
+      ->where('id', $userid)
+      ->where('(status !=1 or verify is null)', null, false)
+      ->get();
+    $num = $sql->num_rows();
+    if ($num) {
+      redirect(site_url('error_permit'));
+    }
   }
 }
 
@@ -173,6 +287,16 @@ function check_admin(int $staff_id = null)
     $result = true;
   }
 
+  // administrator
+  if (check_masterAdminRole()) {
+    $result = true;
+  }
+
+  // administrator
+  if (check_adminRole()) {
+    $result = true;
+  }
+
   return $result;
 }
 
@@ -182,26 +306,17 @@ function check_adminRole(int $staff_id = null)
   $ci->load->database();
   # code...
 
+  $result = false;
+
   // role administrator
-  if (check_role('administrator')) {
-    // check_role('administrator');
+  if (check_role(1, null)) {
     $result = true;
   }
+
+  return $result;
 }
 
-function is_Mobile()
-{
-  $ci = &get_instance();
-  $ci->load->database();
-  # code...
-
-  include FCPATH . "mobile_detect.php";
-  $ci->_detect = new Mobile_Detect();
-
-  return $ci->_detect->isMobile();
-}
-
-function check_helpdesk()
+function check_masterAdminRole(int $staff_id = null)
 {
   $ci = &get_instance();
   $ci->load->database();
@@ -209,12 +324,13 @@ function check_helpdesk()
 
   $result = false;
 
-  if ($ci->session->userdata('role_level') == 11) {
+  // role masteradmin
+  if (check_user(1)) {
     $result = true;
-    return $result;
   }
-}
 
+  return $result;
+}
 // 
-// End Function
+// End small function
 // 

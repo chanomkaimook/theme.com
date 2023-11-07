@@ -46,7 +46,7 @@ class mdl_login extends CI_Model
 
                 $array_permit = $this->permit->get_dataPermitSet($staff_id);
 
-                $permit_json = "";
+                $permit = "";
 
                 if ($array_permit) {
                     /* foreach ($query_permit->result() as $row_permit) {
@@ -84,15 +84,12 @@ class mdl_login extends CI_Model
 
                     #
                     # set permit convert to json data
-                    $permit_json = json_encode($array_permit);
+                    $permit = json_encode($array_permit);
                 }
                 $array = array(
                     'staff_id'    => $staff_id
                 );
-                echo "<pre> Permit";
-print_r($array_permit);
-print_r($permit_json);
-exit;
+
                 if (strnatcmp($user_name, $row->USERNAME) == 0) {
 
                     $token = $this->authorization_token->generateToken($array);
@@ -100,25 +97,19 @@ exit;
                     $result = array(
                         'error' => 0,
                         'data' => $sql->row(),
-                        'permit' => $permit_json,
+                        'permit' => $permit,
                         'token' => $token
                     );
 
                     //
                     // caching token
-                    if (!$this->caching->get('authorization')) {
-                        $authorization = $token;
-            
-                        // Save into the cache for 1 day
-                        $this->caching->save('authorization', $authorization);
-                    }
+                    // Save into the cache for 1 day
+                    $this->caching->save('authorization', $token);
 
                     //
                     // caching permit
-                    if (!$this->caching->get('permit')) {
-                        // Save into the cache for 1 day
-                        $this->caching->save('permit', $permit_json);
-                    }
+                    // Save into the cache for 1 day
+                    $this->caching->save('permit_'.$staff_id, $permit);
 
                     // exit;
                 } else {
