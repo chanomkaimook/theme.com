@@ -82,6 +82,8 @@ function check_permit($permit_value = null, int $staff_id = null, string $type =
     if ($type == "permit_name_list") {
 
       if (is_array($permit_value)) {
+
+        // loop
         foreach ($permit_value as $array_value) {
           $array_permit = explode('/', $array_value);
           if ($result != true) {
@@ -142,30 +144,45 @@ function method_find_array($value = null, array $dataarray = null)
  * @param integer|null $id
  * @return void
  */
-function check_user(int $id = null)
+function check_user($id = null)
 {
   $ci = &get_instance();
   $ci->load->database();
 
   # code...
   $result = false;
+  $user_login = $ci->session->userdata('user_code');
 
   if ($id) {
     // convert json data permit to array
-    //
-    // caching
-    if ($ci->caching->get('permit_' . $ci->session->userdata('user_code'))) {
+    $data_permit = (array)json_decode($ci->caching->get('permit_' . $user_login));
 
-      $data_permit = (array)json_decode($ci->caching->get('permit_' . $ci->session->userdata('user_code')));
-
-      if ($data_permit['user_id'] == $id) {
-        $result = true;
+    if (is_array($id) && count($id)) {
+      foreach ($id as $value) {
+        if ($result != true) {
+          $result = method_find_user($value, $data_permit, $user_login);
+        }
       }
     } else {
+      $result = method_find_user($id, $data_permit, $user_login);
+    }
+  }
 
-      if ($ci->session->userdata('user_code') && $ci->session->userdata('user_code') == $id) {
-        $result = true;
-      }
+  return $result;
+}
+
+function method_find_user($id, $data_permit, $userlogin)
+{
+  //
+  // caching
+  if ($data_permit['user_id']) {
+    if ($data_permit['user_id'] == $id) {
+      $result = true;
+    }
+  } else {
+
+    if ($userlogin && $userlogin == $id) {
+      $result = true;
     }
   }
 
@@ -191,21 +208,22 @@ function check_menu(string $module_name = null)
   if (check_admin()) {
     $result = true;
   } else {
-    echo $module_name . "------------";
+    // echo $module_name . "------------";
     if ($module_name) {
       // convert json data permit to array
       //
       // caching
       if ($ci->caching->get('permit_' . $ci->session->userdata('user_code'))) {
         $data_permit = (array)json_decode($ci->caching->get('permit_' . $ci->session->userdata('user_code')));
-        print_r($data_permit);
-        /*  if (is_numeric(array_search($module_name, $data_permit['menu_name_list']))) {
+        // print_r($data_permit);
+
+        if (is_numeric(array_search($module_name, $data_permit['menu_name_list']))) {
           $result = true;
-        } */
+        }
       }
     }
   }
-
+  echo $result ? "++true" : "++false";
   return $result;
 }
 
@@ -283,11 +301,6 @@ function check_admin(int $staff_id = null)
   $result = false;
 
   // master admin
-  if ($ci->session->userdata('user_code') == 1) {
-    $result = true;
-  }
-
-  // administrator
   if (check_masterAdminRole()) {
     $result = true;
   }
@@ -328,7 +341,8 @@ function check_masterAdminRole(int $staff_id = null)
   if (check_user(1)) {
     $result = true;
   }
-
+  echo $ci->config->item('time_reference');
+echo $result ? "true" : "fasle";
   return $result;
 }
 // 

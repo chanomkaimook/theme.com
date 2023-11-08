@@ -21,7 +21,7 @@
                         </ul>
                     </li>
 
-                    <li class="<?= check_permit_menu('bill') ?>">
+                    <li class="<?= check_permit_menu('quotation') ?>">
                         <a href="javascript: void(0);">
                             <i class="fe-file-text"></i>
                             <span> เอกสาร </span>
