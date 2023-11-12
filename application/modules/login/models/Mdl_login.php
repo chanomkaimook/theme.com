@@ -44,12 +44,16 @@ class mdl_login extends CI_Model
 
                 $staff_id = $row->ID;
 
-                $array_permit = $this->permit->get_dataPermitSet($staff_id);
+                if (strnatcmp($user_name, $row->USERNAME) == 0) {
 
-                $permit = "";
+                    //
+                    // create array permit
+                    $array_permit = $this->permit->get_dataPermitSet($staff_id);
+// print_r($array_permit);exit;
+                    $permit = "";
 
-                if ($array_permit) {
-                    /* foreach ($query_permit->result() as $row_permit) {
+                    if ($array_permit) {
+                        /* foreach ($query_permit->result() as $row_permit) {
 
                         #
                         # select permit from json data 
@@ -78,26 +82,24 @@ class mdl_login extends CI_Model
                         }
                     } */
 
-                    #
-                    # fill data ban out
-                    // $permit = array_values(array_diff($permit_allow, $permit_ban));
+                        #
+                        # fill data ban out
+                        // $permit = array_values(array_diff($permit_allow, $permit_ban));
 
-                    #
-                    # set permit convert to json data
-                    $permit = json_encode($array_permit);
-                }
-                $array = array(
-                    'staff_id'    => $staff_id
-                );
+                        #
+                        # set permit convert to json data
+                        $permit = json_encode($array_permit);
+                    }
 
-                if (strnatcmp($user_name, $row->USERNAME) == 0) {
-
+                    // create token for caching
+                    $array = array(
+                        'staff_id'    => $staff_id
+                    );
                     $token = $this->authorization_token->generateToken($array);
 
                     $result = array(
                         'error' => 0,
                         'data' => $sql->row(),
-                        'permit' => $permit,
                         'token' => $token
                     );
 
@@ -106,12 +108,6 @@ class mdl_login extends CI_Model
                     // Save into the cache for 1 day
                     $this->caching->save('authorization', $token);
 
-                    //
-                    // caching permit
-                    // Save into the cache for 1 day
-                    $this->caching->save('permit_'.$staff_id, $permit);
-
-                    // exit;
                 } else {
                     $result = array(
                         'error' => 1,

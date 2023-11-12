@@ -161,7 +161,7 @@ class Mdl_roles_control extends CI_Model
             'workstatus'  => $this->input->post('label_1'),
 
             'date_update'  => date('Y-m-d H:i:s'),
-            'user_update'  => $this->session->userdata('user_code'),
+            'user_update'  => $this->userlogin
         );
 
         $this->db->where('id', $item_id);
@@ -205,7 +205,7 @@ class Mdl_roles_control extends CI_Model
             $this->fildstatus     => 1,
 
             'date_update'  => date('Y-m-d H:i:s'),
-            'user_update'  => $this->session->userdata('user_code'),
+            'user_update'  => $this->userlogin,
         );
 
         if ($item_remark) {

@@ -48,13 +48,17 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  */
 class CI_Model {
 
+	private $userlogin;
+	
 	/**
 	 * Class constructor
 	 *
 	 * @link	https://github.com/bcit-ci/CodeIgniter/issues/5332
 	 * @return	void
 	 */
-	public function __construct() {}
+	public function __construct() {
+		$this->userlogin = $this->session->userdata('user_code');
+	}
 
 	/**
 	 * __get magic

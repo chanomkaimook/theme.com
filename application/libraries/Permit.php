@@ -27,6 +27,7 @@ class Permit
 	/**
 	 * get data set for authentication
 	 *
+	 * @param integer|null $staff_id
 	 * @return array $result = [role_id,permit_id,permit_name]
 	 */
 	function get_dataPermitSet(int $staff_id = null)

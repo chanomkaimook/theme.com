@@ -278,11 +278,11 @@ function check_userlive()
   $ci->load->database();
   # code...
 
-  if ($ci->session->userdata()) {
-    $userid = $ci->session->userdata('user_code');
+  $userlogin = userlogin();
+  if ($userlogin) {
 
     $sql = $ci->db->from('staff')
-      ->where('id', $userid)
+      ->where('id', $userlogin)
       ->where('(status !=1 or verify is null)', null, false)
       ->get();
     $num = $sql->num_rows();
@@ -343,6 +343,32 @@ function check_masterAdminRole(int $staff_id = null)
   }
   echo $ci->config->item('time_reference');
 echo $result ? "true" : "fasle";
+  return $result;
+}
+// 
+// End small function
+// 
+
+// 
+// Begin core function
+//
+
+/**
+ * defind data user
+ *
+ * @return int = user id
+ */
+function userlogin() {
+  $ci = &get_instance();
+  $ci->load->database();
+  # code...
+  
+  $result = "";
+  
+  if ($ci->session->userdata('user_code')) {
+    $result = $ci->session->userdata('user_code');
+  }
+
   return $result;
 }
 // 

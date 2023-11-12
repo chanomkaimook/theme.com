@@ -11,9 +11,12 @@ class Mdl_permit_control extends CI_Model
     private $permit = "permit";
     private $menu = "menus";
 
+    // private $userlogin;
+
     public function __construct()
     {
         parent::__construct();
+        // $this->userlogin = $this->session->userdata('user_code');
     }
 
     public function __destruct()
@@ -95,9 +98,9 @@ class Mdl_permit_control extends CI_Model
     public function get_dataStaff(int $id = null, array $optionnal = null, string $type = "result")
     {
         if(!$id){
-            $id = $this->session->userdata('user_code');
+            $id = $this->userlogin;
         }
-
+        
         $optionnal['where'] = array(
             'staff_id'  => $id
         );
@@ -223,7 +226,7 @@ class Mdl_permit_control extends CI_Model
             'workstatus'  => $this->input->post('label_1'),
 
             'date_update'  => date('Y-m-d H:i:s'),
-            'user_update'  => $this->session->userdata('user_code'),
+            'user_update'  => $this->userlogin,
         );
 
         $this->db->where('id', $item_id);
@@ -267,7 +270,7 @@ class Mdl_permit_control extends CI_Model
             $this->fildstatus     => 1,
 
             'date_update'  => date('Y-m-d H:i:s'),
-            'user_update'  => $this->session->userdata('user_code'),
+            'user_update'  => $this->userlogin,
         );
 
         if ($item_remark) {
