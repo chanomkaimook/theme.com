@@ -8,6 +8,7 @@ class Permit
 
 	private $control;
 	private $roles;
+	private $userlogin;
 
 	public function __construct()
 	{
@@ -22,6 +23,8 @@ class Permit
 		$this->permit = $this->ci->mdl_permit;
 		$this->control = $this->ci->mdl_permit_control;
 		$this->roles = $this->ci->mdl_roles_control;
+
+		$this->userlogin = $this->ci->session->userdata('user_code');
 	}
 
 	/**
@@ -41,6 +44,11 @@ class Permit
 		$permit_id_list = [];
 		$permit_name_list = [];
 		$menu_name_list = [];
+
+
+		if(!$staff_id){
+			$staff_id = $this->userlogin;
+		}
 
 		if ($staff_id) {
 			$query_permit = $this->control->get_dataStaff($staff_id);

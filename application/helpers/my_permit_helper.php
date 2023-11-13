@@ -5,6 +5,9 @@ error_reporting(E_ALL & ~E_NOTICE);
 # 
 # check admin or master admin
 # check_admin()
+# 
+# check_role()
+# check_permit()
 #
 
 /**
@@ -12,9 +15,10 @@ error_reporting(E_ALL & ~E_NOTICE);
  *
  * @param string|null $role_name
  * @param integer|null $staff_id = It's will be user login if not found
+ * @param string $nameselect = default roles_name_list || roles_id_list
  * @return void
  */
-function check_role(string $role_name = null, int $staff_id = null)
+function check_role(string $role_name = null, int $staff_id = null, string $nameselect = 'roles_name_list')
 {
   $ci = &get_instance();
   $ci->load->database();
@@ -22,47 +26,70 @@ function check_role(string $role_name = null, int $staff_id = null)
   # code...
   $result = false;
 
-  if ($role_name && !$staff_id) {
-    // convert json data permit to array
-    //
-    // caching
-    if (!$ci->caching->get('permit_' . $ci->session->userdata('user_code'))) {
-      // $permit = $ci->session->userdata('permit');
+  if(!$staff_id){
+    $staff_id = userlogin();
+  }
 
-      // Save into the cache for 1 days
-      // $ci->caching->save('permit', $permit);
+  if($nameselect == 'id'){
+    $nameselect = 'roles_id_list';
+  }
+  
+  if ($role_name) {
 
-      // $data_permit = json_decode($ci->session->userdata('permit'));
+    $ci->load->library('Permit');
+
+    $data_permit = $ci->permit->get_dataPermitSet($staff_id);
+
+    $array_permitset = $data_permit[$nameselect];
+
+    if (is_array($role_name)) {
+
+      // loop
+      foreach ($role_name as $value) {
+        if ($result != true) {
+          if (is_numeric(array_search($value, $array_permitset))) {
+            $result = true;
+          }
+        }
+      }
     } else {
-      $data_permit = (array)json_decode($ci->caching->get('permit_' . $ci->session->userdata('user_code')));
+      if (is_numeric(array_search($role_name, $array_permitset))) {
+        $result = true;
+      }
     }
-
-    if (is_numeric(array_search($role_name, $data_permit['roles_id_list']))) {
-      $result = true;
-    }
-  } else {
-    // set staff_id
-    # codeing
   }
 
   return $result;
 }
+
+
+
+
+
 
 /**
  * check permit data
  *
  * @param array|string|null $permit_value = module/controler/method || permit id
  * @param integer|null $staff_id
- * @param string $type = permit_name_list || permit_id_list
+ * @param string $type = default permit_name_list || permit_id_list
  * @return void
  */
-function check_permit($permit_value = null, int $staff_id = null, string $type = "permit_name_list")
+function check_permit($permit_value = null, int $staff_id = null, string $nameselect = "permit_name_list")
 {
   $ci = &get_instance();
   $ci->load->database();
 
   # code...
   $result = false;
+
+  if(!$staff_id){
+    $staff_id = userlogin();
+  }
+
+  if($nameselect == 'id'){
+    $nameselect = 'permit_id_list';
+  }
 
   if ($permit_value && !$staff_id) {
     // convert json data permit to array
@@ -322,7 +349,7 @@ function check_adminRole(int $staff_id = null)
   $result = false;
 
   // role administrator
-  if (check_role(1, null)) {
+  if (check_role(1,'roles_id_list')) {
     $result = true;
   }
 
@@ -342,7 +369,7 @@ function check_masterAdminRole(int $staff_id = null)
     $result = true;
   }
   echo $ci->config->item('time_reference');
-echo $result ? "true" : "fasle";
+  echo $result ? "true" : "fasle";
   return $result;
 }
 // 
@@ -358,13 +385,14 @@ echo $result ? "true" : "fasle";
  *
  * @return int = user id
  */
-function userlogin() {
+function userlogin()
+{
   $ci = &get_instance();
   $ci->load->database();
   # code...
-  
+
   $result = "";
-  
+
   if ($ci->session->userdata('user_code')) {
     $result = $ci->session->userdata('user_code');
   }
