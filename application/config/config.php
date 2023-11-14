@@ -530,3 +530,9 @@ $config['rewrite_short_tags'] = FALSE;
 */
 $config['proxy_ips'] = '';
 $config['modules_locations'] = array(APPPATH.'modules/' => '../modules/',);
+
+
+/**
+ * set id master admin
+ */
+$config['masteradmin_id'] = array(1);
