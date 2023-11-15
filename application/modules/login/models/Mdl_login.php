@@ -106,7 +106,7 @@ class mdl_login extends CI_Model
                     //
                     // caching token
                     // Save into the cache for 1 day
-                    $this->caching->save('authorization', $token);
+                    // $this->caching->save('authorization', $token);
 
                 } else {
                     $result = array(

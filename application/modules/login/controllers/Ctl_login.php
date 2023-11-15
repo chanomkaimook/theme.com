@@ -13,18 +13,6 @@ class Ctl_login extends MY_Controller
 
     public function index()
     {
-        /* $this->load->driver('cache', array('adapter' => 'apc', 'backup' => 'file'));
-        if (!$foo = $this->cache->get('foo')) {
-            echo 'Saving to the cache!<br />';
-            $foo = 'foobarbaz!';
-
-            // Save into the cache for 5 minutes
-            $this->cache->save('foo', $foo, 10);
-        }
-
-        echo $foo; */
-        
-        // $this->authorization_token->validateToken($headers['Authorization']);
         if ($this->session->userdata('user_code')) {
             // User is logged in.  Do something.
             redirect(site_url('dashboard/ctl_dashboard'));

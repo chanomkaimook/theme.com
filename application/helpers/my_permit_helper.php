@@ -3,31 +3,49 @@ error_reporting(E_ALL & ~E_NOTICE);
 #
 # Function recommended
 # 
+# data information for permit
 # 'user_id'			      => $staff_id,
 # 'roles_id_list'		  => array(roles id),
 # 'permit_id_list'	  => array(permit id),
 # 'permit_name_list'	=> array(permit name),
 # 'menu_name_list'	  => array(menu name),
 # 
-# // check admin or master admin
+# // check permit admin or master admin
 # check_admin()
 # 
+# // check permit by paramiter is path or menu name (nav menu bar)
+# get_permitPath()
+# 
+
 # // check role roles_name_list & roles_id_list
 # check_role()
 #
 # // check permit permit_name_list & permit_id_list
 # check_permit()
 #
+# // check permit menu_name_list for nav menu bar
+# check_menu()
+#
+# // check permit all 
+# check_data()
+#
+
+# // check permit master admin only
+# check_masterAdminRole()
+#
+# // check permit admin only
+# check_adminRole()
+#
 
 /**
  * check role data
  *
- * @param string|null $role_name
+ * @param array|string|null $role_name
  * @param integer|null $staff_id = It's will be user login if not found
  * @param string $nameselect = default roles_name_list || roles_id_list
  * @return void
  */
-function check_role(string $role_name = null, int $staff_id = null, string $nameselect = 'roles_name_list')
+function check_role($role_name = null, int $staff_id = null, string $nameselect = 'roles_name_list')
 {
   $ci = &get_instance();
   $ci->load->database();
@@ -292,72 +310,78 @@ function method_find_user($id, $data_permit, $userlogin)
   return $result;
 } */
 
-
-
-
-
-
-
-
-function check_permitssssssss(string $module_name = null, string $controller = null, string $method = null)
+/**
+ * check value from path name or menu name
+ *
+ * @param array|string|null $name = modules/controller/method || name menu
+ * @return boolean
+ */
+function get_permitPath($name = null)
 {
-  $ci = &get_instance();
-  $ci->load->database();
-  # code...
-
   $result = false;
 
-  $module = $module_name ? $module_name : $ci->uri->segment(1);
+  if ($name) {
 
-  // check role admin
-  if (check_admin()) {
-    $result = true;
-  } else {
-  }
-
-  if (!$result) {
-    redirect(site_url('error_permit'));
+    if (is_array($name)) {
+      // loop
+      foreach ($name as $value) {
+        if ($result != true) {
+          $result = method_find_array($value);
+        }
+      }
+    } else {
+      $result = method_find_array($name);
+    }
   }
 
   return $result;
 }
 
-function check_permit_menu(string $module = null)
+function method_find_array($value = null)
 {
-  // $result = check_menu($module);
-  $result = result_fromUrl($module);
-  $css_name = '';
+  $result = false;
 
-  if (!$result) {
-    $css_name = 'd-none';
+  if ($value) {
+    // convert value to array
+    $value = explode("/", $value);
+
+    if (count($value) == 3) {
+      // convert value index to be view
+      if ($value[2] == "index") {
+        $value[2] == "view";
+      }
+
+      $value = implode("-", $value);
+
+      $result = check_permit($value);
+    } else if (count($value) == 2) {
+
+      //
+      // set default third position value = view
+      $value = implode("-", $value);
+      $value .= "-view";
+
+      $result = check_permit($value);
+    } else if (count($value) == 1) {
+      $value = (string) $value[0];
+      //
+      // result from function implode = 1.
+      // It's mean value = menu 
+      if (check_menu($value)) {
+        $result = true;
+      }
+    }
   }
 
-  return $css_name;
+  return $result;
 }
+
+
+
 
 // 
 // Begin small function
 // 
-
-function check_userlive()
-{
-  $ci = &get_instance();
-  $ci->load->database();
-  # code...
-
-  $userlogin = userlogin();
-  if ($userlogin) {
-
-    $sql = $ci->db->from('staff')
-      ->where('id', $userlogin)
-      ->where('(status !=1 or verify is null)', null, false)
-      ->get();
-    $num = $sql->num_rows();
-    if ($num) {
-      redirect(site_url('error_permit'));
-    }
-  }
-}
 
 function check_admin(int $staff_id = null)
 {
@@ -464,48 +488,41 @@ function userlogin()
   return $result;
 }
 
-/**
- * check value from url
- *
- * @param [type] $value
- * @param array|null $dataarray
- * @return void
- */
-function result_fromUrl($value = null)
+function check_permit_menu($module = null)
 {
-  $result = false;
+  // $result = check_menu($module);
+  $result = get_permitPath($module);
+  $css_name = '';
 
-  if ($value) {
-    if (count($value) == 3) {
-      // convert value index to be view
-      if ($value[2] == "index") {
-        $value[2] == "view";
-      }
-
-      $value = implode("-", $value);
-
-      $result = check_permit($value);
-
-    } else if (count($value) == 2) {
-
-      //
-      // set default third position value = view
-      $value = implode("-", $value);
-      $value += "/view";
-
-      $result = check_permit($value);
-      
-    } else if (count($value) == 1) {
-      $value = (string) $value[0];
-      //
-      // result from function implode = 1.
-      // It's mean value = menu 
-      if (check_menu($value)) {
-        $result = true;
-      }
-    }
+  if (!$result) {
+    $css_name = 'd-none';
   }
 
+  return $css_name;
+}
+
+function check_userlive()
+{
+  $ci = &get_instance();
+  $ci->load->database();
+  # code...
+
+  $result = true;
+
+  $userlogin = userlogin();
+  if ($userlogin) {
+
+    $sql = $ci->db->from('staff')
+      ->where('id', $userlogin)
+      ->where('(status is null or verify is null)', null, false)
+      ->get();
+    $num = $sql->num_rows();
+
+    if ($num) {
+      $result = false;
+    }
+  }
+  
   return $result;
 }
 // 

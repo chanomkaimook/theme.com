@@ -15,7 +15,7 @@ class Ctl_workorder extends MY_Controller
         $modelname = 'mdl_page';
         $this->load->model(array('mdl_page'));
 
-        // $this->middleware();
+        $this->middleware();
 
         // setting
         $this->model = $this->$modelname;

@@ -13,36 +13,18 @@ class Ctl_user extends MY_Controller
         // $this->load->model('mdl_staff');
         $this->load->model('mdl_role_focus');
 
+        $this->load->library('Permit');
+
         $this->middleware();
     }
 
     public function index()
     {
-        #
-        # session
-        /* $user_level = $this->session->userdata('role_level');
-
-        $role = $this->db->where('level >=',$user_level)->get('roles');
-        $data['role'] = $role->result();
-
-        $optional['select'] = "
-        employee.name as MEMBER_NAME,
-        employee.lastname as MEMBER_LASTNAME,
-        staff.id as STAFF_ID,
-        ";
-
-        $level = $this->db->get('level');
-        $data['level'] = $level->result(); */
-
-        // echo check_role('a');
-        // echo "<pre>";
-        // print_r($this->session->userdata());exit;
-
         $data['role'] = $this->mdl_roles->get_dataShow();
-        $data['level'] = "";
+
         $this->template->set_layout('lay_datatable');
         $this->template->title('ผู้ใช้งาน');
-        $this->template->build('users',$data);
+        $this->template->build('users', $data);
     }
 
     public function fetch_data()
@@ -71,8 +53,8 @@ class Ctl_user extends MY_Controller
 
                 $sub_data['ID'] = $row->ID;
                 $sub_data['LEVEL'] = "";
-                $sub_data['NAME'] = textLang($row->NAME,$row->NAME_US,false);
-                $sub_data['LASTNAME'] = textLang($row->LASTNAME,$row->LASTNAME_US,false);
+                $sub_data['NAME'] = textLang($row->NAME, $row->NAME_US, false);
+                $sub_data['LASTNAME'] = textLang($row->LASTNAME, $row->LASTNAME_US, false);
                 $sub_data['USERNAME'] = $row->USERNAME;
                 $sub_data['DATE_STARTS'] = array(
                     "display"   => $date_start,
@@ -103,10 +85,19 @@ class Ctl_user extends MY_Controller
 
     public function get_user()
     {
+        $user_login = $this->user_login;
+        $request = $_REQUEST;
+
+        if ($request['id']) {
+            $user_login = $request['id'];
+        }
+
         $data = $this->mdl_user->get_data_staff();
+        $user_permit = $this->permit->get_dataPermitSet($user_login);
         $data_role_focus = $this->mdl_role_focus->get_data();
         $result = array(
-            'data' => $data,
+            'data'      => $data,
+            'permit'    => $user_permit,
             'data_role_focus' => $data_role_focus
         );
         echo json_encode($result);

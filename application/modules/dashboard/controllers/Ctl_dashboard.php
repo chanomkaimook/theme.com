@@ -19,7 +19,7 @@ class Ctl_dashboard extends MY_Controller
         $this->load->model(array('mdl_ticket'));
         $this->load->helper(array('my_calculate'));
 
-        $this->middleware();
+        $this->middleware(1);
 
         include FCPATH . "mobile_detect.php";
         $this->detect = new Mobile_Detect();

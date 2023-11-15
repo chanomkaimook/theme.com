@@ -133,9 +133,14 @@
                 .then(res => res.json())
                 .then((resp) => {
 
+                    if (resp.permit) {
+                        resp.data.permit = resp.permit
+                    }
+
                     if (resp.data_role_focus) {
                         resp.data.role_focus = resp.data_role_focus
                     }
+
                     modal_input_data(resp.data)
 
                     method.val('edit')
@@ -228,14 +233,6 @@
 
             /**
              * for role foucs
-             * 8 == role id (helpdesk)
-             */
-            if (data.ROLES_ID == 8) {
-                $('.userfocus').removeClass('d-none')
-            }
-
-            /**
-             * for role foucs
              */
             if (data.role_focus.length) {
                 let a = ''
@@ -247,11 +244,37 @@
                 $('[data-toggle=select2]').val(a).trigger('change')
             }
 
+            let p = data.permit.roles_id_list
+            if (p) {
+                r = new Array();
+                r.push(1)
+                r.push(2)
+                console.log(r)
+                // $('#role').select2().val([1,2]).trigger('change.select2');
+                // $('#role').val([1,2]);
+                // $('#role').trigger('change.select2');
+
+                $('#role').select2('val',[2,3]).trigger('change.select2');
+                // $('#role').select2().val([1,2]).trigger('change.select2');
+
+
+                // $('#role option[value=1]').attr('selected', 'selected')
+
+                // $('#role').val([1, 2])
+                // $('#role[data-toggle=select2]').val(data.permit.roles_id_list).trigger('change')
+            }
+            // $('#role[data-toggle=select2]').val(p).trigger("change.select2");
+            /* $('#role').trigger({
+                type: 'select2:select',
+                params: {
+                    data: {id:1,id:2}
+                }
+            }); */
+
             modal_name.find("#role").val(data.ROLES_ID)
-            modal_name.find("#level").val(data.LEVEL_ID)
             modal_name.find("#name").val(data.NAME)
             modal_name.find("#lastname").val(data.LASTNAME)
-            modal_name.find("#input_username").attr('disabled', 'disabled')
+            modal_name.find("#input_username").val(data.USERNAME).attr('disabled', 'disabled')
             modal_name.find("#input_password").attr('disabled', 'disabled')
 
         }

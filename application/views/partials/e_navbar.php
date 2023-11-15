@@ -553,7 +553,6 @@
                      //  d.setTime(d.getTime() + 10000);
                      let expires = "expires=" + d.toUTCString();
                      document.cookie = name + "=" + value + ";" + expires + ";path=/";
-                     console.log('create aa')
                  }
                  location.reload();
              }

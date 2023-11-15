@@ -9,6 +9,8 @@ class MY_Controller extends CI_Controller
 	public $auth = true;
 
 	public $site_configs = array();
+	public $my_path = array();
+
 	public function __construct()
 	{
 		parent::__construct();
@@ -29,6 +31,10 @@ class MY_Controller extends CI_Controller
 		// echo '<pre>'; print_r($_POST); exit;
 
 		//
+		// path
+		$this->my_path = $this->uri->uri_string();
+
+		//
 		//	set language
 		if ($_COOKIE['langadmin'] == NULL) {
 			$this->langs = "thai";
@@ -36,12 +42,8 @@ class MY_Controller extends CI_Controller
 			$this->langs = $_COOKIE['langadmin'];
 		}
 
-        $this->lang->load('main', $this->langs);
-        $this->lang->load('menu', $this->langs);
-
-		// echo "auth :".$this->auth;
-		// echo "token :".$this->caching->get('authorization');;
-		// print_r($this->session->userdata());
+		$this->lang->load('main', $this->langs);
+		$this->lang->load('menu', $this->langs);
 	}
 
 	/**
@@ -54,15 +56,13 @@ class MY_Controller extends CI_Controller
 	{
 		$this->is_alive_in();
 
-		if($level and $level == 1){
+		if ($level and $level == 1) {
 			$this->is_logged_in();
-		} else{
+		} else {
 			$this->is_logged_in();
 
-			// $this->is_permit_in();
+			$this->is_permit_in();
 		}
-
-
 	}
 
 	public function is_logged_in()
@@ -70,15 +70,15 @@ class MY_Controller extends CI_Controller
 		$result = false;
 
 		// Load Authorization Library
-        $this->load->library('authorization_token');
+		$this->load->library('authorization_token');
 		// check from library auth session and API
 		$this->auth = $this->authorization_token->validateToken();
-
+		// die;
 		if (isset($this->auth['status']) and $this->auth['status'] === true) {
-           $result = true;
-        }
+			$result = true;
+		}
 
-		if($result == false){
+		if ($result == false) {
 			// User is token expire in.  Do something.
 			session_destroy();
 
@@ -86,16 +86,27 @@ class MY_Controller extends CI_Controller
 		}
 	}
 
-
 	public function is_permit_in()
 	{
 		$this->load->helper('My_permit');
-		return check_permit();
+
+		$result = get_permitPath($this->my_path);
+
+		if ($result == false) {
+			redirect(site_url('error_permit'));
+		}
 	}
+
 	public function is_alive_in()
 	{
 		$this->load->helper('My_permit');
-		return check_userlive();
+		$result = check_userlive();
+
+		if ($result == false) {
+			session_destroy();
+			
+			redirect(site_url('login/ctl_login'));
+		}
 	}
 
 	function _hmvc_fixes()

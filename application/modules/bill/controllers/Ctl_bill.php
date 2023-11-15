@@ -20,7 +20,6 @@ class Ctl_bill extends MY_Controller
         // setting
         $this->model = $this->$modelname;
         $this->title = 'ใบขอรับบริการ';
-        echo " controller ";
     }
 
     public function index()
