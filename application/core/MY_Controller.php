@@ -48,7 +48,29 @@ class MY_Controller extends CI_Controller
 
 	/**
 	 * middle ware
+	 * 
+	 * paramiter
+	 * 
+	 * [access]		=> check permit with method in this array value only
+	 * ->[method]	=> [permit name or role name]
+	 * [except]		=> not check permit with method in this array value only
+	 * choose one between access with except
 	 *
+	 * * [only]	=> 
+	 * 		[method 1]	=> [
+	 * 						quotation.view,
+	 * 						quotation.approve,
+	 * 						bill
+	 * 					],
+	 * * [access]	=> 
+	 * 		[method 1]	=> [
+	 * 						quotation.view,
+	 * 						quotation.approve,
+	 * 						bill
+	 * 					],
+	 * * [except] => [method 2,method 3]
+	 * 					
+	 * 
 	 * @param integer|null $level 1 = check login only not check permit
 	 * @return void
 	 */
@@ -89,8 +111,8 @@ class MY_Controller extends CI_Controller
 	public function is_permit_in()
 	{
 		$this->load->helper('My_permit');
-
-		$result = get_permitPath($this->my_path);
+		$result = true;
+		// $result = can($this->my_path);
 
 		if ($result == false) {
 			redirect(site_url('error_permit'));
@@ -104,7 +126,7 @@ class MY_Controller extends CI_Controller
 
 		if ($result == false) {
 			session_destroy();
-			
+
 			redirect(site_url('login/ctl_login'));
 		}
 	}

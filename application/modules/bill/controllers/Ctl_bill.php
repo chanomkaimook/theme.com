@@ -15,6 +15,7 @@ class Ctl_bill extends MY_Controller
         $modelname = 'mdl_page';
         $this->load->model(array('mdl_page'));
 
+        
         $this->middleware();
 
         // setting

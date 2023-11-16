@@ -124,6 +124,22 @@ class Mdl_roles extends CI_Model
         }
     }
 
+    public function get_dataShowForEdit(int $id = null, array $optionnal = null, string $type = "result")
+    {
+        # code...
+        $sql = (object) $this->get_sql($id, $optionnal, $type);
+        $sql->where($this->table . '.' . $this->fildstatus, null);
+        $sql->where($this->table . '.noedit', null);
+
+        $query = $sql->get();
+
+        if ($id) {
+            return $query->row();
+        } else {
+            return $query->$type();
+        }
+    }
+
     //  *
     //  * CRUD
     //  * insert

@@ -76,7 +76,7 @@ class Ctl_roles extends MY_Controller
 
         $request = $_REQUEST;
 
-        $data = $this->model->get_dataShow();
+        $data = $this->model->get_dataShowForEdit();
         $count = $this->model->get_data_all();
 
         $data_result = [];

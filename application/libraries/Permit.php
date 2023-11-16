@@ -40,13 +40,13 @@ class Permit
 		$permit_ban = [];
 
 		// variable for data set
-		$roles_id_list = [];
-		$permit_id_list = [];
+		$roles_name_list = [];
+
 		$permit_name_list = [];
 		$menu_name_list = [];
 
 
-		if(!$staff_id){
+		if (!$staff_id) {
 			$staff_id = $this->userlogin;
 		}
 
@@ -57,13 +57,19 @@ class Permit
 				foreach ($query_permit as $row_permit) {
 					if ($row_permit->ROLES_ID) {
 						$role_id = $row_permit->ROLES_ID;
-						$roles_id_list[] =  $role_id;
+
+						//
+						// value 1 = administrator
+						if($role_id == 1){
+							$roles_name_list[] =  "administrator";
+						}
 
 						$q_in_1 = $this->roles->get_dataRoles($role_id);
 
 						if ($q_in_1) {
 							foreach ($q_in_1 as $row_in_1) {
 								if ($row_in_1->CODE) {
+									$roles_name_list[] =  $row_in_1->ROLES_CODE;
 									$permit_name_list[] = $row_in_1->CODE;
 								}
 
@@ -76,7 +82,6 @@ class Permit
 
 					if ($row_permit->PERMIT_ID) {
 						$permit_id = $row_permit->PERMIT_ID;
-						$permit_id_list[] =  $permit_id;
 
 						$q_in_2 = $this->permit->get_data($permit_id);
 
@@ -98,8 +103,7 @@ class Permit
 
 		$result = array(
 			'user_id'			=> $staff_id,
-			'roles_id_list'		=> array_unique($roles_id_list),
-			'permit_id_list'	=> array_unique($permit_id_list),
+			'roles_name_list'	=> array_unique($roles_name_list),
 			'permit_name_list'	=> array_unique($permit_name_list),
 			'menu_name_list'	=> array_unique($menu_name_list)
 		);

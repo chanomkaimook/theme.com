@@ -109,6 +109,7 @@ class Mdl_roles_control extends CI_Model
 
         if (!$optionnal['select']) {
             $optionnal['select'] = "*,
+            ".$roles.".code as ROLES_CODE,
             ".$permit.".code as CODE,
             ".$permit.".name as NAME,
             ".$permit.".name_us as NAME_US,

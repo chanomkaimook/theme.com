@@ -1,5 +1,16 @@
 <div class="content">
-
+<?php
+    if(is_Mobile()){
+?>
+<style>
+    .dropdown-menu-right {
+        right:auto !important;
+        left:0px !important;
+    }
+</style>
+<?php
+    }
+?>
     <!-- Start Content-->
     <div class="container-fluid">
         <div class="row">

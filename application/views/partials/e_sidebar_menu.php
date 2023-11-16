@@ -25,9 +25,10 @@
                         $menu_path_quotation = array(
                             "main_menu" => array("quotation","bill","workorder"),
                             "sub_menu"  => array(
-                                "bill/ctl_quotation",    
-                                "bill/ctl_bill",    
-                                "bill/ctl_workorder"    
+                                "quotation.view",
+                                // "bill.view",
+                                "bill",
+                                "workorder.view"
                             )
                         );
                     ?>
@@ -38,9 +39,9 @@
                             <span class="menu-arrow"></span>
                         </a>
                         <ul class="nav-second-level" aria-expanded="false">
-                            <li class="<?= check_permit_menu($menu_path_quotation['sub_menu'][0]) ?>"><a href="<?= site_url($menu_path_quotation['sub_menu'][0]) ?>" data-show="quotations">ใบเสนอราคา</a></li>
-                            <li class="<?= check_permit_menu($menu_path_quotation['sub_menu'][1]) ?>"><a href="<?= site_url($menu_path_quotation['sub_menu'][1]) ?>" data-show="document bills">ใบขอรับบริการ</a></li>
-                            <li class="<?= check_permit_menu($menu_path_quotation['sub_menu'][2]) ?>"><a href="<?= site_url($menu_path_quotation['sub_menu'][2]) ?>" data-show="work orders">Work Order</a></li>
+                            <li class="<?= check_permit_menu($menu_path_quotation['sub_menu'][0]) ?>"><a href="<?= site_url('bill/ctl_quotation'); ?>" data-show="quotations">ใบเสนอราคา</a></li>
+                            <li class="<?= check_permit_menu($menu_path_quotation['sub_menu'][1]) ?>"><a href="<?= site_url('bill/ctl_bill'); ?>" data-show="document bills">ใบขอรับบริการ</a></li>
+                            <li class="<?= check_permit_menu($menu_path_quotation['sub_menu'][2]) ?>"><a href="<?= site_url('bill/ctl_workorder'); ?>" data-show="work orders">Work Order</a></li>
                         </ul>
                     </li>
 
