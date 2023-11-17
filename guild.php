@@ -155,4 +155,38 @@ $session = array(
  * Todo - ส่งค่ากลับมาเป็น json มาเก็บไว้ที่ session->permit
  * 
  */
+
+/**
+ * Middleware
+ * 
+ * paramiter is null = method in this class to not check permit
+ * 
+ * [access]		=> check permit with method in this array value only
+ * ->[method]	=> [permit name or role name]
+ * [need]		=> check permit to every method
+ * [except]		=> not check permit with method in this array value only
+ * choose one between access with except
+ *
+ * * [access]	=> 
+ * 		[method 1]	=> [
+ * 						quotation.view,
+ * 						quotation.approve,
+ * 						bill
+ * 					],
+ * * [need]     => [quotation.view,bill] 
+ * * [except]   => [method 2,method 3]
+ * 		
+ * !! ความสำคัญจะนับจาก except หากมีค่า method ใด 
+ * !! แม้ method นั้นจะมีอยู่ใน access จะถือว่าไม่ check
+ * 
+ * หากไม่ต้องการให้ check method ใดๆ ไม่ต้องระบุ paramiter
+ * 
+ * access จะเป็นการระบุว่า method นี้ต้องตรวจสอบตาม role หรือ permit ที่ระบุ
+ * หากต้องการให้ method นี้อนุญาตทุก role ไม่ต้องกำหนดค่าลงไปใน array นั้น
+ * 
+ * need จะเป็นการระบุว่าทุกๆ method จะต้องมี role ตามที่อยู่ใน array นี้ด้วย
+ * 
+ * except จะเป็นการระบุว่า method นี้ไม่ต้องตรวจสอบ (ไม่ตรวจสอบเลย ผ่านได้เลย)
+ * 
+ */
 ?>

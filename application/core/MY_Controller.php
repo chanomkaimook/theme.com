@@ -11,6 +11,11 @@ class MY_Controller extends CI_Controller
 	public $site_configs = array();
 	public $my_path = array();
 
+	public $segment_array = [];
+	public $_module;
+	public $_controller;
+	public $_method;
+
 	public function __construct()
 	{
 		parent::__construct();
@@ -44,47 +49,31 @@ class MY_Controller extends CI_Controller
 
 		$this->lang->load('main', $this->langs);
 		$this->lang->load('menu', $this->langs);
+
+		$this->segment_array = $this->uri->segment_array();
+		if (!$this->segment_array[3]) {
+			$this->segment_array[3] = "index";
+		}
+		$this->_module = $this->segment_array[1];
+		$this->_controller = $this->segment_array[2];
+		$this->_method = $this->segment_array[3];
+		print_r($this->segment_array);
+		echo "<br>==========";
 	}
 
 	/**
-	 * middle ware
-	 * 
-	 * paramiter
-	 * 
-	 * [access]		=> check permit with method in this array value only
-	 * ->[method]	=> [permit name or role name]
-	 * [except]		=> not check permit with method in this array value only
-	 * choose one between access with except
+	 * function to check all permit on controller
 	 *
-	 * * [only]	=> 
-	 * 		[method 1]	=> [
-	 * 						quotation.view,
-	 * 						quotation.approve,
-	 * 						bill
-	 * 					],
-	 * * [access]	=> 
-	 * 		[method 1]	=> [
-	 * 						quotation.view,
-	 * 						quotation.approve,
-	 * 						bill
-	 * 					],
-	 * * [except] => [method 2,method 3]
-	 * 					
-	 * 
-	 * @param integer|null $level 1 = check login only not check permit
+	 * @param array|null $dataset
 	 * @return void
 	 */
-	public function middleware(int $level = null)
+	public function middleware(array $dataset = null)
 	{
 		$this->is_alive_in();
 
-		if ($level and $level == 1) {
-			$this->is_logged_in();
-		} else {
-			$this->is_logged_in();
+		$this->is_logged_in();
 
-			$this->is_permit_in();
-		}
+		$this->is_permit_in($dataset);
 	}
 
 	public function is_logged_in()
@@ -108,12 +97,112 @@ class MY_Controller extends CI_Controller
 		}
 	}
 
-	public function is_permit_in()
+	/**
+	 * check permit with controller
+	 * 
+	 * dataset is null = method in this class to not check permit
+	 * 
+	 * [access]		=> check permit with method in this array value only
+	 * ->[method]	=> [permit name or role name]
+	 * [need]		=> check permit to every method
+	 * [except]		=> not check permit with method in this array value only
+	 * choose one between access with except
+	 *
+	 * * [access]	=> 
+	 * 		[method 1]	=> [
+	 * 						quotation.view,
+	 * 						quotation.approve,
+	 * 						bill
+	 * 					],
+	 * * [need]     => [quotation.view,bill] 
+	 * * [except]   => [method 2,method 3]
+	 * 
+	 */
+	public function is_permit_in(array $dataset = null)
 	{
-		$this->load->helper('My_permit');
-		$result = true;
-		// $result = can($this->my_path);
 
+		$result = true;
+
+		if (isset($dataset) && is_array($dataset)) {
+
+			$data_need = [];
+			$data_access = [];
+			$data_except = [];
+
+			if (isset($dataset['need']) && is_array($dataset['need'])) {
+				$data_need = $dataset['need'];
+			}
+
+			if (isset($dataset['access']) && is_array($dataset['access'])) {
+				$data_access = $dataset['access'];
+			}
+
+			if (isset($dataset['except']) && is_array($dataset['except'])) {
+				$data_except = $dataset['except'];
+			}
+
+			if ($data_except && count($data_except)) {
+				if (is_numeric(array_search($this->_method, $data_except))) {
+					$result = true;
+				}
+			} else {
+
+				//
+				// check permit to need
+				if ($data_need && count($data_need)) {
+					//
+					// check permit
+					if (can($data_need)) {
+						$need = true;
+						echo "need";
+					} else {
+						$need = false;
+						$result = false;
+						echo "Nooooooooooo!!!";
+					}
+					//
+					//
+				}
+				//
+				//
+
+				//
+				// check permit allowed
+				if ($data_access && count($data_access) && $need === true) {
+
+					if (is_numeric(array_search($this->_method, array_keys($data_access)))) {
+						if (is_array($data_access[$this->_method]) && count($data_access[$this->_method])) {
+							$array = $data_access[$this->_method];
+
+							//
+							// check permit
+							if (can($array) === false) {
+								$result = false;
+							}
+							//
+							//
+						}
+					}
+				}
+			}	// End if except
+
+
+
+		}
+		echo "<br><pre>";
+
+		// print_r($data_access);
+		echo "</pre><pre>";
+		print_r(my_permit());
+		echo "<br>";
+
+		if ($result == false) {
+			echo $this->_method . "= error permit";
+		} else {
+			echo $this->_method . "= success";
+		}
+
+		die;
 		if ($result == false) {
 			redirect(site_url('error_permit'));
 		}

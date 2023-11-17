@@ -19,7 +19,16 @@ class Ctl_dashboard extends MY_Controller
         $this->load->model(array('mdl_ticket'));
         $this->load->helper(array('my_calculate'));
 
-        $this->middleware(1);
+        $this->middleware(
+            array(
+                'access'    => [
+                    'index'      => [],
+                    'view'      => []
+                ],
+                'need'       => ['bills'],
+                'except'    => ['check']
+            )
+        );
 
         include FCPATH . "mobile_detect.php";
         $this->detect = new Mobile_Detect();
@@ -91,6 +100,27 @@ class Ctl_dashboard extends MY_Controller
         } else {
             $this->template->build('dashboard', $data);
         }
+    }
+
+    public function view()
+    {
+        echo "views";
+    }
+    public function insert()
+    {
+        echo "insert";
+    }
+    public function update()
+    {
+        echo "update";
+    }
+    public function delete()
+    {
+        echo "delete";
+    }
+    public function check()
+    {
+        echo "appreove and revise";
     }
 
     function get_dataTicketScore()

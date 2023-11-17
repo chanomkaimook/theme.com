@@ -473,6 +473,23 @@ function check_masterAdminRole(int $staff_id = null)
 
   return $result;
 }
+
+
+function my_permit(int $staff_id = null)
+{
+  $ci = &get_instance();
+  $ci->load->database();
+  # code...
+  
+  if (!$staff_id) {
+    $staff_id = userlogin();
+  }
+
+  $ci->load->library('Permit');
+  $result = $ci->permit->get_dataPermitSet($staff_id);
+
+  return $result;
+}
 // 
 // End core function
 // 
