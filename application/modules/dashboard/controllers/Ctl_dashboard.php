@@ -23,10 +23,21 @@ class Ctl_dashboard extends MY_Controller
             array(
                 'access'    => [
                     'index'      => [],
-                    'view'      => []
+                    'view'      => ['bill.view','bill.a','bill.insert']
+                    // 'view'      => ['bill.view','bill.a','bill.insert','quatation']
+                    // 'view'      => ['quotation']
                 ],
-                'need'       => ['bills'],
-                'except'    => ['check']
+                // 'need'       => [],
+                // 'need'       => ['bill'],
+                // 'need'       => ['bill','quotation'],
+                // 'need'       => ['quotation'],
+
+                'except'    => [
+                    // 'index'      => [],
+                    // 'view'      => [],
+                    // 'view'      => ['quotation','b','c','d'],
+                    // 'view'      => ['bill.a','b','c','d'],
+                ]
             )
         );
 

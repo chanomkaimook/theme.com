@@ -57,8 +57,6 @@ class MY_Controller extends CI_Controller
 		$this->_module = $this->segment_array[1];
 		$this->_controller = $this->segment_array[2];
 		$this->_method = $this->segment_array[3];
-		print_r($this->segment_array);
-		echo "<br>==========";
 	}
 
 	/**
@@ -141,68 +139,87 @@ class MY_Controller extends CI_Controller
 				$data_except = $dataset['except'];
 			}
 
+			//
+			// check permit to except
 			if ($data_except && count($data_except)) {
-				if (is_numeric(array_search($this->_method, $data_except))) {
-					$result = true;
-				}
-			} else {
 
+				if (is_numeric(array_search($this->_method, array_keys($data_except)))) {
+					if (is_array($data_except[$this->_method]) && count($data_except[$this->_method])) {
+						// $array = $data_except[$this->_method];
+
+						//
+						// unset data array access for except
+						if (is_array($data_access[$this->_method])) {
+							$data_access[$this->_method] = array_diff($data_access[$this->_method], $data_except[$this->_method]);
+						}
+
+						//
+						// unset data array need for except
+						if (is_array($data_need)) {
+							$data_need = array_diff($data_need, $data_except[$this->_method]);
+						}
+					} else {
+
+						//
+						// except value to null
+						unset($data_need);
+						unset($data_access);
+					}
+				}
+			}
+
+			//
+			// check permit to need
+			if ($data_need && count($data_need)) {
 				//
 				// check permit to need
-				if ($data_need && count($data_need)) {
-					//
-					// check permit
-					if (can($data_need)) {
-						$need = true;
-						echo "need";
-					} else {
-						$need = false;
+				foreach ($data_need as $row_need) {
+					if (can($row_need) === false && $result === true) {
 						$result = false;
-						echo "Nooooooooooo!!!";
 					}
-					//
-					//
 				}
-				//
-				//
+			}
+			//
+			//
 
-				//
-				// check permit allowed
-				if ($data_access && count($data_access) && $need === true) {
+			//
+			// check permit allowed
+			if ($data_access && count($data_access) && $result === true) {
 
-					if (is_numeric(array_search($this->_method, array_keys($data_access)))) {
-						if (is_array($data_access[$this->_method]) && count($data_access[$this->_method])) {
-							$array = $data_access[$this->_method];
+				if (is_numeric(array_search($this->_method, array_keys($data_access)))) {
+					if (is_array($data_access[$this->_method]) && count($data_access[$this->_method])) {
+						$array = $data_access[$this->_method];
 
-							//
-							// check permit
-							if (can($array) === false) {
-								$result = false;
+						//
+						// check permit
+						foreach ($array as $row_permit) {
+
+							if (can($row_permit) === true && $result === false) {
+								$result = true;
 							}
-							//
-							//
 						}
+						//
+						//
 					}
 				}
-			}	// End if except
-
-
-
+			}
 		}
-		echo "<br><pre>";
+		
+		/* echo "AFTER<pre>";
+		print_r($data_need);
 
-		// print_r($data_access);
-		echo "</pre><pre>";
-		print_r(my_permit());
-		echo "<br>";
-
+		echo "===========================abc";
+		print_r($data_access);
+		echo "===========================def";
+		print_r($data_except);
+		echo "</pre>";
 		if ($result == false) {
 			echo $this->_method . "= error permit";
 		} else {
 			echo $this->_method . "= success";
 		}
+		die; */
 
-		die;
 		if ($result == false) {
 			redirect(site_url('error_permit'));
 		}
