@@ -240,7 +240,7 @@
              let menuTitle = "menu bar" // e_sidebar
 
              // default language
-             let setlang = 'thai' 
+             let setlang = 'thai'
              if (getCookie("langadmin") != setlang) {
                  setlang = getCookie("langadmin")
              }
@@ -282,7 +282,13 @@
                  "<'row'<'col-sm-12 small'tr>>" +
                  "<'row'<'col-sm-4 small'i><'col-sm-4 d-flex justify-content-center small'l><'col-sm-4 small'p>>"
              let datatable_button = [
-                 'print',
+                 {
+                     extend: 'print',
+                     exportOptions: {
+                         columns: ':visible:not(:last-child)'
+                        //  columns: [1, 3]
+                     }
+                 },
                  {
                      extend: 'collection',
                      text: 'Export',

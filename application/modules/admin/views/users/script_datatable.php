@@ -15,7 +15,7 @@
         // # datatable_dom     = form e_navbar.php
         // # datatable_button  = form e_navbar.php
         //
-        let urlname = new URL(path(url_moduleControl + '/get_dataTable'), domain);
+        let urlname = new URL(path(url_moduleControl + '/fetch_data'), domain);
 
         let table = datatable.DataTable({
             scrollY: dataTableHeight(),
@@ -43,12 +43,12 @@
                     targets: last_columntable
                 },
                 {
-                    "targets": [2, 3, 4],
+                    "targets": [2, 3],
                     "className": "truncate"
                 },
             ],
             columns: [{
-                    "data": "CODE",
+                    "data": "USERNAME",
                     "width": "60px",
                     "render": function(data, type, row, meta) {
                         let code = data
@@ -68,17 +68,22 @@
                     "width": "",
                     "createdCell": function(td, cellData, rowData, row, col) {
                         $(td).css('min-width', '150px')
-                    },
+                    }
                 },
                 {
-                    "data": "WORKSTATUS.display",
+                    "data": "LASTNAME",
+                    "width": "",
+                    "createdCell": function(td, cellData, rowData, row, col) {
+                        $(td).css('min-width', '150px')
+                    }
                 },
                 {
                     "data": "STATUS.display",
                 },
                 {
                     "data": {
-                        _: 'USER_ACTIVE.display', // default show
+                        _: 'DATE_STARTS.display', // default show
+                        sort: 'DATE_ACTIVE.timestamp'
                     }
                 },
                 {
@@ -87,16 +92,13 @@
                         sort: 'DATE_ACTIVE.timestamp'
                     }
                 },
+
                 {
                     "data": "ID",
                     "render": function(data, type, row, meta) {
-                        let btn_view = `<a data-id="${data}" class="btn-view text-capitalize dropdown-item" href="#" data-code="${row.CODE}" ><i class="mdi mdi-magnify mr-2 text-info font-18 vertical-middle"></i>${table_column_view[setlang]}</a>`
+                        let btn_view = `<a data-id="${data}" class="btn-view text-capitalize dropdown-item" href="#"><i class="mdi mdi-magnify mr-2 text-info font-18 vertical-middle"></i>${table_column_view[setlang]}</a>`
                         let btn_edit = `<a data-id="${data}" class="btn-edit text-capitalize dropdown-item" href="#"><i class="mdi mdi-wrench mr-2 text-warning font-18 vertical-middle"></i>${table_column_edit[setlang]}</a>`
                         let btn_del = `<a data-id="${data}" class="btn-del text-capitalize dropdown-item" href="#" ><i class="mdi mdi-delete mr-2 text-danger font-18 vertical-middle"></i>${table_column_del[setlang]}</a>`
-
-                        if (row.STATUS.data.id == 1) {
-                            btn_edit = ''
-                        }
 
                         let table_action = `
                                 <div class="btn-group dropdown">
@@ -118,7 +120,6 @@
             "rowCallback": function(row, data) {
                 $('td:eq(0)', row).addClass('btn-view')
                     .attr('data-id', data.ID)
-                    .attr('data-code', data.CODE)
             },
 
             dom: datatable_dom,
@@ -128,5 +129,4 @@
         // table.buttons(0, 0).remove();
         // table.button().add(0,'print');
     }
-
 </script>

@@ -30,6 +30,35 @@ function status_offview(int $status = null, array $optional = ['html' => true])
   return $result;
 }
 
+/**
+ * check data name duplicate
+ *
+ * @param Array|null $data     = array key=column on table, value=data to search
+ * @param String|null $table    = table name
+ * @return boolean
+ */
+function status_online(int $status = null, array $optional = ['html' => true])
+{
+  $ci = &get_instance();
+  $ci->load->database();
+
+  # code...
+
+  $text = 'ปกติ';
+  $result = '<span class="text-success">' . $text . '</span>';
+
+  if ($status == 0 || !$status) {
+    $text = 'ลบ';
+    $result = '<span class="text-danger">' . $text . '</span>';
+  }
+
+  if ($optional['html'] == false) {
+    $result = $text;
+  }
+
+  return $result;
+}
+
 function imageis(String $path = null, String $name = null, String $type = null, array $optional = [])
 {
   $ci = &get_instance();

@@ -17,11 +17,21 @@
 	$lang['_form_descrip'] = "รายละเอียด";
 	$lang['_form_descrip_th'] = "รายละเอียด TH";
 	$lang['_form_descrip_us'] = "description US";
+	$lang['_form_password_placeholder'] = "ไม่เกิน 16 ตัวอักษร";
 	
 	// general
 	$lang['_name'] = "ชื่อ";
+	$lang['_lastname'] = "นามสกุล";
+	$lang['_name_th'] = "ชื่อ TH";
+	$lang['_lastname_th'] = "นามสกุล TH";
+	$lang['_name_us'] = "ชื่อ US";
+	$lang['_lastname_us'] = "นามสกุล US";
+	$lang['_code'] = "code";
 	$lang['_status'] = "สถานะ";
 	$lang['_display'] = "แสดงผล";
 	$lang['_usernow'] = "ผู้ทำรายการ";
 	$lang['_datenow'] = "วันทำรายการ";
 	$lang['_action'] = "เพิ่มเติม";
+	$lang['_total'] = "จำนวน";
+	$lang['_username'] = "username";
+	$lang['_password'] = "รหัสผ่าน";

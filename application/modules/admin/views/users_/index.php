@@ -10,16 +10,15 @@
 
         <div class="">
             <div class="card-box table-responsive">
-                <table id="datatable_users" class="table  dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                <table id="datatable" class="table table-hover m-0 table-actions-bar dt-responsive dataTable no-footer dtr-inline" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                     <thead>
                         <tr>
-                            <th>ระดับ</th>
+                            <th>username</th>
                             <th>ชื่อ</th>
                             <th>นามสกุล</th>
-                            <th>username</th>
                             <th>วันที่สมัคร</th>
                             <th>วันอัพเดต</th>
-                            <th>action</th>
+                            <th class="hidden-sm"><?= mb_ucfirst($this->lang->line('_action')) ?></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -36,85 +35,122 @@
 </div> <!-- end content -->
 
 <!-- Modal -->
-<?php require_once('modal.php'); ?>
+<?php require_once('component/modal.php'); ?>
 
 
 <script>
+    //  =========================
+    //  =========================
+    //  Setting
+    //  =========================
+    //  =========================
+
+    //  *
+    //  * Dom
+    //  * setting variable
+    //  *
+    const d = document
+    const datatable_name = '#datatable'
+
+    //  *
+    //  * Button
+    //  * setting variable
+    //  *
+    const btn_view = ".btn-view"
+    const btn_add = '.btn-add'
+    const btn_edit = '.btn-edit'
+    const btn_del = '.btn-del'
+    const btn_submit = 'button[type=submit]'
+    const btn_print = '.btn-print'
+
+    //  *
+    //  * Form
+    //  * setting variable
+    //  *
+    const form_name = '#frm'
+    const form_hidden_id = '[name=frm_hidden_id]'
+
+    //  *
+    //  * Modal
+    //  * setting variable
+    //  *
+    const modal_roles = '#modal_roles'
+    const modal = '.modal'
+    const modal_body = '.modal .modal-body'
+    const modal_body_view = '.modal .modal-body-view'
+    const modal_body_form = '.modal .modal-body-form'
+
+    //  =========================
+    //  =========================
+    //  End Setting
+    //  =========================
+    //  =========================
+
     $(document).ready(function() {
-        let frm = $('#dataform')
-        let method = $('#dataform input#method')
-
-        //  fetch data
-        //
-        let url_user = new URL('admin/ctl_user/fetch_data', domain);
-
-        $('#datatable_users').DataTable({
-            ajax: {
-                url: url_user,
-                type: 'get',
-                dataType: 'json'
-            },
-            order: [
-                [5, 'desc']
-            ],
-            /* columnDefs: [{
-                "targets": [6],
-                "data": null
-            }], */
-            columns: [{
-                    "data": "LEVEL",
-                },
-                {
-                    "data": "NAME",
-                },
-                {
-                    "data": "LASTNAME",
-                },
-                {
-                    "data": "USERNAME",
-                },
-                {
-                    "data": {
-                        _: 'DATE_STARTS.display', // default show
-                        sort: 'DATE_STARTS.timestamp'
-                    }
-                },
-                {
-                    "data": {
-                        _: 'DATE_ACTIVE.display', // default show
-                        sort: 'DATE_ACTIVE.timestamp'
-                    }
-                },
-                {
-                    "data": null,
-                },
-            ],
-            "createdRow": function(row, data, index) {
-                let table_btn_edit_user =
-                    `
-                <button type="button" class="btn btn-warning text-capitalize btn_edit_user btn-sm" data-id="${data['ID']}" data-toggle="modal" data-target="#btn_register_user_modal">${table_column_edit[setlang]}</button>
-                <button type="button" class="btn btn-danger text-capitalize btn_delete_user btn-sm" data-id="${data['ID']}">${table_column_del[setlang]}</button>
-                `
-                $('td', row).eq(6).html(table_btn_edit_user)
-            },
+        let frm = $(form_name)
+        let method = $(form_name+' input#method')
 
 
-            dom: datatable_dom,
-            buttons: datatable_button,
-        })
+        //  =========================
+        //  =========================
+        //  Event
+        //  =========================
+        //  =========================
 
+        //  *
+        //  * Form
+        //  * click button submit
+        //  * 
+        //  * call function submit data on form
+        //  * #async_insert_data() = script_crud.php
+        //  * #async_update_data() = script_crud.php
+        //  *
+        $(d).on('submit', form_name, function(e) {
+            e.preventDefault()
+            let f = $(modal_body_form)
+            let item_id = $(modal).find(form_hidden_id).val()
 
-        $(document).on('submit', '#dataform', function() {
+            let data = $(form_name).serializeArray()
 
-            if (method.val() == 'insert') {
-                register()
+            let func
+
+            if (item_id) {
+                func = async_update_data(item_id, data)
             } else {
-                update_userdata()
+                func = async_insert_data(data)
+
             }
 
-            return false;
+            func
+                .then((resp) => {
+                    if (resp.error == 1) {
+                        swalalert('error', resp.txt, {
+                            auto: false
+                        })
+                    } else {
+                        Swal.fire({
+                            type: 'success',
+                            title: 'สำเร็จ',
+                            text: resp.txt,
+                            timer: swal_autoClose,
+                        }).then((result) => {
 
+                            modalHide()
+
+                            dataReload()
+
+                        })
+                    }
+                });
+
+
+            return false
         })
+
+
+
+
+
 
         //
         // button add
@@ -126,7 +162,7 @@
 
         //
         // button edit
-        $(document).on('click', '.btn_edit_user', function() {
+        $(document).on('click', btn_edit, function() {
 
             let url_get_user = new URL('admin/ctl_user/get_user?id=' + $(this).attr('data-id'), domain);
             fetch(url_get_user)
@@ -301,7 +337,7 @@
                 .then(res => res.json())
                 .then((resp) => {
 
-                    $('#datatable_users').DataTable().ajax.reload();
+                    $(datatable_name).DataTable().ajax.reload();
 
                     $('#btn_register_user_modal').modal('hide')
 
@@ -346,7 +382,7 @@
                     .then(res => res.json())
                     .then((resp) => {
                         if (resp.data.error == 0) {
-                            $('#datatable_users').DataTable().ajax.reload(null, false);
+                            $(datatable_name).DataTable().ajax.reload(null, false);
 
                             Swal.fire(
                                 'สำเร็จ',
@@ -370,3 +406,6 @@
 
     })
 </script>
+<?php include('script.php') ?>
+<?php include('script_crud.php') ?>
+<?php include('script_datatable.php') ?>

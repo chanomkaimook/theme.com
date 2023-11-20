@@ -98,10 +98,6 @@ class Ctl_register extends MY_Controller
             // keep log
             log_data(array('verify', 'update', $this->db->last_query()));
 
-            // insert permit_control
-            $this->load->model('mdl_permit');
-            $this->mdl_permit->insert_data($this->input->post('id'));
-
             $error = 0;
             $message = 'ยืนยันตัวตนแล้ว ';
         }

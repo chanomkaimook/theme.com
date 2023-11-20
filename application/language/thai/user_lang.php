@@ -6,10 +6,9 @@
 	$lang['log'] = "log";
 	
 	// form
-	$lang['roles_name'] = "ชื่อ Role";
-	$lang['form_roles_roles_name_th'] = "ชื่อ Role TH";
-	$lang['form_roles_roles_name_us'] = "ชื่อ Role US";
-	$lang['form_roles_label_permit'] = "รายการ permission";
+	$lang['form_user_username'] = "username";
+	$lang['form_user_password'] = "รหัสผ่าน";
+	$lang['form_user_label_permit'] = "รายการ permission";
 	
 	// detail
 	$lang['form_roles_roles_name_placeholder'] = "ไม่เกิน 45 ตัวอักษร";

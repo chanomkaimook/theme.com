@@ -14,13 +14,12 @@
 
 </div>
 <div class="">
-
     <table id="datatable" class="table table-hover m-0 table-actions-bar dt-responsive dataTable no-footer dtr-inline" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
         <thead>
             <tr>
-                <th>#</th>
-                <th><?= mb_ucfirst($this->lang->line('_name')) ?></th>
-                <th><?= mb_ucfirst($this->lang->line('_status')) ?></th>
+                <th><?= mb_ucfirst($this->lang->line('_code')) ?></th>
+                <th><?= mb_ucfirst($this->lang->line('roles_name')) ?></th>
+                <th><?= mb_ucfirst($this->lang->line('_total')) ?></th>
                 <th><?= mb_ucfirst($this->lang->line('_display')) ?></th>
                 <th><?= mb_ucfirst($this->lang->line('_usernow')) ?></th>
                 <th><?= mb_ucfirst($this->lang->line('_datenow')) ?></th>

@@ -1,6 +1,6 @@
 <script>
     function getData() {
-        let datatable = $('#datatable')
+        let datatable = $(datatable_name)
 
         let last_columntable = datatable.find('th').length - 1
         let last_defaultSort = last_columntable - 1
@@ -15,7 +15,7 @@
         // # datatable_dom     = form e_navbar.php
         // # datatable_button  = form e_navbar.php
         //
-        let urlname = new URL(path(url_moduleControl + '/get_dataTable'), domain);
+        let urlname = new URL(path(url_moduleControl + '/fetch_data'), domain);
 
         let table = datatable.DataTable({
             scrollY: dataTableHeight(),
@@ -32,7 +32,9 @@
                 dataType: 'json',
                 data: dataFillterFunc()
             },
-            order: [],
+            order: [
+                [4, 'desc']
+            ],
             columnDefs: [{
                     responsivePriority: 1,
                     targets: 0
@@ -47,8 +49,9 @@
                     "className": "truncate"
                 },
             ],
-            columns: [{
-                    "data": "CODE",
+            columns: [
+                {
+                    "data": "USERNAME",
                     "width": "60px",
                     "render": function(data, type, row, meta) {
                         let code = data
@@ -65,20 +68,14 @@
                 },
                 {
                     "data": "NAME",
-                    "width": "",
-                    "createdCell": function(td, cellData, rowData, row, col) {
-                        $(td).css('min-width', '150px')
-                    },
                 },
                 {
-                    "data": "WORKSTATUS.display",
-                },
-                {
-                    "data": "STATUS.display",
+                    "data": "LASTNAME",
                 },
                 {
                     "data": {
-                        _: 'USER_ACTIVE.display', // default show
+                        _: 'DATE_STARTS.display', // default show
+                        sort: 'DATE_STARTS.timestamp'
                     }
                 },
                 {
@@ -90,13 +87,10 @@
                 {
                     "data": "ID",
                     "render": function(data, type, row, meta) {
-                        let btn_view = `<a data-id="${data}" class="btn-view text-capitalize dropdown-item" href="#" data-code="${row.CODE}" ><i class="mdi mdi-magnify mr-2 text-info font-18 vertical-middle"></i>${table_column_view[setlang]}</a>`
+
+                        let btn_view = `<a data-id="${data}" class="btn-view text-capitalize dropdown-item" href="#" data-code="${data['ID']}" ><i class="mdi mdi-magnify mr-2 text-info font-18 vertical-middle"></i>${table_column_view[setlang]}</a>`
                         let btn_edit = `<a data-id="${data}" class="btn-edit text-capitalize dropdown-item" href="#"><i class="mdi mdi-wrench mr-2 text-warning font-18 vertical-middle"></i>${table_column_edit[setlang]}</a>`
                         let btn_del = `<a data-id="${data}" class="btn-del text-capitalize dropdown-item" href="#" ><i class="mdi mdi-delete mr-2 text-danger font-18 vertical-middle"></i>${table_column_del[setlang]}</a>`
-
-                        if (row.STATUS.data.id == 1) {
-                            btn_edit = ''
-                        }
 
                         let table_action = `
                                 <div class="btn-group dropdown">
@@ -118,7 +112,6 @@
             "rowCallback": function(row, data) {
                 $('td:eq(0)', row).addClass('btn-view')
                     .attr('data-id', data.ID)
-                    .attr('data-code', data.CODE)
             },
 
             dom: datatable_dom,

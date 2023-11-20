@@ -12,7 +12,9 @@ class Mdl_user extends CI_Model
 
     public function get_data_staff()
     {
-        $id = $this->input->get('id');
+        $request = $_REQUEST;
+
+        $id = $request['id'];
 
         $sql = $this->db->select('
             employee.NAME as NAME,
@@ -27,12 +29,25 @@ class Mdl_user extends CI_Model
             staff.VERIFY as VERIFY,
             staff.DATE_STARTS as DATE_STARTS,
             staff.DATE_UPDATE as DATE_UPDATE,
+            staff.STATUS as STATUS,
         ')
             ->join('employee', 'staff.employee_id = employee.id', 'left')
             ->where('staff.verify is not null', null, false)
-            ->where('staff.status', 1)
             ->where('staff.id !=', 1)
+            ->where('staff.status', 1)
             ->order_by('staff.id', 'desc');
+
+        if (textShow($request['hidden_datestart'])) {
+            $hidden_start = textShow($request['hidden_datestart']);
+        }
+        if (textShow($request['hidden_dateend'])) {
+            $hidden_end = textShow($request['hidden_dateend']);
+        }
+
+        if ($hidden_start && $hidden_end) {
+            $sql->where('date(staff.date_starts) >=', $hidden_start);
+            $sql->where('date(staff.date_starts) <=', $hidden_end);
+        }
 
         if ($id) {
             $sql->where('staff.id', $id);
@@ -109,7 +124,7 @@ class Mdl_user extends CI_Model
             # insert user for helpdesk
             # if role = 8 (helpdesk) will clear roles_focus
             if (trim($this->input->post('role')) == 8) {
-                $this->db->delete('roles_focus',array('staff_owner'=>$id));
+                $this->db->delete('roles_focus', array('staff_owner' => $id));
 
                 $userfocus = trim($this->input->post('userfocus'));
                 if ($userfocus) {

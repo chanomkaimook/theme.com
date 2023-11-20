@@ -25,8 +25,7 @@ class Ctl_register extends MY_Controller
     public function insert_data_staff()
     {
         $array_text_error = array(
-            'name'  => 'ชื่อ',
-            'lastname'  => 'นามสกุล',
+            'name_th'  => 'ชื่อ',
             'input_username'  => 'ชื่อรหัสผ่าน',
             'input_password'  => 'รหัสผ่าน'
         );
@@ -34,12 +33,21 @@ class Ctl_register extends MY_Controller
         if ($this->input->server('REQUEST_METHOD') == 'POST') {
             $request = $this->input->post();
 
+            if ($request['hidden_form_admin']) {
+                $array_text_error = array(
+                    'name_th'  => 'ชื่อ th',
+                    'name_us'  => 'ชื่อ us',
+                    'input_username'  => 'ชื่อรหัสผ่าน',
+                    'input_password'  => 'รหัสผ่าน'
+                );
+            }
+
             $count_array = count($request);
             if ($count_array) {
 
                 // ตรวจสอบ error
                 foreach ($array_text_error as $key => $value) {
-                    if (!$request[$key]) {
+                    if (!textNull($request[$key])) {
                         $result = array(
                             'error' => 1,
                             'txt'   => 'โปรดระบุ ' . $array_text_error[$key],
@@ -96,8 +104,11 @@ class Ctl_register extends MY_Controller
                 # 
                 # employee
                 $data_employee = array(
-                    'name'      => textNull($request['name']),
-                    'lastname'  => textNull($request['lastname']),
+                    'name'          => textNull($request['name_th']),
+                    'lastname'      => textNull($request['lastname_th']),
+                    'name_us'       => textNull($request['name_us']),
+                    'lastname_us'   => textNull($request['lastname_us']),
+
                 );
                 $this->db->insert('employee', $data_employee);
                 $new_em_id = $this->db->insert_id();
@@ -114,7 +125,7 @@ class Ctl_register extends MY_Controller
 
                     #
                     # insert user roles
-                    if ($data_roles) {
+                    if ($data_roles && count($data_roles)) {
                         $this->load->library('permit');
                         $this->permit->insert_batch_data($data_roles, $new_id);
                     }

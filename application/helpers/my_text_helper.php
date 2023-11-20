@@ -67,7 +67,7 @@ function textNull(String $text = null)
 
   if (trim($text)) {
     if ($text != "null" && $text != "NULL") {
-      $result = $text;
+      $result = trim($text);
     }
   }
 

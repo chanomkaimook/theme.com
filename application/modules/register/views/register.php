@@ -58,14 +58,14 @@
                                             <div class="form-group row">
                                                 <div class="col-12">
                                                     <label for="">ชื่อ</label>
-                                                    <input class="form-control" type="text" id="name" name="name" placeholder="ชื่อภาษาไทย" required>
+                                                    <input class="form-control" type="text" id="name" name="name_th" placeholder="ชื่อภาษาไทย" required>
                                                 </div>
                                             </div>
 
                                             <div class="form-group row">
                                                 <div class="col-12">
                                                     <label for="">นามสกุล</label>
-                                                    <input class="form-control" type="text" id="lastname" name="lastname" placeholder="นามสกุลภาษาไทย" required>
+                                                    <input class="form-control" type="text" id="lastname" name="lastname_th" placeholder="นามสกุลภาษาไทย" required>
                                                 </div>
                                             </div>
 

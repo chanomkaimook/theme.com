@@ -102,7 +102,7 @@ class Ctl_roles extends MY_Controller
 
                 $sub_data['ID'] = $row->ID;
                 $sub_data['CODE'] = textNull($row->CODE);
-                $sub_data['NAME'] = textNull($row->NAME);
+                $sub_data['NAME'] = textLang($row->NAME,$row->NAME_US);
 
                 $sub_data['WORKSTATUS'] = array(
                     "display"   => $dom_workstatus,

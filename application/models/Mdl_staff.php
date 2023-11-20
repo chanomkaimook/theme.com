@@ -41,10 +41,10 @@ class Mdl_staff extends CI_Model
         $sql = (object) $this->get_sql($id, $optionnal, $limit);
         $query = $sql->get();
 
-        if ($type == "row") {
+        if ($id) {
             return $query->row();
         } else {
-            return $query->result();
+            return $query->$type();
         }
     }
 
@@ -268,10 +268,11 @@ class Mdl_staff extends CI_Model
             staff.EMPLOYEE_ID as EMPLOYEE_ID,
             staff.USERNAME as USERNAME,
             staff.VERIFY as VERIFY,
-            staff.DATE_START as DATE_START,
+            staff.DATE_STARTS as DATE_START,
             staff.DATE_UPDATE as DATE_UPDATE,
-            staff.USER_START as USER_START,
+            staff.USER_STARTS as USER_START,
             staff.USER_UPDATE as USER_UPDATE,
+            staff.STATUS as STATUS,
         ');
         }
 
