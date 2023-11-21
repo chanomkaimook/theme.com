@@ -21,6 +21,20 @@
     </div>
 </div>
 
+<div class="row">
+    <div class="form-group col-md-12">
+        <span class="required"><i class="mdi mdi-svg"></i></span>
+        <label class="text-capitalize"><?= mb_ucfirst($this->lang->line('_code')) ?></label>
+        <input type="text" maxlength="45" class="form-control" name="roles_code" placeholder="<?= mb_ucfirst($this->lang->line('_form_onlyus')) ?>" value="" required>
+    </div>
+    <div class="form-group col-md-12">
+        <label for="">คัดลอกสิทธิ์ <small>เลือกได้มากกว่า 1</small></label>
+        <select id="roles_child" name="roles_child[]" class="form-control" data-toggle="select2" multiple="multiple" data-placeholder="ระบุสิทธิ์ได้มากกว่า 1">
+
+        </select>
+    </div>
+</div>
+
 <style>
     .jstree-grid-container {
         display: grid;
@@ -58,7 +72,7 @@
 
         <div class="jstree-grid-container">
             <?php
-            echo html_roles_jstree($permit,'jstree_checkbox');
+            echo html_roles_jstree($permit, 'jstree_checkbox');
             ?>
         </div>
 

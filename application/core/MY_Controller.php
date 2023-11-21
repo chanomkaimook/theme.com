@@ -16,6 +16,8 @@ class MY_Controller extends CI_Controller
 	public $_controller;
 	public $_method;
 
+	public $userlogin;
+
 	public function __construct()
 	{
 		parent::__construct();
@@ -57,6 +59,8 @@ class MY_Controller extends CI_Controller
 		$this->_module = $this->segment_array[1];
 		$this->_controller = $this->segment_array[2];
 		$this->_method = $this->segment_array[3];
+
+		$this->userlogin = userlogin();
 	}
 
 	/**
@@ -71,7 +75,9 @@ class MY_Controller extends CI_Controller
 
 		$this->is_logged_in();
 
-		$this->is_permit_in($dataset);
+		if (!check_admin()) {
+			$this->is_permit_in($dataset);
+		}
 	}
 
 	public function is_logged_in()
@@ -119,7 +125,7 @@ class MY_Controller extends CI_Controller
 	public function is_permit_in(array $dataset = null)
 	{
 
-		$result = true;
+		$result = false;
 
 		if (isset($dataset) && is_array($dataset)) {
 
@@ -139,6 +145,18 @@ class MY_Controller extends CI_Controller
 				$data_except = $dataset['except'];
 			}
 
+			/* $this->load->library('permit');
+			echo "<pre>";
+			print_r($this->permit->get_dataPermitSet($this->session->userdata($this->userlogin)));
+			echo "</pre>";
+			echo "BEFORE<pre>";
+			print_r($data_need);
+
+			echo "===========================abc";
+			print_r($data_access);
+			echo "===========================def";
+			print_r($data_except);
+			echo "</pre>"; */
 			//
 			// check permit to except
 			if ($data_except && count($data_except)) {
@@ -167,15 +185,31 @@ class MY_Controller extends CI_Controller
 					}
 				}
 			}
+			/* echo "<br>AFTER<pre>";
+			print_r($data_need);
+
+			echo "===========================abc";
+			print_r($data_access);
+			echo "===========================def";
+			print_r($data_except);
+			echo "</pre>"; */
+
+			if (!isset($data_access[$this->_method])) {
+				$result = true;
+			} else {
+				$dataarray = $this->permit->get_dataPermitSet($this->session->userdata($this->userlogin));
+			}
 
 			//
 			// check permit to need
-			if ($data_need && count($data_need)) {
+			$next = 1;
+			if ($data_need && count($data_need) && $result == false) {
 				//
 				// check permit to need
 				foreach ($data_need as $row_need) {
-					if (can($row_need) === false && $result === true) {
+					if (can($row_need,$dataarray) === false) {
 						$result = false;
+						$next = 0;
 					}
 				}
 			}
@@ -184,36 +218,35 @@ class MY_Controller extends CI_Controller
 
 			//
 			// check permit allowed
-			if ($data_access && count($data_access) && $result === true) {
+			if ($data_access && count($data_access) && $next == 1) {
 
 				if (is_numeric(array_search($this->_method, array_keys($data_access)))) {
 					if (is_array($data_access[$this->_method]) && count($data_access[$this->_method])) {
+
 						$array = $data_access[$this->_method];
 
 						//
 						// check permit
 						foreach ($array as $row_permit) {
-
-							if (can($row_permit) === true && $result === false) {
+							if (can($row_permit,$dataarray) === true && $result === false) {
 								$result = true;
 							}
 						}
 						//
 						//
+					} else {
+						$result = true;
 					}
 				}
 			}
-		}
-		
-		/* echo "AFTER<pre>";
-		print_r($data_need);
+		} else {
 
-		echo "===========================abc";
-		print_r($data_access);
-		echo "===========================def";
-		print_r($data_except);
-		echo "</pre>";
-		if ($result == false) {
+			//
+			// if not have setting value
+			// pass auto
+			$result = true;
+		}
+		/* if ($result == false) {
 			echo $this->_method . "= error permit";
 		} else {
 			echo $this->_method . "= success";

@@ -61,7 +61,7 @@ class Mdl_page extends CI_Model
         # code...
         $optionnal['select'] = 'count(' . $this->table . '.id) as total';
 
-        $data = (object) $this->get_dataShow($id, $optionnal,'row');
+        $data = (object) $this->get_dataShow($id, $optionnal, 'row');
         $num = $data->total;
 
         return $num;
@@ -77,7 +77,9 @@ class Mdl_page extends CI_Model
     {
         # code...
         $sql = (object) $this->get_sql($id, $optionnal, $type);
-        $sql->where($this->table . '.'.$this->fildstatus, 1);
+        if($this->fildstatus){
+            $sql->where($this->table . '.' . $this->fildstatus, 1);
+        }
 
         $query = $sql->get();
 
@@ -86,6 +88,46 @@ class Mdl_page extends CI_Model
         } else {
             return $query->$type();
         }
+    }
+
+    //  *
+    //  * Check validate
+    //  * validation
+    //  *
+    /**
+     * Check validate
+     *
+     * @param array|null $arrayset = array from method POST or GET
+     * @param array|null $array_to_find
+     * @return void
+     */
+    function check_value_valid($arrayset, array $array_to_find = null)
+    {
+
+        $result = false;
+
+        if ($array_to_find) {
+            $array_text_error = $array_to_find;
+        } else {
+            $array_text_error = array(
+                'label_2'       => 'ชื่อ',
+                'label_3'       => 'code',
+            );
+        }
+
+        if (is_array($array_text_error) && count($array_text_error)) {
+            if ($text = check_value_valid($array_text_error, $arrayset)) {
+                $result = array(
+                    'error' => 1,
+                    'txt'   => 'โปรดระบุ ' . $text,
+                );
+
+                return $result;
+            }
+        }
+
+
+        return $result;
     }
 
     //  *
@@ -102,13 +144,18 @@ class Mdl_page extends CI_Model
             'txt'       => 'ไม่มีการทำรายการ',
         );
 
-        if (textShow($this->input->post('label_6'))) {
+        $request = $_POST;
+        if ($return = $this->check_value_valid($request)) {
+            return $return;
+        }
+
+        if (textNull($this->input->post('label_6'))) {
             $data = array(
-                'code'  => textShow($this->input->post('label_2')),
-                'name'  => textShow($this->input->post('label_6')),
+                'code'  => textNull($this->input->post('label_2')),
+                'name'  => textNull($this->input->post('label_6')),
                 'workstatus'  => $this->input->post('label_1'),
 
-                'user_starts'  => $this->session->userdata('user_code'),
+                'user_starts'  => $this->userlogin,
             );
 
             $this->db->insert($this->table, $data);
@@ -150,12 +197,12 @@ class Mdl_page extends CI_Model
         } */
 
         $data = array(
-            'code'  => textShow($this->input->post('label_2')),
-            'name'  => textShow($this->input->post('label_6')),
+            'code'  => textNull($this->input->post('label_2')),
+            'name'  => textNull($this->input->post('label_6')),
             'workstatus'  => $this->input->post('label_1'),
 
             'date_update'  => date('Y-m-d H:i:s'),
-            'user_update'  => $this->session->userdata('user_code'),
+            'user_update'  => $this->userlogin,
         );
 
         $this->db->where('id', $item_id);
@@ -183,8 +230,8 @@ class Mdl_page extends CI_Model
     //  *
     public function delete_data()
     {
-        $item_id = textShow($this->input->post('item_id'));
-        $item_remark = textShow($this->input->post('item_remark'));
+        $item_id = textNull($this->input->post('item_id'));
+        $item_remark = textNull($this->input->post('item_remark'));
 
         $result = array(
             'error' => 1,
@@ -196,11 +243,13 @@ class Mdl_page extends CI_Model
         }
 
         $data_array = array(
-            $this->fildstatus     => 0,
-
             'date_update'  => date('Y-m-d H:i:s'),
-            'user_update'  => $this->session->userdata('user_code'),
+            'user_update'  => $this->userlogin,
         );
+
+        if($this->fildstatus){
+            $data_array[$this->fildstatus]  = 0;
+        }
 
         if ($item_remark) {
             $data_array['remark_delete'] = $item_remark;
@@ -248,11 +297,11 @@ class Mdl_page extends CI_Model
 
         $sql = $this->db->from($this->table);
 
-        if (textShow($request['hidden_datestart'])) {
-            $hidden_start = textShow($request['hidden_datestart']);
+        if (textNull($request['hidden_datestart'])) {
+            $hidden_start = textNull($request['hidden_datestart']);
         }
-        if (textShow($request['hidden_dateend'])) {
-            $hidden_end = textShow($request['hidden_dateend']);
+        if (textNull($request['hidden_dateend'])) {
+            $hidden_end = textNull($request['hidden_dateend']);
         }
 
         if ($hidden_start && $hidden_end) {

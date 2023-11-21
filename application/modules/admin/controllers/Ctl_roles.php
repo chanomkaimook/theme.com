@@ -102,7 +102,7 @@ class Ctl_roles extends MY_Controller
 
                 $sub_data['ID'] = $row->ID;
                 $sub_data['CODE'] = textNull($row->CODE);
-                $sub_data['NAME'] = textLang($row->NAME,$row->NAME_US);
+                $sub_data['NAME'] = textLang($row->NAME, $row->NAME_US);
 
                 $sub_data['WORKSTATUS'] = array(
                     "display"   => $dom_workstatus,
@@ -152,16 +152,31 @@ class Ctl_roles extends MY_Controller
     public function get_data()
     {
         $this->load->library('roles');
-        
+
         $request = $_REQUEST;
         $item_id = $request['id'];
-        $array_permit = $this->roles->get_dataRolesJS($item_id,null,"result_array");
+        $array_permit = $this->roles->get_dataRolesJS($item_id, null, "result_array");
 
+        $test = $this->roles->get_data($item_id);
+        print_r($test);
         $data = $this->model->get_data($item_id);
         $data->PERMIT = $array_permit;
         $data->PERMIT_HTML = html_roles_jstree($array_permit);
-
         // echo html_roles_jstree($array_permit);die;
+        $result = $data;
+        echo json_encode($result);
+    }
+
+    //  *
+    //  * CRUD
+    //  * read
+    //  * 
+    //  * get data role
+    //  *
+    public function get_dataRole()
+    {
+        $data = $this->model->get_dataShow();
+
         $result = $data;
         echo json_encode($result);
     }
@@ -179,7 +194,7 @@ class Ctl_roles extends MY_Controller
 
             $returns = $this->model->insert_data();
             echo json_encode($returns);
-        } 
+        }
     }
 
     //  *
@@ -195,7 +210,7 @@ class Ctl_roles extends MY_Controller
 
             $returns = $this->model->update_data();
             echo json_encode($returns);
-        } 
+        }
     }
 
 
@@ -212,6 +227,6 @@ class Ctl_roles extends MY_Controller
 
             $returns = $this->model->delete_data();
             echo json_encode($returns);
-        } 
+        }
     }
 }

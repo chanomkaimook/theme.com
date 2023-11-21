@@ -18,6 +18,7 @@
 	$lang['_form_descrip_th'] = "รายละเอียด TH";
 	$lang['_form_descrip_us'] = "description US";
 	$lang['_form_password_placeholder'] = "ไม่เกิน 16 ตัวอักษร";
+	$lang['_form_onlyus'] = "เฉพาะภษาอังกฤษเท่านั้น";
 	
 	// general
 	$lang['_name'] = "ชื่อ";

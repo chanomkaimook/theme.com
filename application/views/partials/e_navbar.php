@@ -261,6 +261,13 @@
              }
              //
              //
+             function textCapitalize(text) {
+                 let result = ""
+                 if (text) {
+                     result = text.charAt(0).toUpperCase() + text.slice(1)
+                 }
+                 return result
+             }
 
              document.getElementsByClassName('logo-lg')[0].getElementsByTagName('span')[0].innerHTML = logoText
              // =======
@@ -281,12 +288,11 @@
              let datatable_dom = "<'row'<'col-sm-6 btn-sm'B><'col-sm-6 'f>>" +
                  "<'row'<'col-sm-12 small'tr>>" +
                  "<'row'<'col-sm-4 small'i><'col-sm-4 d-flex justify-content-center small'l><'col-sm-4 small'p>>"
-             let datatable_button = [
-                 {
+             let datatable_button = [{
                      extend: 'print',
                      exportOptions: {
                          columns: ':visible:not(:last-child)'
-                        //  columns: [1, 3]
+                         //  columns: [1, 3]
                      }
                  },
                  {

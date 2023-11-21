@@ -19,6 +19,7 @@
 	$lang['_form_descrip_us'] = "description US";
 	$lang['_form_descrip_us'] = "description US";
 	$lang['_form_password_placeholder'] = "text less than 16 word";
+	$lang['_form_onlyus'] = "english only";
 	
 	// general
 	$lang['_name'] = "name";

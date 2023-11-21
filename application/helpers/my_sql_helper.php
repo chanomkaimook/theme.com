@@ -25,7 +25,6 @@ function check_dup(array $array = [], String $table = null)
     $count = $sql->count_all_results(null, false);
     $q = $sql->get();
 
-    return $count;
     if (!$count) {
       $result = false;
     }

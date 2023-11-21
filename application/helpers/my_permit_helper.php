@@ -42,10 +42,10 @@ error_reporting(E_ALL & ~E_NOTICE);
  *
  * @param array|string|null $role_name
  * @param integer|null $staff_id = It's will be user login if not found
- * @param string $nameselect = default roles_name_list || roles_id_list
+ * @param array|null $dataarray = if setting this value will not get get_dataPermitSet
  * @return void
  */
-function check_role($role_name = null, int $staff_id = null, string $nameselect = 'roles_name_list')
+function check_role($role_name = null, int $staff_id = null, array $dataarray = null)
 {
   $ci = &get_instance();
   $ci->load->database();
@@ -53,10 +53,12 @@ function check_role($role_name = null, int $staff_id = null, string $nameselect 
   # code...
   $result = false;
 
+  $nameselect = 'roles_name_list';
+
   if (check_admin()) {
     $result = true;
   } else {
-    $result = method_find_checkarray($role_name, $staff_id, $nameselect);
+    $result = method_find_checkarray($role_name, $staff_id, $nameselect,$dataarray);
   }
 
   return $result;
@@ -67,10 +69,10 @@ function check_role($role_name = null, int $staff_id = null, string $nameselect 
  *
  * @param array|string|null $permit_value = module/controler/method || permit id
  * @param integer|null $staff_id
- * @param string $type = default permit_name_list || permit_id_list
+ * @param array|null $dataarray = if setting this value will not get get_dataPermitSet
  * @return void
  */
-function check_permit($permit_value = null, int $staff_id = null, string $nameselect = "permit_name_list")
+function check_permit($permit_value = null, int $staff_id = null, array $dataarray = null)
 {
   $ci = &get_instance();
   $ci->load->database();
@@ -78,10 +80,12 @@ function check_permit($permit_value = null, int $staff_id = null, string $namese
   # code...
   $result = false;
 
+  $nameselect = "permit_name_list";
+
   if (check_admin()) {
     $result = true;
   } else {
-    $result = method_find_checkarray($permit_value, $staff_id, $nameselect);
+    $result = method_find_checkarray($permit_value, $staff_id, $nameselect,$dataarray);
   }
 
   return $result;
@@ -92,10 +96,9 @@ function check_permit($permit_value = null, int $staff_id = null, string $namese
  *
  * @param array|string|null $permit_value = module/controler/method
  * @param integer|null $staff_id
- * @param string $type = default permit_name_list || permit_id_list
  * @return void
  */
-/* function check_menu($menu_value = null, int $staff_id = null, string $nameselect = "menu_name_list")
+/* function check_menu($menu_value = null, int $staff_id = null)
 {
   $ci = &get_instance();
   $ci->load->database();
@@ -106,6 +109,8 @@ function check_permit($permit_value = null, int $staff_id = null, string $namese
   if (!$staff_id) {
     $staff_id = userlogin();
   }
+
+  $nameselect = "menu_name_list";
 
   if (check_admin()) {
     $result = true;
@@ -122,9 +127,10 @@ function check_permit($permit_value = null, int $staff_id = null, string $namese
  * @param array|string|null $permit_value = module/controler/method
  * @param integer|null $staff_id
  * @param string $type = default permit_name_list || permit_id_list
+ * @param array|null $dataarray = if setting this value will not get get_dataPermitSet
  * @return void
  */
-function check_data($url_value = null, int $staff_id = null, string $nameselect = null)
+function check_data($url_value = null, int $staff_id = null, string $nameselect = null, array $dataarray = null)
 {
   $ci = &get_instance();
   $ci->load->database();
@@ -139,7 +145,7 @@ function check_data($url_value = null, int $staff_id = null, string $nameselect 
   if (check_admin()) {
     $result = true;
   } else {
-    $result = method_find_checkarray($url_value, $staff_id, $nameselect);
+    $result = method_find_checkarray($url_value, $staff_id, $nameselect,$dataarray);
   }
 
   return $result;
@@ -151,9 +157,10 @@ function check_data($url_value = null, int $staff_id = null, string $nameselect 
  * @param array|string|null $name = value
  * @param integer|null $staff_id
  * @param string $key_array_name = key on permit array
+ * @param array|null $dataarray = if setting this value will not get get_dataPermitSet
  * @return boolean
  */
-function method_find_checkarray($name = null, int $staff_id = null, string $key_array_name = "")
+function method_find_checkarray($name = null, int $staff_id = null, string $key_array_name = "", array $dataarray = null)
 {
   $ci = &get_instance();
 
@@ -164,9 +171,14 @@ function method_find_checkarray($name = null, int $staff_id = null, string $key_
   }
 
   if ($staff_id && $key_array_name) {
-
+    
     $ci->load->library('Permit');
-    $data_permit = $ci->permit->get_dataPermitSet($staff_id);
+
+    if($dataarray){
+      $data_permit = $dataarray;
+    }else{
+      $data_permit = $ci->permit->get_dataPermitSet($staff_id);
+    }
     $array_permitset = $data_permit[$key_array_name];
 
     if (is_array($name)) {
@@ -276,22 +288,23 @@ function check_admin(int $staff_id = null)
  * check value name with permit
  *
  * @param array|string|null $name = value
+ * @param array|null $dataarray = if setting this value will not get get_dataPermitSet
  * @return boolean
  */
-function can($name = null) {
+function can($name = null, array $dataarray = null) {
   $result = false;
 
   if (is_array($name)) {
     // loop
     foreach ($name as $value) {
       if ($result != true) {
-        if (method_can($value)) {
+        if (method_can($value,$dataarray)) {
           $result = true;
         }
       }
     }
   } else {
-    if (method_can($name)) {
+    if (method_can($name,$dataarray)) {
       $result = true;
     }
   }
@@ -303,9 +316,10 @@ function can($name = null) {
  * sub function for function can()
  *
  * @param string|null $name
+ * @param array|null $dataarray = if setting this value will not get get_dataPermitSet
  * @return boolean
  */
-function method_can(string $name = null)
+function method_can(string $name = null, array $dataarray = null)
 {
   $result = false;
 
@@ -318,10 +332,11 @@ function method_can(string $name = null)
       // value = permit
       //
 
-      if (check_permit($name)) {
+      if (check_permit($name,null,$dataarray)) {
         $result = true;
       }
     } else {
+      
       //
       // value = menu
       //
@@ -332,7 +347,7 @@ function method_can(string $name = null)
       $value = (string) $value[0];
 
       if (!$result) {
-        if (check_role($value)) {
+        if (check_role($value,null,$dataarray)) {
           $result = true;
         }
       }

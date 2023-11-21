@@ -22,18 +22,19 @@ class Ctl_dashboard extends MY_Controller
         $this->middleware(
             array(
                 'access'    => [
-                    'index'      => [],
+                    // 'index'     => ['bill'],
+                    // 'index'     => ['bill','bill.view'],
                     'view'      => ['bill.view','bill.a','bill.insert']
                     // 'view'      => ['bill.view','bill.a','bill.insert','quatation']
                     // 'view'      => ['quotation']
                 ],
-                // 'need'       => [],
+                // 'need'       => ['workorder'],
                 // 'need'       => ['bill'],
                 // 'need'       => ['bill','quotation'],
                 // 'need'       => ['quotation'],
 
                 'except'    => [
-                    // 'index'      => [],
+                    // 'index'      => ['workorder','bill.view','bill'],
                     // 'view'      => [],
                     // 'view'      => ['quotation','b','c','d'],
                     // 'view'      => ['bill.a','b','c','d'],

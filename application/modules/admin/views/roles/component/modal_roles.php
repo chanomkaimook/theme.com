@@ -58,7 +58,7 @@
 
 <script>
     $(document).ready(function() {
-        $('[data-toggle=select2]').select2()
+        // $('[data-toggle=select2]').select2()
 
         $('[data-plugin=jstree_checkbox]').jstree({
             "plugins": ["checkbox"]

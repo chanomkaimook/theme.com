@@ -24,17 +24,28 @@ class Mdl_roles extends CI_Model
     //  Function
     //  =========================
     //  =========================
-    function update_roles_control(array $data = null, int $roles_id = null)
+    function update_roles_control(array $data = null, int $roles_id = null, string $type = 'permit_id')
     {
         if ($roles_id && $data) {
             $data_permit = [];
             $list_permit = $data;
-            foreach ($list_permit as $value) {
-                $data_permit[] = array(
-                    'roles_id'  => $roles_id,
-                    'permit_id'  => $value,
-                    'user_starts'  => $this->session->userdata('user_code'),
-                );
+
+            if ($type != "permit_id") {
+                foreach ($list_permit as $value) {
+                    $data_permit[] = array(
+                        'roles_id'  => $roles_id,
+                        'roles_id_child'  => $value,
+                        'user_starts'  => $this->userlogin,
+                    );
+                }
+            } else {
+                foreach ($list_permit as $value) {
+                    $data_permit[] = array(
+                        'roles_id'  => $roles_id,
+                        'permit_id'  => $value,
+                        'user_starts'  => $this->userlogin,
+                    );
+                }
             }
 
             if (count($data_permit)) {
@@ -47,6 +58,7 @@ class Mdl_roles extends CI_Model
 
         return true;
     }
+
     //  =========================
     //  =========================
     //  End Function
@@ -141,6 +153,54 @@ class Mdl_roles extends CI_Model
     }
 
     //  *
+    //  * Check validate
+    //  * validation
+    //  *
+    /**
+     * Check validate
+     *
+     * @param array|null $arrayset = array from method POST or GET
+     * @param array|null $array_to_find
+     * @return void
+     */
+    function check_value_valid($arrayset, array $array_to_find = null)
+    {
+
+        $result = false;
+
+        if ($array_to_find) {
+            $array_text_error = $array_to_find;
+        } else {
+            $array_text_error = array(
+                'roles_name_th'  => 'ชื่อ',
+                'roles_code'      => 'code',
+            );
+        }
+
+        if (is_array($array_text_error) && count($array_text_error)) {
+            if ($text = check_value_valid($array_text_error, $arrayset)) {
+                $result = array(
+                    'error' => 1,
+                    'txt'   => 'โปรดระบุ ' . $text,
+                );
+
+                return $result;
+            }
+            if ($text = check_dup(array('code' => textNull($arrayset['roles_code'])), 'roles')) {
+                $result = array(
+                    'error' => 1,
+                    'txt'   => 'ค่าที่ระบุใน code มีการใช้แล้ว',
+                );
+
+                return $result;
+            }
+        }
+
+
+        return $result;
+    }
+
+    //  *
     //  * CRUD
     //  * insert
     //  * 
@@ -148,21 +208,26 @@ class Mdl_roles extends CI_Model
     //  *
     public function insert_data()
     {
-        // print_r($this->input->post());
-        // exit;
         $result = array(
             'error'     => 1,
             'txt'       => 'ไม่มีการทำรายการ',
         );
 
+        $request = $_POST;
+        if ($return = $this->check_value_valid($request)) {
+            return $return;
+        }
+
         if ($this->input->post()) {
             $data = array(
+                'code'  => textNull($this->input->post('roles_code')),
+
                 'name'  => textNull($this->input->post('roles_name_th')),
                 'name_us'  => textNull($this->input->post('roles_name_us')),
                 'description'  => textNull($this->input->post('roles_descrip_th')),
                 'description_us'  => textNull($this->input->post('roles_descrip_us')),
 
-                'user_starts'  => $this->session->userdata('user_code'),
+                'user_starts'  => $this->userlogin,
             );
 
             $this->db->insert($this->table, $data);
@@ -173,10 +238,13 @@ class Mdl_roles extends CI_Model
 
             // 
             // if find variable permit_id
-            $this->update_roles_control($this->input->post('permit_id'), $new_id);
+            $this->update_roles_control($this->input->post('permit_id'), $new_id, 'permit_id');
+
+            // 
+            // if find variable role child
+            $this->update_roles_control($this->input->post('roles_child'), $new_id, 'roles_id_child');
 
             if ($new_id) {
-
                 $result = array(
                     'error'     => 0,
                     'txt'       => 'ทำรายการสำเร็จ',
@@ -198,15 +266,23 @@ class Mdl_roles extends CI_Model
     //  *
     public function update_data()
     {
+
+        $request = $_POST;
+        if ($return = $this->check_value_valid($request)) {
+            return $return;
+        }
+
         $item_id = $this->input->post('item_id');
         $data = array(
+            'code'  => textNull($this->input->post('roles_code')),
+
             'name'  => textNull($this->input->post('roles_name_th')),
             'name_us'  => textNull($this->input->post('roles_name_us')),
             'description'  => textNull($this->input->post('roles_descrip_th')),
             'description_us'  => textNull($this->input->post('roles_descrip_us')),
 
             'date_update'  => date('Y-m-d H:i:s'),
-            'user_update'  => $this->session->userdata('user_code'),
+            'user_update'  => $this->userlogin,
         );
 
         $this->db->where('id', $item_id);
@@ -263,7 +339,7 @@ class Mdl_roles extends CI_Model
             $this->fildstatus     => 1,
 
             'date_update'  => date('Y-m-d H:i:s'),
-            'user_update'  => $this->session->userdata('user_code'),
+            'user_update'  => $this->userlogin,
         );
 
         if ($item_remark) {

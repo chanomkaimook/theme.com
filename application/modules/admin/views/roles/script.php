@@ -33,6 +33,7 @@
                     'value': $(item).attr('data-id')
                 })
             })
+
             let func
 
             if (item_id) {
@@ -173,6 +174,31 @@
             $(modal).find('.modal_text_header').html(header)
         }
 
+        let url_role = new URL(path(url_moduleControl + '/get_dataRole'), domain)
+        fetch(url_role)
+            .then(res => res.json())
+            .then(resp => {
+                let data_array_html = ""
+
+                let data_array = ""
+                let item_value
+                let item_id
+
+                resp.map(function(item) {
+                    item_value = textCapitalize(item.CODE)
+                    item_id = item.ID
+                    data_array += `<option value="${item_id}">${item_value}</option>`
+
+                    data_array_html += create_html_roles(item_value)
+                })
+
+                $('[data-toggle=select2]')
+                    .html(data_array).select2()
+
+                // value for modal form view
+                // $(modal_body_view).find('.roles_child').html(data_array_html).end()
+            })
+
         switch (action) {
             case 'view':
                 $(modal_body_view)
@@ -180,6 +206,7 @@
                     .find('.roles_name_us').text(data.NAME_US).end()
                     .find('.roles_descrip_th').text(data.DESCRIPTION).end()
                     .find('.roles_descrip_us').text(data.DESCRIPTION_US).end()
+                    .find('.roles_code').text(data.CODE).end()
                     .find('.jstree-grid-container').html(data.PERMIT_HTML).end()
 
                 $('[data-plugin=jstree]').jstree()
@@ -190,6 +217,7 @@
                     .find('[name=roles_name_us]').val(data.NAME_US).end()
                     .find('[name=roles_descrip_th]').val(data.DESCRIPTION).end()
                     .find('[name=roles_descrip_us]').val(data.DESCRIPTION_US).end()
+                    .find('[name=roles_code]').val(data.CODE).end()
 
                 let t = data.PERMIT
 
@@ -219,6 +247,16 @@
         $(modal_roles).modal()
 
         modalLayout(action)
+    }
+
+    function create_html_roles(text = null) {
+        let html = ""
+
+        if (text) {
+            html += `<div class="btn btn-primary">${text}</div>`
+        }
+
+        return html
     }
 
     //  *
@@ -272,6 +310,7 @@
         // item_id = 0
         async_get_data(item_id)
             .then((resp) => {
+                console.log(resp)
                 modalActive(resp, 'view')
             })
             .then(() => {
@@ -393,6 +432,8 @@
         $(modal).find('.modal_text_header').html('')
         $('[data-plugin=jstree_checkbox]').jstree("deselect_all");
         $('.modal').find('.slimScrollDiv').slimScroll();
+
+        $('[data-toggle=select2]').val(null).trigger('change')
     }
 
     //  *
@@ -430,28 +471,4 @@
     //  End Base Function
     //  =========================
     //  =========================
-
-    $(document).on('click', '.btn-insert', function(e) {
-        e.preventDefault()
-
-        let error = 0
-        let validvalue = [
-            '#id_input_1',
-            '#id_input_2',
-            '#id_input_3',
-        ]
-
-        validvalue.forEach(function(item) {
-            if (!$(item).val()) {
-                error = 1
-
-                $(item).addClass('bg-warning')
-            }
-        })
-
-        if (error === 0) {
-            func_insert(data);
-        }
-
-    })
 </script>
