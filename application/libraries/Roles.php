@@ -27,7 +27,7 @@ class Roles
 		if ($id) {
 			$ci->load->model('mdl_roles_control');
 
-			$sql = $ci->mdl_roles_control->get_dataRoles($id, $optional, $type);
+			$result = $ci->mdl_roles_control->get_dataRoles($id, $optional, $type);
 		}
 
 		return $result;
@@ -102,10 +102,10 @@ class Roles
 	/**
 	 * get roles data
 	 *
-	 * @param integer|null $id = roles_id from roles_control
+	 * @param integer|array $id = roles_id from roles_control
 	 * @return void
 	 */
-	function get_dataRolesJS(int $id = null, array $optional = null, $type = "result")
+	function get_dataRolesJS($id = null, array $optional = null, $type = "result")
 	{
 		//=	 call database	=//
 		$ci = &get_instance();
@@ -123,4 +123,54 @@ class Roles
 
 		return $result;
 	}
+
+	/**
+	 * get permit data in roles child
+	 *
+	 * @param integer|array $id = roles_id from roles_control
+	 * @return void
+	 */
+	function get_dataRolesChildJS($id = null, array $optional = null, $type = "result")
+	{
+		//=	 call database	=//
+		$ci = &get_instance();
+		$ci->load->database();
+		//===================//
+
+		$result = [];
+
+		if ($id) {
+			$ci->load->model('mdl_roles_control');
+
+			$sql = $ci->mdl_roles_control->get_dataRolesChild_permit($id, $optional, $type);
+			$result = $this->get_jsTree($sql);
+		}
+
+		return $result;
+	}
+
+	/**
+	 * get roles child data 
+	 *
+	 * @param integer|array $id = roles_id from roles_control
+	 * @return void
+	 */
+	function get_dataRolesChild($id = null, array $optional = null, $type = "result")
+	{
+		//=	 call database	=//
+		$ci = &get_instance();
+		$ci->load->database();
+		//===================//
+
+		$result = [];
+
+		if ($id) {
+			$ci->load->model('mdl_roles_control');
+
+			$result = $ci->mdl_roles_control->get_dataRolesChild($id, $optional, $type);
+		}
+
+		return $result;
+	}
+
 }

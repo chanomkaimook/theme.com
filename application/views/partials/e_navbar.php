@@ -1,4 +1,7 @@
          <style>
+             .gap-1 {
+                 gap: 10px;
+             }
              .gap-2 {
                  gap: 20px;
              }

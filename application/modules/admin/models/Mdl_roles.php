@@ -161,9 +161,10 @@ class Mdl_roles extends CI_Model
      *
      * @param array|null $arrayset = array from method POST or GET
      * @param array|null $array_to_find
+     * @param integer|null $item_id_noncheck = id to not check
      * @return void
      */
-    function check_value_valid($arrayset, array $array_to_find = null)
+    function check_value_valid($arrayset, array $array_to_find = null,int $item_id_noncheck = null)
     {
 
         $result = false;
@@ -186,16 +187,23 @@ class Mdl_roles extends CI_Model
 
                 return $result;
             }
-            if ($text = check_dup(array('code' => textNull($arrayset['roles_code'])), 'roles')) {
-                $result = array(
-                    'error' => 1,
-                    'txt'   => 'ค่าที่ระบุใน code มีการใช้แล้ว',
-                );
-
-                return $result;
-            }
         }
 
+        $array_checkdup = array(
+            'code'  => textNull($arrayset['roles_code'])
+        );
+
+        if($item_id_noncheck){
+            $array_checkdup['roles.id !='] = textNull($item_id_noncheck);
+        }
+        if ($text = check_dup($array_checkdup, 'roles')) {
+            $result = array(
+                'error' => 1,
+                'txt'   => 'ค่าที่ระบุใน code มีการใช้แล้ว',
+            );
+
+            return $result;
+        }
 
         return $result;
     }
@@ -267,12 +275,15 @@ class Mdl_roles extends CI_Model
     public function update_data()
     {
 
-        $request = $_POST;
-        if ($return = $this->check_value_valid($request)) {
-            return $return;
-        }
+        
 
         $item_id = $this->input->post('item_id');
+
+        $request = $_POST;
+        if ($return = $this->check_value_valid($request,null,$item_id)) {
+            return $return;
+        }
+        
         $data = array(
             'code'  => textNull($this->input->post('roles_code')),
 

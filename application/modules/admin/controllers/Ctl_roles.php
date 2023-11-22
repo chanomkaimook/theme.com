@@ -149,34 +149,69 @@ class Ctl_roles extends MY_Controller
     //  * 
     //  * get data for item id
     //  *
-    public function get_data()
+    public function get_data(int $id = null)
     {
         $this->load->library('roles');
 
         $request = $_REQUEST;
-        $item_id = $request['id'];
+        $item_id = $id ? $id : $request['id'];
         $array_permit = $this->roles->get_dataRolesJS($item_id, null, "result_array");
+        $array_roles_child = $this->roles->get_dataRolesChild($item_id, null, "result_array");
+        $array_permit_inchild = $this->roles->get_dataRolesChildJS($item_id, null, "result_array");
 
-        $test = $this->roles->get_data($item_id);
-        print_r($test);
+        $permit_all = array_merge($array_permit,$array_permit_inchild);
+
         $data = $this->model->get_data($item_id);
-        $data->PERMIT = $array_permit;
-        $data->PERMIT_HTML = html_roles_jstree($array_permit);
+        $data->PERMIT = $permit_all;
+        $data->PERMIT_HTML = html_roles_jstree($permit_all);
+        $data->ROLES = $array_roles_child;
+
         // echo html_roles_jstree($array_permit);die;
         $result = $data;
         echo json_encode($result);
     }
 
-    //  *
-    //  * CRUD
-    //  * read
-    //  * 
-    //  * get data role
-    //  *
+    /**
+     * get data role
+     *
+     * @return void
+     */
     public function get_dataRole()
     {
         $data = $this->model->get_dataShow();
 
+        $result = $data;
+        echo json_encode($result);
+    }
+
+    public function get_dataPermitFromRole()
+    {
+        $this->load->library('roles');
+
+        $request = $_REQUEST;
+        $item_id = $request['id'];
+
+        print_r($request);
+        $explode = explode(",",$item_id);
+
+        $query = "";
+        if($explode){
+            foreach($explode as $row_id){
+                echo $row_id."++++";
+                $query = $this->get_data($row_id);
+            }
+        }
+        echo "<pre>";
+        print_r($query);
+        echo "</pre>END";
+      die;
+        $array_permit_inchild = $this->roles->get_dataRolesChildJS($item_id, null, "result_array");
+
+        $data = $this->model->get_data($item_id);
+        $data->PERMIT = $array_permit_inchild;
+        $data->PERMIT_HTML = html_roles_jstree($array_permit_inchild);
+
+        // echo html_roles_jstree($array_permit);die;
         $result = $data;
         echo json_encode($result);
     }

@@ -27,7 +27,7 @@
     </div>
     <div class="form-group col-md-12">
         <label for="">สิทธิ์ที่คัดลอก</label>
-        <p class="card-text roles_child">
+        <p class="card-text roles_child d-flex gap-1">
         </p>
     </div>
 </div>

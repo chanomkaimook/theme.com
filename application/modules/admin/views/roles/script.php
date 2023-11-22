@@ -147,6 +147,18 @@
         $(modal).on('show.bs.modal', function() {
             modalLoading()
         })
+
+        $(d).on('change', '#roles_child', function(e) {
+            e.preventDefault()
+
+            let element = $(this)
+            let e_value = element.val()
+
+            console.log(e_value.join())
+            get_dataPermitFromRole(e_value.join())
+
+        })
+
     })
     //  =========================
     //  =========================
@@ -160,6 +172,20 @@
     //  Todo adjust code default here
     //  =========================
     //  =========================
+
+    function get_dataPermitFromRole(data = null) {
+        if (data) {
+            let url_role = new URL(path(url_moduleControl + '/get_dataPermitFromRole'), domain)
+            let dataarray = new FormData();
+            dataarray.append('id',data)
+            fetch(url_role,{
+                method:"post",
+                body:dataarray
+            })
+                .then(res => res.json())
+                .then(resp => {})
+        }
+    }
 
     //  *
     //  * Modal
@@ -178,8 +204,6 @@
         fetch(url_role)
             .then(res => res.json())
             .then(resp => {
-                let data_array_html = ""
-
                 let data_array = ""
                 let item_value
                 let item_id
@@ -188,15 +212,9 @@
                     item_value = textCapitalize(item.CODE)
                     item_id = item.ID
                     data_array += `<option value="${item_id}">${item_value}</option>`
-
-                    data_array_html += create_html_roles(item_value)
                 })
-
                 $('[data-toggle=select2]')
                     .html(data_array).select2()
-
-                // value for modal form view
-                // $(modal_body_view).find('.roles_child').html(data_array_html).end()
             })
 
         switch (action) {
@@ -208,6 +226,24 @@
                     .find('.roles_descrip_us').text(data.DESCRIPTION_US).end()
                     .find('.roles_code').text(data.CODE).end()
                     .find('.jstree-grid-container').html(data.PERMIT_HTML).end()
+
+                let data_array_html = ""
+
+                test()
+                async function test() {
+                    await new Promise((resolve, reject) => {
+                        resolve(
+                            data.ROLES.map(function(item) {
+                                data_array_html += create_html_roles(textCapitalize(item.ROLES_CODE))
+                            })
+                        )
+
+                    })
+                    await new Promise((resolve, reject) => {
+                        $(modal_body_view).find('.roles_child').html(data_array_html)
+                    })
+                }
+
 
                 $('[data-plugin=jstree]').jstree()
                 break
@@ -310,7 +346,6 @@
         // item_id = 0
         async_get_data(item_id)
             .then((resp) => {
-                console.log(resp)
                 modalActive(resp, 'view')
             })
             .then(() => {
