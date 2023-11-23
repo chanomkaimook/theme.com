@@ -189,20 +189,17 @@ class Mdl_roles extends CI_Model
             }
         }
 
-        $array_checkdup = array(
-            'code'  => textNull($arrayset['roles_code'])
+        $array_checkdup['where'] = array(
+            'code' => textNull($arrayset['roles_code'])
         );
-
         if ($item_id_noncheck) {
-            $array_checkdup['roles.id !='] = textNull($item_id_noncheck);
+            $array_checkdup['where']['roles.id !='] = textNull($item_id_noncheck);
         }
-        if ($text = check_dup($array_checkdup, 'roles')) {
+        if($this->get_dataShow(null,$array_checkdup)){
             $result = array(
                 'error' => 1,
                 'txt'   => 'ค่าที่ระบุใน code มีการใช้แล้ว',
             );
-
-            return $result;
         }
 
         return $result;

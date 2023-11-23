@@ -1,6 +1,6 @@
 <script>
     let role_child_select
-    
+
     $(d).ready(function() {
 
         //  =========================
@@ -167,7 +167,7 @@
             swalalert('error', text)
 
         })
-        
+
         $('#roles_child').on('select2:select', function(e) {
             e.preventDefault()
 
@@ -190,26 +190,49 @@
         $('#roles_child').on('select2:unselect', function(e) {
             e.preventDefault()
 
-            console.log('unselect ' + role_child_select);
-            console.log($(this).val());
-
-            let new_select=[]
+            let new_select = []
             let this_select = $(this).val()
             if (role_child_select) {
-                // new_select = new String(role_child_select)
-                // console.log(new_select)
-
                 role_child_select.forEach((item, index) => {
                     if (this_select.indexOf(item) == -1) {
                         new_select.push(item)
                     }
                 })
             }
-            console.log(new_select)
-            let element = $(this)
-            let e_value = element.val()
 
-            // get_dataPermitFromRole(e_value.join())
+
+            let url_role = new URL(path(url_moduleControl + '/get_dataPermitFromRole'), domain)
+            let dataarray = new FormData();
+            dataarray.append('id', new_select)
+            fetch(url_role, {
+                    method: "post",
+                    body: dataarray
+                })
+                .then(res => res.json())
+                .then(resp => {
+
+                    let js_checkbox
+                    let js_id
+
+                    if (resp.PERMIT) {
+                        $.each(resp.PERMIT, function(index, item) {
+                            item.map(function(permit) {
+
+                                js_checkbox = $(modal_body_form)
+                                    .find('.jstree-grid-container li[aria-level=2][data-id=' + permit.PERMIT_ID + ']')
+                                js_id = js_checkbox.attr('id')
+
+                                js_checkbox.jstree("deselect_node", "#" + js_id)
+                                js_checkbox.jstree("enable_node", "#" + js_id)
+                                
+                                js_checkbox.find('a').removeAttr('data-jstree_fromrole')
+                                // js_checkbox.find('a').removeClass('jstree-disabled')
+                                // js_checkbox.find('a').attr('aria-disabled',"false")
+                            })
+                        })
+                    }
+
+                })
             // deselect_node
         });
 
@@ -291,7 +314,7 @@
                 create_html_select2()
 
                 test()
-                
+
                 async function test() {
                     let data_array_html = ""
                     await new Promise((resolve, reject) => {
@@ -327,10 +350,10 @@
 
                     $(modal_body_form)
                         .find('#roles_child').val(roles_id_child).triggerHandler('change')
-                        
-                        // set default value
-                        role_child_select = $(modal_body_form).find('#roles_child').val()
-                        console.log(role_child_select)
+
+                    // set default value
+                    role_child_select = $(modal_body_form).find('#roles_child').val()
+
                     //
                     // create permit
                     create_html_checkjstree(data.PERMIT, 1)
@@ -359,7 +382,7 @@
                 let data_array = ""
                 let item_value
                 let item_id
-
+                
                 resp.map(function(item) {
                     item_value = textCapitalize(item.CODE)
                     item_id = item.ID
@@ -375,7 +398,7 @@
         jstree_clear()
         if (data) {
             let permit_id
-
+            
             $.each(data, function(key, arraypermit) {
                 if (arraypermit.length) {
                     $.each(arraypermit, function(index, column) {
@@ -388,8 +411,7 @@
 
                             js_checkbox.jstree("check_node", "#" + js_id)
 
-                            if (disable == 1) {
-
+                            if (disable == 1 && role_child_select.indexOf(column.ROLES_ID) != -1) {
                                 js_checkbox.jstree("disable_node", "#" + js_id)
                                     .find('a').attr('data-jstree_fromrole', key)
                             }
