@@ -1,4 +1,6 @@
 <script>
+    let role_child_select
+    
     $(d).ready(function() {
 
         //  =========================
@@ -148,16 +150,79 @@
             modalLoading()
         })
 
-        $(d).on('change', '#roles_child', function(e) {
+        /* $(d).on('change', '#roles_child', function(e) {
             e.preventDefault()
 
             let element = $(this)
             let e_value = element.val()
 
-            console.log(e_value.join())
             get_dataPermitFromRole(e_value.join())
+        }) */
+
+        $(d).on('click', '[data-jstree_fromrole]', function(e) {
+            e.preventDefault()
+
+            let role_name = $(this).attr('data-jstree_fromrole')
+            let text = setlang == 'thai' ? 'ค่านี้เป็น child ของ Role ' + role_name : 'Role ' + role_name + ' have owner this value'
+            swalalert('error', text)
 
         })
+        
+        $('#roles_child').on('select2:select', function(e) {
+            e.preventDefault()
+
+            let element = $(this)
+            let e_value = element.val()
+
+            role_child_select = e_value
+
+            get_dataPermitFromRole(e_value.join())
+        });
+
+        /* $('#roles_child').on('select2:unselecting', function(e) {
+            e.preventDefault()
+
+            console.log('unselecting');
+            console.log($(this).val());
+            role_child_select = $(this).val()
+        }); */
+
+        $('#roles_child').on('select2:unselect', function(e) {
+            e.preventDefault()
+
+            console.log('unselect ' + role_child_select);
+            console.log($(this).val());
+
+            let new_select=[]
+            let this_select = $(this).val()
+            if (role_child_select) {
+                // new_select = new String(role_child_select)
+                // console.log(new_select)
+
+                role_child_select.forEach((item, index) => {
+                    if (this_select.indexOf(item) == -1) {
+                        new_select.push(item)
+                    }
+                })
+            }
+            console.log(new_select)
+            let element = $(this)
+            let e_value = element.val()
+
+            // get_dataPermitFromRole(e_value.join())
+            // deselect_node
+        });
+
+        $(d).on('click', '.jstree-grid-container li[aria-level=1] > a', function(e) {
+            e.preventDefault()
+
+            console.log('aaaa')
+            let node = $('.jstree-grid-container li[aria-level=1]')
+            let node_disable = node.find('[aria-disabled=true]')
+            console.log(node_disable.length)
+
+        })
+
 
     })
     //  =========================
@@ -177,14 +242,26 @@
         if (data) {
             let url_role = new URL(path(url_moduleControl + '/get_dataPermitFromRole'), domain)
             let dataarray = new FormData();
-            dataarray.append('id',data)
-            fetch(url_role,{
-                method:"post",
-                body:dataarray
-            })
+            dataarray.append('id', data)
+            fetch(url_role, {
+                    method: "post",
+                    body: dataarray
+                })
                 .then(res => res.json())
-                .then(resp => {})
+                .then(resp => {
+
+                    create_html_checkjstree(resp.PERMIT, 1)
+
+                })
+        } else {
+            jstree_clear()
         }
+    }
+
+    function jstree_clear() {
+        console.log('clear')
+        $('[data-plugin=jstree_checkbox]').jstree("refresh");
+        // $('[data-plugin=jstree_checkbox]').jstree("deselect_all");
     }
 
     //  *
@@ -200,6 +277,81 @@
             $(modal).find('.modal_text_header').html(header)
         }
 
+        switch (action) {
+            case 'view':
+                $(modal_body_view)
+                    .find('.roles_name_th').text(data.NAME).end()
+                    .find('.roles_name_us').text(data.NAME_US).end()
+                    .find('.roles_descrip_th').text(data.DESCRIPTION).end()
+                    .find('.roles_descrip_us').text(data.DESCRIPTION_US).end()
+                    .find('.roles_code').text(data.CODE).end()
+                    .find('.jstree-grid-container').html(data.PERMIT_HTML).end()
+
+                // create role
+                create_html_select2()
+
+                test()
+                
+                async function test() {
+                    let data_array_html = ""
+                    await new Promise((resolve, reject) => {
+                        resolve(
+                            data.ROLES.map(function(item) {
+                                data_array_html += create_html_roles(textCapitalize(item.ROLES_CODE))
+                            })
+                        )
+
+                    })
+                    await new Promise((resolve, reject) => {
+                        $(modal_body_view).find('.roles_child').html(data_array_html)
+                    })
+                }
+
+                $('[data-plugin=jstree]').jstree()
+                break
+            case 'edit':
+                $(modal_body_form)
+                    .find('[name=roles_name_th]').val(data.NAME).end()
+                    .find('[name=roles_name_us]').val(data.NAME_US).end()
+                    .find('[name=roles_descrip_th]').val(data.DESCRIPTION).end()
+                    .find('[name=roles_descrip_us]').val(data.DESCRIPTION_US).end()
+                    .find('[name=roles_code]').val(data.CODE).end()
+
+                //
+                // create role
+                let roles_id_child
+                if (data.ROLES.length) {
+                    roles_id_child = data.ROLES.map(function(item) {
+                        return item.ROLES_ID_CHILD
+                    })
+
+                    $(modal_body_form)
+                        .find('#roles_child').val(roles_id_child).triggerHandler('change')
+                        
+                        // set default value
+                        role_child_select = $(modal_body_form).find('#roles_child').val()
+                        console.log(role_child_select)
+                    //
+                    // create permit
+                    create_html_checkjstree(data.PERMIT, 1)
+                } else {
+                    create_html_checkjstree(data.PERMIT)
+
+                }
+
+                break
+            default:
+                // create role
+                create_html_select2()
+                break
+        }
+
+        $(modal_roles).modal()
+
+        modalLayout(action)
+    }
+
+    function create_html_select2() {
         let url_role = new URL(path(url_moduleControl + '/get_dataRole'), domain)
         fetch(url_role)
             .then(res => res.json())
@@ -215,74 +367,37 @@
                 })
                 $('[data-toggle=select2]')
                     .html(data_array).select2()
+
             })
+    }
 
-        switch (action) {
-            case 'view':
-                $(modal_body_view)
-                    .find('.roles_name_th').text(data.NAME).end()
-                    .find('.roles_name_us').text(data.NAME_US).end()
-                    .find('.roles_descrip_th').text(data.DESCRIPTION).end()
-                    .find('.roles_descrip_us').text(data.DESCRIPTION_US).end()
-                    .find('.roles_code').text(data.CODE).end()
-                    .find('.jstree-grid-container').html(data.PERMIT_HTML).end()
+    function create_html_checkjstree(data = null, disable = null) {
+        jstree_clear()
+        if (data) {
+            let permit_id
 
-                let data_array_html = ""
+            $.each(data, function(key, arraypermit) {
+                if (arraypermit.length) {
+                    $.each(arraypermit, function(index, column) {
+                        permit_id = column.PERMIT_ID
+                        if (permit_id) {
 
-                test()
-                async function test() {
-                    await new Promise((resolve, reject) => {
-                        resolve(
-                            data.ROLES.map(function(item) {
-                                data_array_html += create_html_roles(textCapitalize(item.ROLES_CODE))
-                            })
-                        )
+                            let js_checkbox = $(modal_body_form)
+                                .find('.jstree-grid-container li[aria-level=2][data-id=' + permit_id + ']')
+                            let js_id = js_checkbox.attr('id')
 
-                    })
-                    await new Promise((resolve, reject) => {
-                        $(modal_body_view).find('.roles_child').html(data_array_html)
-                    })
-                }
+                            js_checkbox.jstree("check_node", "#" + js_id)
 
+                            if (disable == 1) {
 
-                $('[data-plugin=jstree]').jstree()
-                break
-            case 'edit':
-                $(modal_body_form)
-                    .find('[name=roles_name_th]').val(data.NAME).end()
-                    .find('[name=roles_name_us]').val(data.NAME_US).end()
-                    .find('[name=roles_descrip_th]').val(data.DESCRIPTION).end()
-                    .find('[name=roles_descrip_us]').val(data.DESCRIPTION_US).end()
-                    .find('[name=roles_code]').val(data.CODE).end()
-
-                let t = data.PERMIT
-
-                if (t) {
-                    let permit_id
-
-                    $.each(t, function(key, arraypermit) {
-                        if (arraypermit.length) {
-                            $.each(arraypermit, function(index, column) {
-                                permit_id = column.PERMIT_ID
-                                if (permit_id) {
-
-                                    let js_checkbox = $(modal_body_form)
-                                        .find('.jstree-grid-container li[aria-level=2][data-id=' + permit_id + ']')
-                                    let js_id = js_checkbox.attr('id')
-                                    js_checkbox.jstree("check_node", "#" + js_id);
-                                }
-                            })
+                                js_checkbox.jstree("disable_node", "#" + js_id)
+                                    .find('a').attr('data-jstree_fromrole', key)
+                            }
                         }
                     })
                 }
-                break
-            default:
-                break
+            })
         }
-
-        $(modal_roles).modal()
-
-        modalLayout(action)
     }
 
     function create_html_roles(text = null) {

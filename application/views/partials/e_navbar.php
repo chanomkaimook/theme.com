@@ -384,18 +384,18 @@
              }) {
 
                  let timeclose_total = swal_autoClose
-                 let title = 'สำเร็จ'
+                 let title = setlang == 'thai' ? 'สำเร็จ' : 'Success'
 
                  if (optional.auto == false) {
                      timeclose_total = null
                  }
 
                  if (type == 'warning') {
-                     title = 'แจ้งเตือน'
+                     title =  setlang == 'thai' ? 'แจ้งเตือน' : 'Warning'
                  }
 
                  if (type == 'error') {
-                     title = 'ไม่สำเร็จ'
+                     title =  setlang == 'thai' ? 'ไม่สำเร็จ' : 'Fail'
                  }
 
                  return Swal.fire({

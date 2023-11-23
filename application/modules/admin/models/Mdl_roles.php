@@ -164,7 +164,7 @@ class Mdl_roles extends CI_Model
      * @param integer|null $item_id_noncheck = id to not check
      * @return void
      */
-    function check_value_valid($arrayset, array $array_to_find = null,int $item_id_noncheck = null)
+    function check_value_valid($arrayset, array $array_to_find = null, int $item_id_noncheck = null)
     {
 
         $result = false;
@@ -193,7 +193,7 @@ class Mdl_roles extends CI_Model
             'code'  => textNull($arrayset['roles_code'])
         );
 
-        if($item_id_noncheck){
+        if ($item_id_noncheck) {
             $array_checkdup['roles.id !='] = textNull($item_id_noncheck);
         }
         if ($text = check_dup($array_checkdup, 'roles')) {
@@ -275,15 +275,13 @@ class Mdl_roles extends CI_Model
     public function update_data()
     {
 
-        
-
         $item_id = $this->input->post('item_id');
 
         $request = $_POST;
-        if ($return = $this->check_value_valid($request,null,$item_id)) {
+        if ($return = $this->check_value_valid($request, null, $item_id)) {
             return $return;
         }
-        
+
         $data = array(
             'code'  => textNull($this->input->post('roles_code')),
 
@@ -314,6 +312,10 @@ class Mdl_roles extends CI_Model
 
         // roles_control update
         $this->update_roles_control($this->input->post('permit_id'), $item_id);
+
+        // 
+        // if find variable role child
+        $this->update_roles_control($this->input->post('roles_child'), $item_id, 'roles_id_child');
 
         $result = array(
             'error'     => 0,

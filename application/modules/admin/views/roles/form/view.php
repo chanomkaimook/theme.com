@@ -26,7 +26,7 @@
         <p class="card-text roles_code"></p>
     </div>
     <div class="form-group col-md-12">
-        <label for="">สิทธิ์ที่คัดลอก</label>
+        <label for=""><?= mb_ucfirst($this->lang->line('form_roles_label_rolechild')) ?></label>
         <p class="card-text roles_child d-flex gap-1">
         </p>
     </div>

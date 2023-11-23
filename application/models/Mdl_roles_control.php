@@ -189,41 +189,56 @@ class Mdl_roles_control extends CI_Model
             }
 
             if ($array_id) {
-                $row_id = implode("," , $array_id);
-
-                $roles = $this->roles;
-                $permit = $this->permit;
-                $menus = $this->menu;
-
-
-                $optionnals['select'] = "*,
-                    " . $roles . ".code as ROLES_CODE,
-                    " . $permit . ".code as CODE,
-                    " . $permit . ".name as NAME,
-                    " . $permit . ".name_us as NAME_US,
-                    " . $menus . ".name as MENUS_NAME,
-                    " . $menus . ".name_us as MENUS_NAME_US";
-
-                $optionnals['where'][$this->table . '.roles_id in (' . $row_id . ')'] = null;
-                $optionnals['where'][$this->table . '.roles_id_child is null'] = null;
-
-                $optionnals['order_by'] = array(
-                    $menus . '.sort' => 'asc',
-                    $permit . '.sort' => 'asc',
-                );
-
-                $sql = (object) $this->get_sql(null, $optionnals, $type);
-                $sql->join($roles, $roles . '.id=' . $this->table . '.roles_id', 'left')
-                    ->join($permit, $permit . '.id=' . $this->table . '.permit_id', 'left')
-                    ->join($menus, $menus . '.id=' . $permit . '.menus_id', 'left')
-                    ->where($this->table . '.' . $this->fildstatus, null);
-                $query = $sql->get();
+                $row_id = implode(",", $array_id);
+                $query = $this->get_dataPermitFromRole($row_id);
             }
 
             return $query->$type();
         } else {
             return $result;
         }
+    }
+
+    /**
+     * get query data from item_id (array || int)
+     *
+     * @param [type] $item_id
+     * @return void
+     */
+    function get_dataPermitFromRole($item_id)
+    {
+        $query = "";
+
+        if($item_id){
+            $roles = $this->roles;
+            $permit = $this->permit;
+            $menus = $this->menu;
+    
+            $optionnals['select'] = "*,
+                        " . $roles . ".code as ROLES_CODE,
+                        " . $permit . ".code as CODE,
+                        " . $permit . ".name as NAME,
+                        " . $permit . ".name_us as NAME_US,
+                        " . $menus . ".name as MENUS_NAME,
+                        " . $menus . ".name_us as MENUS_NAME_US";
+    
+            $optionnals['where'][$this->table . '.roles_id in (' . $item_id . ')'] = null;
+            $optionnals['where'][$this->table . '.roles_id_child is null'] = null;
+    
+            $optionnals['order_by'] = array(
+                $menus . '.sort' => 'asc',
+                $permit . '.sort' => 'asc',
+            );
+    
+            $sql = (object) $this->get_sql(null, $optionnals);
+            $sql->join($roles, $roles . '.id=' . $this->table . '.roles_id', 'left')
+                ->join($permit, $permit . '.id=' . $this->table . '.permit_id', 'left')
+                ->join($menus, $menus . '.id=' . $permit . '.menus_id', 'left')
+                ->where($this->table . '.' . $this->fildstatus, null);
+            $query = $sql->get();
+        }
+        
+        return $query;
     }
 
     //  *

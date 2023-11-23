@@ -12,6 +12,7 @@ class Ctl_roles extends MY_Controller
         $modelname = 'mdl_roles';
 
         $this->load->model('admin/mdl_roles');
+        $this->load->model('mdl_roles_control');
         // $this->load->model($modelname,'admin');
         // $this->load->model('mdl_user');
         // $this->load->model('mdl_register');
@@ -159,7 +160,7 @@ class Ctl_roles extends MY_Controller
         $array_roles_child = $this->roles->get_dataRolesChild($item_id, null, "result_array");
         $array_permit_inchild = $this->roles->get_dataRolesChildJS($item_id, null, "result_array");
 
-        $permit_all = array_merge($array_permit,$array_permit_inchild);
+        $permit_all = array_merge($array_permit, $array_permit_inchild);
 
         $data = $this->model->get_data($item_id);
         $data->PERMIT = $permit_all;
@@ -191,25 +192,26 @@ class Ctl_roles extends MY_Controller
         $request = $_REQUEST;
         $item_id = $request['id'];
 
-        print_r($request);
-        $explode = explode(",",$item_id);
+        $explode = explode(",", $item_id);
 
-        $query = "";
-        if($explode){
-            foreach($explode as $row_id){
-                echo $row_id."++++";
-                $query = $this->get_data($row_id);
+        if ($explode) {
+            $permit_all = [];
+            foreach ($explode as $row_id) {
+                $array_permit = $this->roles->get_dataRolesJS($row_id, null, "result_array");
+                $array_permit_inchild = $this->roles->get_dataRolesChildJS($row_id, null, "result_array");
+
+                if(count($permit_all) == 0){
+                    $permit_all = array_merge($array_permit, $array_permit_inchild);
+                }else{
+                    $pre_permit_all = array_merge($array_permit, $array_permit_inchild);
+                    $permit_all = array_merge($permit_all, $pre_permit_all);
+                }
             }
         }
-        echo "<pre>";
-        print_r($query);
-        echo "</pre>END";
-      die;
-        $array_permit_inchild = $this->roles->get_dataRolesChildJS($item_id, null, "result_array");
 
         $data = $this->model->get_data($item_id);
-        $data->PERMIT = $array_permit_inchild;
-        $data->PERMIT_HTML = html_roles_jstree($array_permit_inchild);
+        $data->PERMIT = $permit_all;
+        $data->PERMIT_HTML = html_roles_jstree($permit_all);
 
         // echo html_roles_jstree($array_permit);die;
         $result = $data;
@@ -242,7 +244,9 @@ class Ctl_roles extends MY_Controller
     {
         # code...
         if ($this->input->server('REQUEST_METHOD') == 'POST') {
+            /* print_r($this->input->post());
 
+            die; */
             $returns = $this->model->update_data();
             echo json_encode($returns);
         }

@@ -28,8 +28,8 @@
         <input type="text" maxlength="45" class="form-control" name="roles_code" placeholder="<?= mb_ucfirst($this->lang->line('_form_onlyus')) ?>" value="" required>
     </div>
     <div class="form-group col-md-12">
-        <label for="">คัดลอกสิทธิ์ <small>เลือกได้มากกว่า 1</small></label>
-        <select id="roles_child" name="roles_child[]" class="form-control" data-toggle="select2" multiple="multiple" data-placeholder="ระบุสิทธิ์ได้มากกว่า 1">
+        <label for=""><?= mb_ucfirst($this->lang->line('form_roles_label_rolecopy')) ?></label>
+        <select id="roles_child" name="roles_child[]" class="form-control" data-toggle="select2" multiple="multiple" data-placeholder="<?= mb_ucfirst($this->lang->line('form_roles_label_rolecopy_placeholder')) ?>">
 
         </select>
     </div>
@@ -57,7 +57,9 @@
 </style>
 <div class="row">
     <div class="form-group col-md-12">
-        <label class="text-capitalize"><?= mb_ucfirst($this->lang->line('form_roles_label_permit')) ?></label>
+        <label class="text-capitalize"><?= mb_ucfirst($this->lang->line('form_roles_label_permit')) ?>
+        <small><?= mb_ucfirst($this->lang->line('form_roles_label_permit_small')) ?></small>
+    </label>
 
         <!-- <div data-plugin="jstree">
             <ul>
