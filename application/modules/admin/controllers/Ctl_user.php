@@ -15,9 +15,9 @@ class Ctl_user extends MY_Controller
 
         $this->load->model('mdl_user');
         $this->load->model('mdl_roles');
+        $this->load->model('mdl_role_focus');
         // $this->load->model('mdl_register');
         // $this->load->model('mdl_staff');
-        // $this->load->model('mdl_role_focus');
 
         $this->load->library('Permit');
 
@@ -32,6 +32,11 @@ class Ctl_user extends MY_Controller
     public function index()
     {
         $data['role'] = $this->mdl_roles->get_dataShow();
+
+        // permit variable
+        $this->load->library('roles');
+        $array_permit = $this->roles->get_dataJS();
+        $data['permit'] = $array_permit;
 
         $this->template->set_layout('lay_datatable');
         $this->template->title($this->title);
@@ -59,12 +64,12 @@ class Ctl_user extends MY_Controller
     public function fetch_data()
     {
         $this->load->helper('my_date');
-        
 
-        if($item_id = $this->input->get('id')){
+
+        if ($item_id = $this->input->get('id')) {
             $this->load->model('mdl_staff');
             $data[0] = $this->mdl_staff->get_data($item_id);
-        }else{
+        } else {
             $data = $this->model->get_data_staff();
         }
 
@@ -74,7 +79,7 @@ class Ctl_user extends MY_Controller
 
         if ($data) {
             foreach ($data as $row) {
-                
+
                 $user_active_id = $row->USER_STARTS ? $row->USER_STARTS : $row->USER_UPDATE;
 
                 if ($row->DATE_UPDATE) {
@@ -149,6 +154,34 @@ class Ctl_user extends MY_Controller
         );
         echo json_encode($result);
     }
+
+/*     //  *
+    //  * CRUD
+    //  * read
+    //  * 
+    //  * get data for item id
+    //  *
+    public function get_data(int $id = null)
+    {
+        $this->load->library('roles');
+
+        $request = $_REQUEST;
+        $item_id = $id ? $id : $request['id'];
+        $array_permit = $this->roles->get_dataRolesJS($item_id, null, "result_array");
+        $array_roles_child = $this->roles->get_dataRolesChild($item_id, null, "result_array");
+        $array_permit_inchild = $this->roles->get_dataRolesChildJS($item_id, null, "result_array");
+
+        $permit_all = array_merge($array_permit, $array_permit_inchild);
+
+        $data = $this->model->get_data($item_id);
+        $data->PERMIT = $permit_all;
+        $data->PERMIT_HTML = html_roles_jstree($permit_all);
+        $data->ROLES = $array_roles_child;
+
+        // echo html_roles_jstree($array_permit);die;
+        $result = $data;
+        echo json_encode($result);
+    } */
 
     public function update_user()
     {

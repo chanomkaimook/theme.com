@@ -150,14 +150,46 @@
             modalLoading()
         })
 
-        /* $(d).on('change', '#roles_child', function(e) {
+        $('[data-plugin=jstree_checkbox]').on("open_node.jstree", function(e, data) {
+            let menu_name = data.node.text
+
+            data.node.children.map(function(item) {
+                let li_checkbox = $('.jstree-grid-container li#' + item + '[aria-level=2][aria-selected=true]')
+                if (li_checkbox.length) {
+                    li_checkbox.find('a').attr('data-jstree_fromrole', menu_name)
+                }
+
+            })
+
+            let this_select = $('#roles_child').val()
+
+            get_dataPermitFromRole(this_select.join())
+
+        })
+
+        $(d).on('click', '.jstree-grid-container li[aria-level=1] > a', function(e) {
             e.preventDefault()
 
-            let element = $(this)
-            let e_value = element.val()
+            check_boxPermit()
+        })
 
-            get_dataPermitFromRole(e_value.join())
-        }) */
+        function check_boxPermit() {
+            let node = $('.jstree-grid-container li[aria-level=1]')
+            let node_disable = node.find('a.jstree-disabled')
+
+            if (node_disable) {
+                $.each(node_disable, function(index, item) {
+
+                    let aria_id = $(item).parent('li').attr('data-id')
+                    js_checkbox = $(modal_body_form)
+                        .find('.jstree-grid-container li[aria-level=2][data-id=' + aria_id + ']')
+                    js_id = js_checkbox.attr('id')
+                    js_checkbox.jstree("check_node", "#" + js_id)
+
+
+                })
+            }
+        }
 
         $(d).on('click', '[data-jstree_fromrole]', function(e) {
             e.preventDefault()
@@ -179,19 +211,17 @@
             get_dataPermitFromRole(e_value.join())
         });
 
-        /* $('#roles_child').on('select2:unselecting', function(e) {
-            e.preventDefault()
-
-            console.log('unselecting');
-            console.log($(this).val());
-            role_child_select = $(this).val()
-        }); */
-
         $('#roles_child').on('select2:unselect', function(e) {
             e.preventDefault()
 
-            let new_select = []
             let this_select = $(this).val()
+            t(this_select)
+        });
+
+        function t(value_child = null) {
+
+            let new_select = []
+            let this_select = value_child
             if (role_child_select) {
                 role_child_select.forEach((item, index) => {
                     if (this_select.indexOf(item) == -1) {
@@ -200,53 +230,41 @@
                 })
             }
 
+            if (new_select.length) {
 
-            let url_role = new URL(path(url_moduleControl + '/get_dataPermitFromRole'), domain)
-            let dataarray = new FormData();
-            dataarray.append('id', new_select)
-            fetch(url_role, {
-                    method: "post",
-                    body: dataarray
-                })
-                .then(res => res.json())
-                .then(resp => {
+                let url_role = new URL(path(url_moduleControl + '/get_dataPermitFromRole'), domain)
+                let dataarray = new FormData();
+                dataarray.append('id', new_select)
+                fetch(url_role, {
+                        method: "post",
+                        body: dataarray
+                    })
+                    .then(res => res.json())
+                    .then(resp => {
 
-                    let js_checkbox
-                    let js_id
+                        let js_checkbox
+                        let js_id
 
-                    if (resp.PERMIT) {
-                        $.each(resp.PERMIT, function(index, item) {
-                            item.map(function(permit) {
+                        if (resp.PERMIT) {
+                            $.each(resp.PERMIT, function(index, item) {
+                                item.map(function(permit) {
 
-                                js_checkbox = $(modal_body_form)
-                                    .find('.jstree-grid-container li[aria-level=2][data-id=' + permit.PERMIT_ID + ']')
-                                js_id = js_checkbox.attr('id')
+                                    js_checkbox = $(modal_body_form)
+                                        .find('.jstree-grid-container li[aria-level=2][data-id=' + permit.PERMIT_ID + ']')
+                                    js_id = js_checkbox.attr('id')
 
-                                js_checkbox.jstree("deselect_node", "#" + js_id)
-                                js_checkbox.jstree("enable_node", "#" + js_id)
-                                
-                                js_checkbox.find('a').removeAttr('data-jstree_fromrole')
-                                // js_checkbox.find('a').removeClass('jstree-disabled')
-                                // js_checkbox.find('a').attr('aria-disabled',"false")
+                                    js_checkbox.jstree("deselect_node", "#" + js_id)
+                                    js_checkbox.jstree("enable_node", "#" + js_id)
+
+                                    js_checkbox.find('a').removeAttr('data-jstree_fromrole')
+                                })
                             })
-                        })
-                    }
+                        }
 
-                })
-            // deselect_node
-        });
+                    })
+            }
 
-        $(d).on('click', '.jstree-grid-container li[aria-level=1] > a', function(e) {
-            e.preventDefault()
-
-            console.log('aaaa')
-            let node = $('.jstree-grid-container li[aria-level=1]')
-            let node_disable = node.find('[aria-disabled=true]')
-            console.log(node_disable.length)
-
-        })
-
-
+        }
     })
     //  =========================
     //  =========================
@@ -282,7 +300,6 @@
     }
 
     function jstree_clear() {
-        console.log('clear')
         $('[data-plugin=jstree_checkbox]').jstree("refresh");
         // $('[data-plugin=jstree_checkbox]').jstree("deselect_all");
     }
@@ -382,7 +399,7 @@
                 let data_array = ""
                 let item_value
                 let item_id
-                
+
                 resp.map(function(item) {
                     item_value = textCapitalize(item.CODE)
                     item_id = item.ID
@@ -398,7 +415,7 @@
         jstree_clear()
         if (data) {
             let permit_id
-            
+
             $.each(data, function(key, arraypermit) {
                 if (arraypermit.length) {
                     $.each(arraypermit, function(index, column) {
@@ -414,6 +431,7 @@
                             if (disable == 1 && role_child_select.indexOf(column.ROLES_ID) != -1) {
                                 js_checkbox.jstree("disable_node", "#" + js_id)
                                     .find('a').attr('data-jstree_fromrole', key)
+
                             }
                         }
                     })

@@ -42,30 +42,30 @@
                 func = register()
             }
 
-           /*  func
-                .then((resp) => {
-                    if (resp.error == 1) {
-                        swalalert('error', resp.txt, {
-                            auto: false
-                        })
-                    } else {
-                        Swal.fire({
-                            type: 'success',
-                            title: 'สำเร็จ',
-                            text: resp.txt,
-                            timer: swal_autoClose,
-                        }).then((result) => {
+            /*  func
+                 .then((resp) => {
+                     if (resp.error == 1) {
+                         swalalert('error', resp.txt, {
+                             auto: false
+                         })
+                     } else {
+                         Swal.fire({
+                             type: 'success',
+                             title: 'สำเร็จ',
+                             text: resp.txt,
+                             timer: swal_autoClose,
+                         }).then((result) => {
 
-                            modalHide()
+                             modalHide()
 
-                            dataReload()
+                             dataReload()
 
-                        })
-                    }
-                });
+                         })
+                     }
+                 });
 
 
-            return false */
+             return false */
         })
 
         function register() {
@@ -141,7 +141,7 @@
             e.preventDefault()
             let id = $(this).attr('data-id')
             view_data(id)
-            
+
             $(form_name).find(form_hidden_id).val(id)
             $(form_name).find(btn_edit).attr('data-id', id)
         })
@@ -208,6 +208,122 @@
         $(modal).on('show.bs.modal', function() {
             modalLoading()
         })
+
+        $('[data-plugin=jstree_checkbox]').on("open_node.jstree", function(e, data) {
+            let menu_name = data.node.text
+
+            data.node.children.map(function(item) {
+                let li_checkbox = $('.jstree-grid-container li#' + item + '[aria-level=2][aria-selected=true]')
+                if (li_checkbox.length) {
+                    li_checkbox.find('a').attr('data-jstree_fromrole', menu_name)
+                }
+
+            })
+
+            let this_select = $('#user_role').val()
+
+            get_dataPermitFromRole(this_select.join())
+
+        })
+
+        $(d).on('click', '.jstree-grid-container li[aria-level=1] > a', function(e) {
+            e.preventDefault()
+
+            check_boxPermit()
+        })
+
+        function check_boxPermit() {
+            let node = $('.jstree-grid-container li[aria-level=1]')
+            let node_disable = node.find('a.jstree-disabled')
+
+            if (node_disable) {
+                $.each(node_disable, function(index, item) {
+
+                    let aria_id = $(item).parent('li').attr('data-id')
+                    js_checkbox = $(modal_body_form)
+                        .find('.jstree-grid-container li[aria-level=2][data-id=' + aria_id + ']')
+                    js_id = js_checkbox.attr('id')
+                    js_checkbox.jstree("check_node", "#" + js_id)
+
+
+                })
+            }
+        }
+
+        $(d).on('click', '[data-jstree_fromrole]', function(e) {
+            e.preventDefault()
+
+            let role_name = $(this).attr('data-jstree_fromrole')
+            let text = setlang == 'thai' ? 'ค่านี้เป็น child ของ Role ' + role_name : 'Role ' + role_name + ' have owner this value'
+            swalalert('error', text)
+
+        })
+
+        $('#user_role').on('select2:select', function(e) {
+            e.preventDefault()
+
+            let element = $(this)
+            let e_value = element.val()
+
+            role_child_select = e_value
+
+            get_dataPermitFromRole(e_value.join())
+        });
+
+        $('#user_role').on('select2:unselect', function(e) {
+            e.preventDefault()
+
+            let this_select = $(this).val()
+            t(this_select)
+        });
+
+        function t(value_child = null) {
+
+            let new_select = []
+            let this_select = value_child
+            if (role_child_select) {
+                role_child_select.forEach((item, index) => {
+                    if (this_select.indexOf(item) == -1) {
+                        new_select.push(item)
+                    }
+                })
+            }
+
+            if (new_select.length) {
+
+                let url_role = new URL('admin/ctl_roles/get_dataPermitFromRole', domain)
+                let dataarray = new FormData();
+                dataarray.append('id', new_select)
+                fetch(url_role, {
+                        method: "post",
+                        body: dataarray
+                    })
+                    .then(res => res.json())
+                    .then(resp => {
+
+                        let js_checkbox
+                        let js_id
+
+                        if (resp.PERMIT) {
+                            $.each(resp.PERMIT, function(index, item) {
+                                item.map(function(permit) {
+
+                                    js_checkbox = $(modal_body_form)
+                                        .find('.jstree-grid-container li[aria-level=2][data-id=' + permit.PERMIT_ID + ']')
+                                    js_id = js_checkbox.attr('id')
+
+                                    js_checkbox.jstree("deselect_node", "#" + js_id)
+                                    js_checkbox.jstree("enable_node", "#" + js_id)
+
+                                    js_checkbox.find('a').removeAttr('data-jstree_fromrole')
+                                })
+                            })
+                        }
+
+                    })
+            }
+
+        }
     })
     //  =========================
     //  =========================
@@ -222,6 +338,31 @@
     //  =========================
     //  =========================
 
+    function get_dataPermitFromRole(data = null) {
+        if (data) {
+            let url_role = new URL('admin/ctl_roles/get_dataPermitFromRole', domain)
+            let dataarray = new FormData();
+            dataarray.append('id', data)
+            fetch(url_role, {
+                    method: "post",
+                    body: dataarray
+                })
+                .then(res => res.json())
+                .then(resp => {
+
+                    create_html_checkjstree(resp.PERMIT, 1)
+
+                })
+        } else {
+            jstree_clear()
+        }
+    }
+
+    function jstree_clear() {
+        $('[data-plugin=jstree_checkbox]').jstree("refresh");
+        // $('[data-plugin=jstree_checkbox]').jstree("deselect_all");
+    }
+
     //  *
     //  * Modal
     //  * view
@@ -230,6 +371,7 @@
     //  * @data = array[key=>[column=>value]]
     //  *
     function modalActive(data = [], action = 'view') {
+        console.log(data)
         if (action != 'add' && data.NAME) {
             let header = data.NAME
             $(modal).find('.modal_text_header').html(header)
@@ -244,6 +386,26 @@
                     .find('.roles_descrip_us').text(data.DESCRIPTION_US).end()
                     .find('.jstree-grid-container').html(data.PERMIT_HTML).end()
 
+                // create role
+                create_html_select2()
+
+                test()
+
+                async function test() {
+                    let data_array_html = ""
+                    await new Promise((resolve, reject) => {
+                        resolve(
+                            data.ROLES.map(function(item) {
+                                data_array_html += create_html_roles(textCapitalize(item.ROLES_CODE))
+                            })
+                        )
+
+                    })
+                    await new Promise((resolve, reject) => {
+                        $(modal_body_view).find('.user_role').html(data_array_html)
+                    })
+                }
+
                 $('[data-plugin=jstree]').jstree()
                 break
             case 'edit':
@@ -253,26 +415,28 @@
                     .find('[name=roles_descrip_th]').val(data.DESCRIPTION).end()
                     .find('[name=roles_descrip_us]').val(data.DESCRIPTION_US).end()
 
-                let t = data.PERMIT
-
-                if (t) {
-                    let permit_id
-
-                    $.each(t, function(key, arraypermit) {
-                        if (arraypermit.length) {
-                            $.each(arraypermit, function(index, column) {
-                                permit_id = column.PERMIT_ID
-                                if (permit_id) {
-
-                                    let js_checkbox = $(modal_body_form)
-                                        .find('.jstree-grid-container li[aria-level=2][data-id=' + permit_id + ']')
-                                    let js_id = js_checkbox.attr('id')
-                                    js_checkbox.jstree("check_node", "#" + js_id);
-                                }
-                            })
-                        }
+                //
+                // create role
+                let roles_id_child
+                if (data.ROLES.length) {
+                    roles_id_child = data.ROLES.map(function(item) {
+                        return item.ROLES_ID_CHILD
                     })
+
+                    $(modal_body_form)
+                        .find('#user_role').val(roles_id_child).triggerHandler('change')
+
+                    // set default value
+                    role_child_select = $(modal_body_form).find('#user_role').val()
+
+                    //
+                    // create permit
+                    create_html_checkjstree(data.PERMIT, 1)
+                } else {
+                    create_html_checkjstree(data.PERMIT)
+
                 }
+
                 break
             default:
                 break
@@ -281,6 +445,65 @@
         $(modal_roles).modal()
 
         modalLayout(action)
+    }
+
+    function create_html_select2() {
+        let url_role = new URL('admin/ctl_roles/get_dataRole', domain)
+        fetch(url_role)
+            .then(res => res.json())
+            .then(resp => {
+                let data_array = ""
+                let item_value
+                let item_id
+
+                resp.map(function(item) {
+                    item_value = textCapitalize(item.CODE)
+                    item_id = item.ID
+                    data_array += `<option value="${item_id}">${item_value}</option>`
+                })
+                $('[data-toggle=select2]')
+                    .html(data_array).select2()
+
+            })
+    }
+
+    function create_html_checkjstree(data = null, disable = null) {
+        jstree_clear()
+        if (data) {
+            let permit_id
+
+            $.each(data, function(key, arraypermit) {
+                if (arraypermit.length) {
+                    $.each(arraypermit, function(index, column) {
+                        permit_id = column.PERMIT_ID
+                        if (permit_id) {
+
+                            let js_checkbox = $(modal_body_form)
+                                .find('.jstree-grid-container li[aria-level=2][data-id=' + permit_id + ']')
+                            let js_id = js_checkbox.attr('id')
+
+                            js_checkbox.jstree("check_node", "#" + js_id)
+
+                            if (disable == 1 && role_child_select.indexOf(column.ROLES_ID) != -1) {
+                                js_checkbox.jstree("disable_node", "#" + js_id)
+                                    .find('a').attr('data-jstree_fromrole', key)
+
+                            }
+                        }
+                    })
+                }
+            })
+        }
+    }
+
+    function create_html_roles(text = null) {
+        let html = ""
+
+        if (text) {
+            html += `<div class="btn btn-primary">${text}</div>`
+        }
+
+        return html
     }
 
     //  *
@@ -322,6 +545,7 @@
     //  Base Function
     //  =========================
     //  =========================
+    
 
     //  *
     //  * Form
@@ -455,6 +679,8 @@
         $(modal).find('.modal_text_header').html('')
         $('[data-plugin=jstree_checkbox]').jstree("deselect_all");
         $('.modal').find('.slimScrollDiv').slimScroll();
+
+        $('[data-toggle=select2]').val(null).trigger('change')
     }
 
     //  *
@@ -493,7 +719,7 @@
     //  =========================
     //  =========================
 
-    $(document).on('click', '.btn-insert', function(e) {
+   /*  $(document).on('click', '.btn-insert', function(e) {
         e.preventDefault()
 
         let error = 0
@@ -515,5 +741,5 @@
             func_insert(data);
         }
 
-    })
+    }) */
 </script>

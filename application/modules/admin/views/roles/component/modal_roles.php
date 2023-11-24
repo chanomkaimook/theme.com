@@ -60,9 +60,16 @@
     $(document).ready(function() {
         // $('[data-toggle=select2]').select2()
 
-        $('[data-plugin=jstree_checkbox]').jstree({
-            "plugins": ["checkbox"]
-        })
+        $('[data-plugin=jstree_checkbox]')
+            .jstree({
+                "core": {
+                    "initially_open" : [ "{{ top_symbol }}" ],
+                    "animation": 0
+                },
+                "plugins": ["checkbox"]
+            })
+
         $('[data-plugin=jstree]').jstree()
+
     })
 </script>

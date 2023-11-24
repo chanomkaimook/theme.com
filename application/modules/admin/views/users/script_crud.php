@@ -10,7 +10,7 @@
     //  * get data
     //  *
     async function async_get_data(id = null) {
-        let url = new URL(path(url_moduleControl + '/fetch_data'), domain)
+        let url = new URL(path(url_moduleControl + '/get_user'), domain)
         if (id) {
             url.searchParams.append('id', id)
         }
