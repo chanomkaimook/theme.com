@@ -146,12 +146,27 @@ class Ctl_user extends MY_Controller
 
         $data = $this->model->get_data_staff();
         $user_permit = $this->permit->get_dataPermitSet($user_login);
-        $data_role_focus = $this->mdl_role_focus->get_data();
-        $result = array(
+        // $data_role_focus = $this->mdl_role_focus->get_data();
+        
+        print_r($user_permit);
+        die;
+        $item_id = $id ? $id : $request['id'];
+        $array_permit = $this->roles->get_dataRolesJS($item_id, null, "result_array");
+        $array_roles_child = $this->roles->get_dataRolesChild($item_id, null, "result_array");
+        $array_permit_inchild = $this->roles->get_dataRolesChildJS($item_id, null, "result_array");
+        
+        $permit_all = array_merge($array_permit, $array_permit_inchild);
+
+        $data->PERMIT = $permit_all;
+        $data->PERMIT_HTML = html_roles_jstree($permit_all);
+        $data->ROLES = $array_roles_child;
+        /* $result = array(
             'data'      => $data,
             'permit'    => $user_permit,
             'data_role_focus' => $data_role_focus
-        );
+        ); */
+
+        $result = $data;
         echo json_encode($result);
     }
 
