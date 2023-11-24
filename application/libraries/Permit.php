@@ -103,7 +103,7 @@ class Permit
 
 		$result = array(
 			'user_id'			=> $staff_id,
-			'roles_id_list'	=> array_unique($roles_name_list),
+			'roles_id_list'		=> array_unique($roles_name_list),
 			'roles_name_list'	=> array_unique($roles_name_list),
 			'permit_id_list'	=> array_unique($permit_name_list),
 			'permit_name_list'	=> array_unique($permit_name_list),
