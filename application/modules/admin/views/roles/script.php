@@ -202,7 +202,7 @@
 
         $('#roles_child').on('select2:select', function(e) {
             e.preventDefault()
-
+            
             let element = $(this)
             let e_value = element.val()
 
@@ -224,6 +224,7 @@
             let this_select = value_child
             if (role_child_select) {
                 role_child_select.forEach((item, index) => {
+
                     if (this_select.indexOf(item) == -1) {
                         new_select.push(item)
                     }
@@ -244,8 +245,9 @@
 
                         let js_checkbox
                         let js_id
-
+                        
                         if (resp.PERMIT) {
+
                             $.each(resp.PERMIT, function(index, item) {
                                 item.map(function(permit) {
 
@@ -259,6 +261,9 @@
                                     js_checkbox.find('a').removeAttr('data-jstree_fromrole')
                                 })
                             })
+
+                            // for read permit again to choose
+                            get_dataPermitFromRole(this_select.join())
                         }
 
                     })
@@ -430,7 +435,7 @@
 
                             if (disable == 1 && role_child_select.indexOf(column.ROLES_ID) != -1) {
                                 js_checkbox.jstree("disable_node", "#" + js_id)
-                                    .find('a').attr('data-jstree_fromrole', key)
+                                    .find('a').attr('data-jstree_fromrole', column.ROLES_CODE)
 
                             }
                         }

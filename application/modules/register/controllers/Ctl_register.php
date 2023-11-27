@@ -80,9 +80,11 @@ class Ctl_register extends MY_Controller
                 # setting
                 $request = $_REQUEST;
                 $data_roles = [];
+                $data_permit = [];
 
                 #
                 # check value
+                
 
                 # roles
                 $array_roles = trim($request['group_role']);
@@ -93,12 +95,27 @@ class Ctl_register extends MY_Controller
                     if ($array) {
                         foreach ($array as $value) {
                             $data_roles_sub = array(
+                                'permit_id'  => null,
                                 'roles_id'  => $value
                             );
                             $data_roles[] = $data_roles_sub;
                         }
                     }
                 }
+
+                # roles
+                $array_permit = (array)$request['permit_id'];
+                if ($array_permit) {
+                    foreach ($array_permit as $value) {
+                        $data_roles_sub = array(
+                            'permit_id'  => $value,
+                            'roles_id'  => null
+                        );
+                        $data_roles[] = $data_roles_sub;
+                        
+                    }
+                }
+
                 $this->db->trans_begin();
 
                 # 

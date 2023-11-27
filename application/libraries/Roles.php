@@ -105,6 +105,31 @@ class Roles
 	 * @param integer|array $id = roles_id from roles_control
 	 * @return void
 	 */
+	function get_dataRolesGroup($id = null, array $optional = null, $type = "result")
+	{
+		//=	 call database	=//
+		$ci = &get_instance();
+		$ci->load->database();
+		//===================//
+
+		$result = [];
+
+		if ($id) {
+			$ci->load->model('mdl_roles_control');
+			$optional['group_by'] = array('roles.CODE');
+
+			$result = $ci->mdl_roles_control->get_dataRolesOnly($id, $optional, $type);
+		}
+
+		return $result;
+	}
+
+	/**
+	 * get roles data
+	 *
+	 * @param integer|array $id = roles_id from roles_control
+	 * @return void
+	 */
 	function get_dataRolesJS($id = null, array $optional = null, $type = "result")
 	{
 		//=	 call database	=//
@@ -169,8 +194,8 @@ class Roles
 
 			$result = $ci->mdl_roles_control->get_dataRolesChild($id, $optional, $type);
 		}
+		print_r($result);
 
 		return $result;
 	}
-
 }

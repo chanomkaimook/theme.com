@@ -84,6 +84,13 @@
 
             data.append('group_role', $('#user_role[data-toggle=select2]').val())
 
+            // set variable checkbox
+            // permit
+            let a = $('.jstree-grid-container li[aria-level=2][aria-selected=true]')
+            $.each(a, function(index, item) {
+                data.append('permit_id[]', $(item).attr('data-id'))
+            })
+
             fetch(url, {
                     method: 'POST',
                     body: data
@@ -318,6 +325,9 @@
                                     js_checkbox.find('a').removeAttr('data-jstree_fromrole')
                                 })
                             })
+
+                            // for read permit again to choose
+                            get_dataPermitFromRole(this_select.join())
                         }
 
                     })
@@ -402,7 +412,7 @@
 
                     })
                     await new Promise((resolve, reject) => {
-                        $(modal_body_view).find('.user_role').html(data_array_html)
+                        $(modal_body_view).find('.roles_child').html(data_array_html)
                     })
                 }
 
@@ -486,7 +496,7 @@
 
                             if (disable == 1 && role_child_select.indexOf(column.ROLES_ID) != -1) {
                                 js_checkbox.jstree("disable_node", "#" + js_id)
-                                    .find('a').attr('data-jstree_fromrole', key)
+                                    .find('a').attr('data-jstree_fromrole', column.ROLES_CODE)
 
                             }
                         }

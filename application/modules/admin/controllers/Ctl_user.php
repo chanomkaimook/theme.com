@@ -23,6 +23,7 @@ class Ctl_user extends MY_Controller
 
         // set language
         $this->lang->load('user', $this->langs);
+        $this->lang->load('roles', $this->langs);
 
         // setting
         $this->model = $this->$modelname;
@@ -137,6 +138,8 @@ class Ctl_user extends MY_Controller
 
     public function get_user()
     {
+        $this->load->library('roles');
+
         $user_login = $this->user_login;
         $request = $_REQUEST;
 
@@ -144,18 +147,72 @@ class Ctl_user extends MY_Controller
             $user_login = $request['id'];
         }
 
+        $array_permit = [];
+        $find_permit_only = [];
+        $array_permit_only = [];
+
         $data = $this->model->get_data_staff();
         $user_permit = $this->permit->get_dataPermitSet($user_login);
         // $data_role_focus = $this->mdl_role_focus->get_data();
-        
-        print_r($user_permit);
-        die;
-        $item_id = $id ? $id : $request['id'];
+
+        // print_r($data);
+        // print_r($user_permit);echo "=============";
+        // die;
+
+        // $item_id = implode(",", $user_permit['roles_id_list']);
+        $item_id = $user_permit['roles_id_list'];
+
         $array_permit = $this->roles->get_dataRolesJS($item_id, null, "result_array");
-        $array_roles_child = $this->roles->get_dataRolesChild($item_id, null, "result_array");
+        $array_roles_child = $this->roles->get_dataRolesGroup($item_id, null, "result_array");
         $array_permit_inchild = $this->roles->get_dataRolesChildJS($item_id, null, "result_array");
-        
-        $permit_all = array_merge($array_permit, $array_permit_inchild);
+        // print_r($array_roles_child);
+        if ($array_permit && $array_permit_inchild) {
+            $permit_all = array_merge($array_permit, $array_permit_inchild);
+        } else {
+            $permit_all = $array_permit;
+        }
+
+        if ($permit_all) {
+            function set_layer($i)
+            {
+                return $i;
+            }
+
+            $t = [];
+            foreach ($permit_all as $key => $array) {
+                $a = array_column($array, 'PERMIT_ID');
+                $t = array_map("set_layer", $a);
+            }
+
+            $find_permit_only = array_diff($user_permit['permit_id_list'],$t);
+        }
+
+        // permit id
+        if ($user_permit['permit_id_list']) {
+
+            if(count($find_permit_only) == 0){
+                $p_id = implode(",", $user_permit['permit_id_list']);
+            }else{
+                $p_id = implode(",", $find_permit_only);
+            }
+
+            $optional['where'] = array(
+                'permit.id in('.$p_id.')'   => null
+            );
+
+            $array_permit_only = $this->roles->get_dataJS(true, $optional, "result_array");
+        }
+
+        if($array_permit && $array_permit_only){
+            $permit_all = array_merge($array_permit, $array_permit_only);
+        }else{
+            $permit_all = $array_permit_only;
+        }
+
+        // $permit_all = $array_permit_only;
+
+        // print_r($permit_all);
+        // die;
 
         $data->PERMIT = $permit_all;
         $data->PERMIT_HTML = html_roles_jstree($permit_all);
@@ -170,7 +227,7 @@ class Ctl_user extends MY_Controller
         echo json_encode($result);
     }
 
-/*     //  *
+    /*     //  *
     //  * CRUD
     //  * read
     //  * 

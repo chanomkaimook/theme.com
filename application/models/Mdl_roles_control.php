@@ -95,12 +95,12 @@ class Mdl_roles_control extends CI_Model
     /**
      * permit data from roles_control
      *
-     * @param integer|null $id  = roles_id
+     * @param integer|array $id  = roles_id
      * @param array|null $optionnal
      * @param string $type
      * @return void
      */
-    public function get_dataRoles(int $roles_id = null, array $optionnal = null, string $type = "result")
+    public function get_dataRoles($roles_id = null, array $optionnal = null, string $type = "result")
     {
         # code...
         $roles = $this->roles;
@@ -109,6 +109,7 @@ class Mdl_roles_control extends CI_Model
 
         if (!$optionnal['select']) {
             $optionnal['select'] = "*,
+            " . $roles . ".id as ROLES_ID,
             " . $roles . ".code as ROLES_CODE,
             " . $permit . ".code as CODE,
             " . $permit . ".name as NAME,
@@ -116,7 +117,14 @@ class Mdl_roles_control extends CI_Model
             " . $menus . ".name as MENUS_NAME,
             " . $menus . ".name_us as MENUS_NAME_US";
         }
-        $optionnal['where'][$this->table . '.roles_id'] = $roles_id;
+
+        if(is_array($roles_id)){
+            $roles_id = implode(",", $roles_id);
+            $optionnal['where'][$this->table . '.roles_id in('.$roles_id.')'] = null;
+        }else{
+            $optionnal['where'][$this->table . '.roles_id'] = $roles_id;
+        }
+        
         $optionnal['where'][$this->table . '.roles_id_child is null'] = null;
 
         $optionnal['order_by'] = array(
@@ -135,14 +143,14 @@ class Mdl_roles_control extends CI_Model
     }
 
     /**
-     * roles data from role child in roles_control
+     * roles data roles_control
      *
-     * @param integer|null $id  = roles_id owner
+     * @param integer|array $id  = roles_id owner
      * @param array|null $optionnal
      * @param string $type
      * @return void
      */
-    public function get_dataRolesChild(int $roles_id = null, array $optionnal = null, string $type = "result")
+    public function get_dataRolesOnly($roles_id = null, array $optionnal = null, string $type = "result")
     {
         # code...
         $roles = $this->roles;
@@ -151,7 +159,46 @@ class Mdl_roles_control extends CI_Model
             $optionnal['select'] = $this->table . ".*,
             " . $roles . ".code as ROLES_CODE";
         }
-        $optionnal['where'][$this->table . '.roles_id'] = $roles_id;
+
+        if(is_array($roles_id)){
+            $roles_id = implode(",", $roles_id);
+            $optionnal['where'][$this->table . '.roles_id in('.$roles_id.')'] = null;
+        }else{
+            $optionnal['where'][$this->table . '.roles_id'] = $roles_id;
+        }
+    
+        $optionnal['where'][$this->table . '.roles_id_child is null'] = null;
+        $sql = (object) $this->get_sql(null, $optionnal, $type);
+        $sql->join($roles, $roles . '.id=' . $this->table . '.roles_id', 'left');
+
+        $query = $sql->get();
+
+        return $query->$type();
+    }
+
+    /**
+     * roles data from role child in roles_control
+     *
+     * @param integer|array $id  = roles_id owner
+     * @param array|null $optionnal
+     * @param string $type
+     * @return void
+     */
+    public function get_dataRolesChild($roles_id = null, array $optionnal = null, string $type = "result")
+    {
+        # code...
+        $roles = $this->roles;
+
+        if (!$optionnal['select']) {
+            $optionnal['select'] = $this->table . ".*,
+            " . $roles . ".code as ROLES_CODE";
+        }
+        if(is_array($roles_id)){
+            $optionnal['where'][$this->table . '.roles_id in('.$roles_id.')'] = null;
+        }else{
+            $optionnal['where'][$this->table . '.roles_id'] = $roles_id;
+        }
+    
         $optionnal['where'][$this->table . '.roles_id_child is not null'] = null;
         $sql = (object) $this->get_sql(null, $optionnal, $type);
         $sql->join($roles, $roles . '.id=' . $this->table . '.roles_id_child', 'left');
@@ -164,12 +211,12 @@ class Mdl_roles_control extends CI_Model
     /**
      * roles data from role child in roles_control
      *
-     * @param integer|null $id  = roles_id owner
+     * @param integer|array $id  = roles_id owner
      * @param array|null $optionnal
      * @param string $type
      * @return void
      */
-    public function get_dataRolesChild_permit(int $roles_id = null, array $optionnal = null, string $type = "result")
+    public function get_dataRolesChild_permit($roles_id = null, array $optionnal = null, string $type = "result")
     {
         # code...
         $result = [];
@@ -177,7 +224,14 @@ class Mdl_roles_control extends CI_Model
         if (!$optionnal['select']) {
             $optionnal['select'] = $this->table . ".roles_id_child";
         }
-        $optionnal['where'][$this->table . '.roles_id'] = $roles_id;
+
+        if(is_array($roles_id)){
+            $roles_id = implode(",", $roles_id);
+            $optionnal['where'][$this->table . '.roles_id in('.$roles_id.')'] = null;
+        }else{
+            $optionnal['where'][$this->table . '.roles_id'] = $roles_id;
+        }
+
         $optionnal['where'][$this->table . '.roles_id_child is not null'] = null;
         $sql = (object) $this->get_sql(null, $optionnal, $type);
         $query = $sql->get();

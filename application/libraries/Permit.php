@@ -40,8 +40,10 @@ class Permit
 		$permit_ban = [];
 
 		// variable for data set
+		$roles_id_list = [];
 		$roles_name_list = [];
 
+		$permit_id_list = [];
 		$permit_name_list = [];
 		$menu_name_list = [];
 
@@ -57,10 +59,9 @@ class Permit
 				foreach ($query_permit as $row_permit) {
 					if ($row_permit->ROLES_ID) {
 						$role_id = $row_permit->ROLES_ID;
-
 						//
 						// value 1 = administrator
-						if($role_id == 1){
+						if ($role_id == 1) {
 							$roles_name_list[] =  "administrator";
 						}
 
@@ -69,7 +70,9 @@ class Permit
 						if ($q_in_1) {
 							foreach ($q_in_1 as $row_in_1) {
 								if ($row_in_1->CODE) {
+									$roles_id_list[] =  $row_in_1->ROLES_ID;
 									$roles_name_list[] =  $row_in_1->ROLES_CODE;
+									$permit_id_list[] =  $row_in_1->PERMIT_ID;
 									$permit_name_list[] = $row_in_1->CODE;
 								}
 
@@ -82,18 +85,17 @@ class Permit
 
 					if ($row_permit->PERMIT_ID) {
 						$permit_id = $row_permit->PERMIT_ID;
+						$row_in_2 = $this->permit->get_data($permit_id);
 
-						$q_in_2 = $this->permit->get_data($permit_id);
+						if ($row_in_2) {
 
-						if ($q_in_2) {
-							foreach ($q_in_2 as $row_in_2) {
-								if ($row_in_2->CODE) {
-									$permit_name_list[] = $row_in_2->CODE;
-								}
+							if ($row_in_2->CODE) {
+								$permit_id_list[] =  $row_in_2->ID;
+								$permit_name_list[] = $row_in_2->CODE;
+							}
 
-								if ($row_in_2->MENUS_CODE) {
-									$menu_name_list[] = $row_in_2->MENUS_CODE;
-								}
+							if ($row_in_2->MENUS_CODE) {
+								$menu_name_list[] = $row_in_2->MENUS_CODE;
 							}
 						}
 					}	// end permit list
@@ -103,9 +105,9 @@ class Permit
 
 		$result = array(
 			'user_id'			=> $staff_id,
-			'roles_id_list'		=> array_unique($roles_name_list),
+			'roles_id_list'		=> array_unique($roles_id_list),
 			'roles_name_list'	=> array_unique($roles_name_list),
-			'permit_id_list'	=> array_unique($permit_name_list),
+			'permit_id_list'	=> array_unique($permit_id_list),
 			'permit_name_list'	=> array_unique($permit_name_list),
 			'menu_name_list'	=> array_unique($menu_name_list)
 		);
