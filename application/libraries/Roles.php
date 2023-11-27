@@ -194,7 +194,31 @@ class Roles
 
 			$result = $ci->mdl_roles_control->get_dataRolesChild($id, $optional, $type);
 		}
-		print_r($result);
+
+		return $result;
+	}
+
+	/**
+	 * get roles data
+	 *
+	 * @param integer|array $id = roles_id from roles_control
+	 * @return void
+	 */
+	function get_dataPermitJS($id = null, array $optional = null, $type = "result")
+	{
+		//=	 call database	=//
+		$ci = &get_instance();
+		$ci->load->database();
+		//===================//
+
+		$result = [];
+
+		if ($id) {
+			$ci->load->model('mdl_permit');
+
+			$sql = $ci->mdl_permit->get_dataPermit($id, $optional, $type);
+			$result = $this->get_jsTree($sql);
+		}
 
 		return $result;
 	}

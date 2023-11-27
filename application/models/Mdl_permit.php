@@ -7,6 +7,9 @@ class Mdl_permit extends CI_Model
     private $table = "permit";
     private $fildstatus = "";
 
+    private $permit = "permit";
+    private $menu = "menus";
+
     public function __construct()
     {
         parent::__construct();
@@ -99,6 +102,48 @@ class Mdl_permit extends CI_Model
         } else {
             return $query->$type();
         }
+    }
+
+    /**
+     * permit data
+     *
+     * @param integer|array $id  = permit_id
+     * @param array|null $optionnal
+     * @param string $type
+     * @return void
+     */
+    public function get_dataPermit($permit_id = null, array $optionnal = null, string $type = "result")
+    {
+        # code...
+        $menus = $this->menu;
+
+        if (!$optionnal['select']) {
+            $optionnal['select'] = $this->table.".*,
+            " . $this->table . ".id as PERMIT_ID,
+            " . $this->table . ".code as CODE,
+            " . $this->table . ".name as NAME,
+            " . $this->table . ".name_us as NAME_US,
+            " . $menus . ".name as MENUS_NAME,
+            " . $menus . ".name_us as MENUS_NAME_US";
+        }
+
+        if(is_array($permit_id)){
+            $permit_id = implode(",", $permit_id);
+            $optionnal['where'][$this->table . '.id in('.$permit_id.')'] = null;
+        }else{
+            $optionnal['where'][$this->table . '.id'] = $permit_id;
+        }
+
+        $optionnal['order_by'] = array(
+            $menus . '.sort' => 'asc',
+            $this->table . '.sort' => 'asc',
+        );
+
+        $sql = (object) $this->get_sql(null, $optionnal, $type);
+        $sql->join($menus, $menus . '.id=' . $this->table . '.menus_id', 'left');
+        $query = $sql->get();
+
+        return $query->$type();
     }
     //  =========================
     //  =========================

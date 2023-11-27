@@ -1,33 +1,40 @@
 <div class="row">
     <div class="form-group col-md-6">
-        <label class="text-capitalize"><?= mb_ucfirst($this->lang->line('form_roles_roles_name_th')) ?></label>
-        <p class="card-text roles_name_th"></p>
+        <label class="text-capitalize"><?= mb_ucfirst($this->lang->line('_name_th')) ?></label>
+        <p class="card-text name_th"></p>
     </div>
     <div class="form-group col-md-6">
-        <label class="text-capitalize"><?= mb_ucfirst($this->lang->line('form_roles_roles_name_us')) ?></label>
-        <p class="card-text roles_name_us"></p>
+        <label class="text-capitalize"><?= mb_ucfirst($this->lang->line('_lastname_th')) ?></label>
+        <p class="card-text lastname_th"></p>
     </div>
 </div>
 
 <div class="row">
     <div class="form-group col-md-6">
-        <label class="text-capitalize"><?= mb_ucfirst($this->lang->line('_form_descrip_th')) ?></label>
-        <p class="card-text roles_descrip_th"></p>
+        <label class="text-capitalize"><?= mb_ucfirst($this->lang->line('_name_us')) ?></label>
+        <p class="card-text name_us"></p>
     </div>
     <div class="form-group col-md-6">
-        <label class="text-capitalize"><?= mb_ucfirst($this->lang->line('_form_descrip_us')) ?></label>
-        <p class="card-text roles_descrip_us"></p>
+        <label class="text-capitalize"><?= mb_ucfirst($this->lang->line('_lastname_us')) ?></label>
+        <p class="card-text lastname_us"></p>
     </div>
 </div>
 
 <div class="row">
-    <div class="form-group col-md-12">
-        <label class="text-capitalize"><?= mb_ucfirst($this->lang->line('_code')) ?></label>
-        <p class="card-text roles_code"></p>
+    <div class="form-group col-md-6">
+        <label class="text-capitalize"><?= mb_ucfirst($this->lang->line('form_user_username')) ?></label>
+        <p class="card-text username"></p>
     </div>
+    <div class="form-group col-md-6">
+        <label class="text-capitalize"><?= mb_ucfirst($this->lang->line('form_user_password')) ?></label>
+        <p class="card-text password"></p>
+    </div>
+</div>
+
+<div class="row">
     <div class="form-group col-md-12">
         <label for=""><?= mb_ucfirst($this->lang->line('form_roles_label_rolechild')) ?></label>
-        <p class="card-text roles_child d-flex gap-1">
+        <p class="card-text user_role d-flex gap-1">
         </p>
     </div>
 </div>

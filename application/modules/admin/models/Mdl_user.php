@@ -18,7 +18,9 @@ class Mdl_user extends CI_Model
 
         $sql = $this->db->select('
             employee.NAME as NAME,
+            employee.NAME_US as NAME_US,
             employee.LASTNAME as LASTNAME,
+            employee.LASTNAME_US as LASTNAME_US,
             employee.EMAIL as EMAIL,
             employee.POSITION as POSITION,
             employee.DEPARTMENT as DEPARTMENT,

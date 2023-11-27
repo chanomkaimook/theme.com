@@ -101,13 +101,9 @@
                     if (resp.error == 1) {
                         Swal.fire('ผิดพลาด', resp.txt, 'warning')
                     } else {
-
-                        Swal.fire({
-                            title: 'สำเร็จ',
-                            html: 'รหัสพร้อมใช้งาน',
-                            timer: 2000,
-                            timerProgressBar: true,
-                        }).then((result) => {
+                        
+                        swalalert('success','รหัสพร้อมใช้งาน')
+                        .then((result) => {
                             update_verify(resp.data.ID, resp.data.USERNAME)
                             dataReload()
                         })
@@ -381,7 +377,7 @@
     //  * @data = array[key=>[column=>value]]
     //  *
     function modalActive(data = [], action = 'view') {
-        console.log(data)
+
         if (action != 'add' && data.NAME) {
             let header = data.NAME
             $(modal).find('.modal_text_header').html(header)
@@ -390,10 +386,11 @@
         switch (action) {
             case 'view':
                 $(modal_body_view)
-                    .find('.roles_name_th').text(data.NAME).end()
-                    .find('.roles_name_us').text(data.NAME_US).end()
-                    .find('.roles_descrip_th').text(data.DESCRIPTION).end()
-                    .find('.roles_descrip_us').text(data.DESCRIPTION_US).end()
+                    .find('.name_th').text(data.NAME).end()
+                    .find('.name_us').text(data.NAME_US).end()
+                    .find('.lastname_th').text(data.LASTNAME).end()
+                    .find('.lastname_us').text(data.LASTNAME_US).end()
+                    .find('.username').text(data.USERNAME).end()
                     .find('.jstree-grid-container').html(data.PERMIT_HTML).end()
 
                 // create role
@@ -412,7 +409,7 @@
 
                     })
                     await new Promise((resolve, reject) => {
-                        $(modal_body_view).find('.roles_child').html(data_array_html)
+                        $(modal_body_view).find('.user_role').html(data_array_html)
                     })
                 }
 
@@ -420,17 +417,19 @@
                 break
             case 'edit':
                 $(modal_body_form)
-                    .find('[name=roles_name_th]').val(data.NAME).end()
-                    .find('[name=roles_name_us]').val(data.NAME_US).end()
-                    .find('[name=roles_descrip_th]').val(data.DESCRIPTION).end()
-                    .find('[name=roles_descrip_us]').val(data.DESCRIPTION_US).end()
+                    .find('[name=name_th]').val(data.NAME).end()
+                    .find('[name=name_us]').val(data.NAME_US).end()
+                    .find('[name=lastname_th]').val(data.LASTNAME).end()
+                    .find('[name=lastname_us]').val(data.LASTNAME_US).end()
+                    .find('[name=input_username]').val(data.USERNAME).end()
+                    .find('[name=input_password]').attr('disabled','disabled').end()
 
                 //
                 // create role
                 let roles_id_child
                 if (data.ROLES.length) {
                     roles_id_child = data.ROLES.map(function(item) {
-                        return item.ROLES_ID_CHILD
+                        return item.ROLES_ID
                     })
 
                     $(modal_body_form)
@@ -442,9 +441,9 @@
                     //
                     // create permit
                     create_html_checkjstree(data.PERMIT, 1)
+
                 } else {
                     create_html_checkjstree(data.PERMIT)
-
                 }
 
                 break
@@ -479,6 +478,7 @@
 
     function create_html_checkjstree(data = null, disable = null) {
         jstree_clear()
+        
         if (data) {
             let permit_id
 
@@ -682,6 +682,8 @@
         form.forEach((item, key) => {
             document.getElementsByTagName('form')[key].reset();
         })
+
+        $(modal).find('[name=input_password]').removeAttr('disabled').end()
 
         //
         // clear manual
