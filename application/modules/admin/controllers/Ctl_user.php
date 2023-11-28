@@ -162,7 +162,7 @@ class Ctl_user extends MY_Controller
         // $data_role_focus = $this->mdl_role_focus->get_data();
 
         // print_r($data);
-        // print_r($user_permit);
+        print_r($user_permit);
         // echo "=============";
         // die;
 
@@ -194,18 +194,19 @@ class Ctl_user extends MY_Controller
             $p_id = $find_permit_only;
             $array_permit_only = $this->roles->get_dataPermitJS($p_id, null, "result_array");
         }
-        
+
         if ($array_permit && $array_permit_only) {
-            $permit_all = array_merge($array_permit, $array_permit_only);
+            $permit_all = array_merge($array_permit['quotation'], $array_permit_only['quotation']);
+            print_r($permit_all);
         } else {
-            if($array_permit){
+            if ($array_permit) {
                 $permit_all = $array_permit;
-            }else{
+            } else {
                 $permit_all = $array_permit_only;
             }
         }
 
-        // print_r($array_permit);
+        // print_r($permit_all);
         // die;
 
         $data->PERMIT = $permit_all;

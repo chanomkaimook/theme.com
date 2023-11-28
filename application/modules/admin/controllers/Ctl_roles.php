@@ -159,7 +159,7 @@ class Ctl_roles extends MY_Controller
         $array_permit = $this->roles->get_dataRolesJS($item_id, null, "result_array");
         $array_roles_child = $this->roles->get_dataRolesChild($item_id, null, "result_array");
         $array_permit_inchild = $this->roles->get_dataRolesChildJS($item_id, null, "result_array");
-        print_r($array_permit);
+
         $permit_all = array_merge($array_permit, $array_permit_inchild);
 
         $data = $this->model->get_data($item_id);
