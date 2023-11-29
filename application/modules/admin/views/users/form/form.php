@@ -39,7 +39,7 @@
 <div class="row">
     <div class="form-group col-md-12">
         <label for="">สิทธิ์ <small>เลือกได้มากกว่า 1</small></label>
-        <select name="user_role" id="user_role" class="form-control" data-toggle="select2" multiple="multiple" data-placeholder="ระบุสิทธิ์ได้มากกว่า 1">
+        <select name="user_role[]" id="user_role" class="form-control" data-toggle="select2" multiple="multiple" data-placeholder="ระบุสิทธิ์ได้มากกว่า 1">
             <?php
             foreach ($role as $row_role) :
                 $aria = mb_ucfirst($row_role->NAME);

@@ -154,7 +154,6 @@ class Ctl_user extends MY_Controller
         }
 
         $array_permit = [];
-        $find_permit_only = [];
         $array_permit_only = [];
 
         $data = $this->model->get_data_staff();
@@ -162,56 +161,27 @@ class Ctl_user extends MY_Controller
         // $data_role_focus = $this->mdl_role_focus->get_data();
 
         // print_r($data);
-        print_r($user_permit);
+        // print_r($user_permit);
         // echo "=============";
         // die;
 
-        // $item_id = implode(",", $user_permit['roles_id_list']);
         $item_id = $user_permit['roles_id_list'];
 
         $array_permit = $this->roles->get_dataRolesJS($item_id, null, "result_array");
         $array_roles_child = $this->roles->get_dataRolesGroup($item_id, null, "result_array");
-        $array_permit_inchild = $this->roles->get_dataRolesChildJS($item_id, null, "result_array");
 
-        if ($array_permit && $array_permit_inchild) {
-            $permit_all = array_merge($array_permit, $array_permit_inchild);
-        } else {
-            $permit_all = $array_permit;
-        }
 
-        if ($permit_all) {
-            $find_permit_only = $user_permit['permit_id_list'];
-            foreach ($permit_all as $key => $array) {
-                $a = array_column($array, 'PERMIT_ID');
+        $permit_all = $array_permit;
+       
 
-                $find_permit_only = array_diff($find_permit_only, $a);
-            }
-        }
         
         // permit id
-        if ($user_permit['permit_id_list'] && count($find_permit_only) != 0) {
-
-            $p_id = $find_permit_only;
-            $array_permit_only = $this->roles->get_dataPermitJS($p_id, null, "result_array");
-        }
-
-        if ($array_permit && $array_permit_only) {
-            $permit_all = array_merge($array_permit['quotation'], $array_permit_only['quotation']);
-            print_r($permit_all);
-        } else {
-            if ($array_permit) {
-                $permit_all = $array_permit;
-            } else {
-                $permit_all = $array_permit_only;
-            }
-        }
-
-        // print_r($permit_all);
-        // die;
+        $array_permit_only = $this->roles->get_dataPermitOnly($user_login, null, "result_array");
 
         $data->PERMIT = $permit_all;
         $data->PERMIT_HTML = html_roles_jstree($permit_all);
         $data->ROLES = $array_roles_child;
+        $data->PERMIT_NOROLE = $array_permit_only;
         /* $result = array(
             'data'      => $data,
             'permit'    => $user_permit,
@@ -222,9 +192,9 @@ class Ctl_user extends MY_Controller
         echo json_encode($result);
     }
 
-    public function update_user()
+    public function update_data()
     {
-        $data = $this->model->update_user();
+        $data = $this->model->update_data();
         $result = array(
             'data' => $data
         );

@@ -133,7 +133,8 @@ class Permit
 
 	/**
 	 * insert_batch data user permit
-	 *
+	 *	-> clear transection before insert
+	 * 
 	 * @param array|null $data = data[key] => array(col=>value)
 	 * @param integer|null $staff_id
 	 * @return void
@@ -145,7 +146,48 @@ class Permit
 				$data[$key]['staff_id'] = $staff_id;
 			}
 
+			$q_staff = $this->control->get_dataStaff($staff_id);
+			if($q_staff){
+				$data_delete = array(
+					'staff_id'	=> $staff_id
+				);
+				$this->control->delete_pure($data_delete);
+			}
+
 			return $this->control->insert_batch_data($data);
 		}
+	}
+
+	/**
+	 * restore status user
+	 *
+	 * @param int|array $id = staff
+	 * @return void
+	 */
+	function staff_restore($id=null){
+		$this->ci->load->model('mdl_staff');
+
+		if($id){
+
+			$data_array = array(
+				'status'	=> 1
+			);
+			
+			if(is_array($id)){
+				$text = implode(",",$id);
+
+				$data_staff = array(
+					'id in('.$text.')'	=> null
+				);
+				$this->ci->mdl_staff->update_data($data_array,$data_staff);
+			}else{
+				$data_staff = array(
+					'id'	=> $id
+				);
+				$this->ci->mdl_staff->update_data($data_array,$data_staff);
+			}
+		}
+
+		return true;
 	}
 }

@@ -133,21 +133,33 @@ class Mdl_staff extends CI_Model
     //  * 
     //  * update data
     //  *
-    public function update_data()
+    /**
+     * Undocumented function
+     *
+     * @param array|null $data_array = data update[column=>value]
+     * @param array|null $data_staff = data where[column=>value]
+     * @return void
+     */
+    public function update_data(array $data_array = null,array $data_staff = null)
     {
         $item_id = $this->input->post('item_id');
 
-        $data = array(
-            'code'  => textShow($this->input->post('label_2')),
-            'name'  => textShow($this->input->post('label_6')),
-            'workstatus'  => $this->input->post('label_1'),
+        if($data_array && is_array($data_array) && $data_staff){
+            $this->db->update($this->table, $data_array, $data_staff);
+        }else{
 
-            'date_update'  => date('Y-m-d H:i:s'),
-            'user_update'  => $this->session->userdata('user_code'),
-        );
-
-        $this->db->where('id', $item_id);
-        $this->db->update($this->table, $data);
+            $data = array(
+                'code'  => textShow($this->input->post('label_2')),
+                'name'  => textShow($this->input->post('label_6')),
+                'workstatus'  => $this->input->post('label_1'),
+    
+                'date_update'  => date('Y-m-d H:i:s'),
+                'user_update'  => $this->session->userdata('user_code'),
+            );
+    
+            $this->db->where('id', $item_id);
+            $this->db->update($this->table, $data);
+        }
 
         // keep log
         log_data(array('update ' . $this->table, 'update', $this->db->last_query()));

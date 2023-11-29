@@ -97,13 +97,11 @@ class Mdl_permit_control extends CI_Model
 
     public function get_dataStaff(int $id = null, array $optionnal = null, string $type = "result")
     {
-        if(!$id){
+        if (!$id) {
             $id = $this->userlogin;
         }
-        
-        $optionnal['where'] = array(
-            'staff_id'  => $id
-        );
+
+        $optionnal['where']['staff_id'] = $id;
         $sql = (object) $this->get_sql(null, $optionnal);
         $query = $sql->get();
 
@@ -147,7 +145,7 @@ class Mdl_permit_control extends CI_Model
             );
         } else {
             $request = $_REQUEST;
-            
+
             if (textShow($request['roles_id']) || textShow($request['permit_id'])) {
 
                 $this->db->insert($this->table, $data);
@@ -170,9 +168,16 @@ class Mdl_permit_control extends CI_Model
 
         return $result;
     }
+
+    //  *
+    //  * CRUD
+    //  * insert
+    //  * 
+    //  * insert data
+    //  *
     /**
      * insert permit
-     *
+     * 
      * @param array|null $data = data[key] => array(col=>value)
      * @return void
      */
@@ -281,6 +286,40 @@ class Mdl_permit_control extends CI_Model
 
         // keep log
         log_data(array('delete ' . $this->table, 'update', $this->db->last_query()));
+
+        $result = array(
+            'error'     => 0,
+            'txt'       => 'ทำรายการสำเร็จ'
+        );
+
+        return $result;
+    }
+
+    /**
+     * delete (destroy from database)
+     *
+     * @param array|null $data = array(col=>value)
+     * @return void
+     */
+    public function delete_pure(array $data = null)
+    {
+        $item_id = textShow($this->input->post('item_id'));
+
+
+        if ($data && is_array($data)) {
+            $this->db->delete($this->table, $data);
+
+            // keep log
+            log_data(array('delete ' . $this->table, 'delete', $this->db->last_query()));
+        } else {
+            if ($item_id) {
+                $this->db->delete($this->table, array('id' => $item_id));
+
+                // keep log
+                log_data(array('delete ' . $this->table, 'delete', $this->db->last_query()));
+            }
+        }
+
 
         $result = array(
             'error'     => 0,

@@ -127,6 +127,9 @@ class Mdl_roles_control extends CI_Model
         
         $optionnal['where'][$this->table . '.roles_id_child is null'] = null;
 
+        $optionnal['group_by'] = array(
+            $this->table.'.permit_id'
+        );
         $optionnal['order_by'] = array(
             $menus . '.sort' => 'asc',
             $permit . '.sort' => 'asc',
@@ -279,6 +282,9 @@ class Mdl_roles_control extends CI_Model
             $optionnals['where'][$this->table . '.roles_id in (' . $item_id . ')'] = null;
             $optionnals['where'][$this->table . '.roles_id_child is null'] = null;
     
+            $optionnals['group_by'] = array(
+                $this->table.'.permit_id'
+            );
             $optionnals['order_by'] = array(
                 $menus . '.sort' => 'asc',
                 $permit . '.sort' => 'asc',

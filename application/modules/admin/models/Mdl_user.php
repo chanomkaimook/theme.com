@@ -36,7 +36,7 @@ class Mdl_user extends CI_Model
             ->join('employee', 'staff.employee_id = employee.id', 'left')
             ->where('staff.verify is not null', null, false)
             ->where('staff.id !=', 1)
-            ->where('staff.status', 1)
+            ->where('staff.status >=', 1)
             ->order_by('staff.id', 'desc');
 
         if (textShow($request['hidden_datestart'])) {
@@ -78,54 +78,88 @@ class Mdl_user extends CI_Model
         return $query->row();
     } */
 
-    public function update_user()
+    public function update_data()
     {
         $date_update = date('Y-m-d H:i:s');
-        $user_update = $this->session->userdata('user_code');
+        $user_update = $this->userlogin;
 
-        $roles_id = $this->input->post('role');
-        $sql_roles = $this->db->where('id', $roles_id)->get('roles');
-
-        $row_roles = $sql_roles->row();
-        $roles_name = $row_roles->NAME;
-        $roles_level = $row_roles->LEVEL;
-
-        $data_staff = array(
-            'ROLES_ID' => $this->input->post('role'),
-            'ROLES_NAME' => $roles_name,
-            'ROLES_LEVEL' => $roles_level,
-            'DATE_UPDATE' =>   $date_update,
-            'USER_UPDATE' =>   $user_update,
-        );
-
-        $result = array();
-
-        $id = $this->input->post('id');
+        $id = $this->input->post('item_id');
+        $array_role = $this->input->post('user_role');
+        $array_permit = $this->input->post('permit_id');
+        $data_roles = [];
 
         if ($id) {
+
+            $this->db->trans_begin();
+
             $sql_staff = $this->db->select('employee_id')
                 ->where('id', $id)
                 ->get('staff');
             $row_staff = $sql_staff->row();
             $employee_id = $row_staff->employee_id;
 
+            // 
+            // Employee
+            // 
             $data_employee = array(
-                'NAME' => trim($this->input->post('name')),
-                'LASTNAME' => trim($this->input->post('lastname')),
+                'NAME' => textNull($this->input->post('name_th')),
+                'NAME_US' => textNull($this->input->post('name_us')),
+                'LASTNAME' => textNull($this->input->post('lastname_th')),
+                'LASTNAME_US' => textNull($this->input->post('lastname_us')),
                 'DATE_UPDATE' =>   $date_update,
                 'USER_UPDATE' =>   $user_update,
             );
             $this->db->where('id', $employee_id);
             $this->db->update('employee', $data_employee);
 
+            // 
+            // Staff
+            // 
+            $data_staff = array(
+                'STATUS' => 9,     // 10 = force login again
+            );
             $this->db->where('id', $id);
             $this->db->update('staff', $data_staff);
+
+            if ($this->db->trans_status() === FALSE) {
+                $this->db->trans_rollback();
+            } else {
+                $this->db->trans_commit();
+            }
+
+            // 
+            // Role
+            // 
+            if ($array_role && is_array($array_role)) {
+                foreach ($array_role as $value) {
+                    $data_roles_sub = array(
+                        'permit_id'  => null,
+                        'roles_id'  => $value
+                    );
+                    $data_roles[] = $data_roles_sub;
+                }
+            }
+
+            if ($array_permit) {
+                foreach ($array_permit as $value) {
+                    $data_roles_sub = array(
+                        'permit_id'  => $value,
+                        'roles_id'  => null
+                    );
+                    $data_roles[] = $data_roles_sub;
+                }
+            }
+
+            if ($data_roles && count($data_roles)) {
+                $this->load->library('permit');
+                $this->permit->insert_batch_data($data_roles, $id);
+            }
 
             #
             # helpdesk only
             # insert user for helpdesk
             # if role = 8 (helpdesk) will clear roles_focus
-            if (trim($this->input->post('role')) == 8) {
+            /* if (trim($this->input->post('role')) == 8) {
                 $this->db->delete('roles_focus', array('staff_owner' => $id));
 
                 $userfocus = trim($this->input->post('userfocus'));
@@ -144,17 +178,18 @@ class Mdl_user extends CI_Model
             }
 
             // keep log
-            log_data(array('update user', 'update', $this->db->last_query()));
-
-            // insert permit_control
-            $this->load->model('mdl_permit');
-            $this->mdl_permit->update_data($id);
+            log_data(array('update user', 'update', $this->db->last_query())); */
 
             $result = array(
-                'role' =>   $data_staff['ROLE'],
-                'name' =>   $data_employee['NAME'],
-                'last_name' =>   $data_employee['LASTNAME'],
-
+                'error' =>   0,
+                'text' => '',
+                'id' => $id,
+            );
+        } else{
+            $result = array(
+                'error' =>   1,
+                'text' => 'ไม่พบ ID',
+                'id' => null,
             );
         }
 

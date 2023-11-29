@@ -420,7 +420,7 @@ function check_userlive()
 
     $sql = $ci->db->from('staff')
       ->where('id', $userlogin)
-      ->where('(status is null or verify is null)', null, false)
+      ->where('(status not in(1,2,3,4,5) or verify is null)', null, false)
       ->get();
     $num = $sql->num_rows();
 

@@ -199,12 +199,12 @@ class Roles
 	}
 
 	/**
-	 * get roles data
+	 * get permit only on permit control
 	 *
-	 * @param integer|array $id = roles_id from roles_control
+	 * @param integer|array $id = staff id
 	 * @return void
 	 */
-	function get_dataPermitJS($id = null, array $optional = null, $type = "result")
+	function get_dataPermitOnly($id = null, array $optional = null, $type = "result")
 	{
 		//=	 call database	=//
 		$ci = &get_instance();
@@ -212,12 +212,26 @@ class Roles
 		//===================//
 
 		$result = [];
+		$p_array = [];
 
 		if ($id) {
 			$ci->load->model('mdl_permit');
+			$optional_in['where'] = array(
+				'permit_control.roles_id is null'	=> null
+			);
+			$q = $ci->mdl_permit_control->get_dataStaff($id,$optional_in,'result_array');
+			if($q){
+				foreach($q as $row){
+					if($row['PERMIT_ID']){
+						$p_array[] = $row['PERMIT_ID'];
+					}
+				}
+			}
 
-			$sql = $ci->mdl_permit->get_dataPermit($id, $optional, $type);
-			$result = $this->get_jsTree($sql);
+			if(count($p_array)){
+				$result = $ci->mdl_permit->get_dataPermit($p_array, $optional, $type);
+			}
+			
 		}
 
 		return $result;

@@ -35,7 +35,7 @@ class mdl_login extends CI_Model
                 ->where('staff.username', $user_name)
                 ->where('staff.password', $user_password)
                 ->where('staff.verify is not null', null, false)
-                ->where('staff.status', 1)
+                ->where('staff.status in(1,6,7,8,9)',null,false)
                 ->get('staff');
             $number = $sql->num_rows();  //num_rows() นับจำนวนแถว
 
@@ -45,6 +45,11 @@ class mdl_login extends CI_Model
                 $staff_id = $row->ID;
 
                 if (strnatcmp($user_name, $row->USERNAME) == 0) {
+
+                    //
+                    // update status to normal (1)
+                    //
+                    $this->permit->staff_restore($staff_id);
 
                     //
                     // create array permit

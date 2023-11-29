@@ -27,11 +27,24 @@
             // permit
             let a = $('.jstree-grid-container li[aria-level=2][aria-selected=true]')
             $.each(a, function(index, item) {
-                // data.append('a',$(item).attr('data-id'))
-                data.push({
-                    'name': 'permit_id[]',
-                    'value': $(item).attr('data-id')
-                })
+
+                if ($(item).find('a').attr('aria-disabled') != "true") {
+                    console.log('false=' + $(item))
+
+                    data.push({
+                        'name': 'permit_id[]',
+                        'value': $(item).attr('data-id')
+                    })
+                } else {
+                    console.log('true=' + $(item))
+                }
+                /* if ($(item).find('a').attr('aria-disabled') != "true") {
+                    data.push({
+                        'name': 'permit_id[]',
+                        'value': $(item).attr('data-id')
+                    })
+                } */
+
             })
             let func
             // console.log(data)
@@ -42,30 +55,26 @@
                 func = register()
             }
 
-            /*  func
-                 .then((resp) => {
-                     if (resp.error == 1) {
-                         swalalert('error', resp.txt, {
-                             auto: false
-                         })
-                     } else {
-                         Swal.fire({
-                             type: 'success',
-                             title: 'สำเร็จ',
-                             text: resp.txt,
-                             timer: swal_autoClose,
-                         }).then((result) => {
+            func
+                .then((resp) => {
+                    if (resp.error == 1) {
+                        swalalert('error', resp.data.txt, {
+                            auto: false
+                        })
+                    } else {
+                        swalalert()
+                            .then((result) => {
 
-                             modalHide()
+                                modalHide()
 
-                             dataReload()
+                                dataReload()
 
-                         })
-                     }
-                 });
+                            })
+                    }
+                });
 
 
-             return false */
+            return false
         })
 
         function register() {
@@ -88,8 +97,13 @@
             // permit
             let a = $('.jstree-grid-container li[aria-level=2][aria-selected=true]')
             $.each(a, function(index, item) {
-                data.append('permit_id[]', $(item).attr('data-id'))
+                
+                if ($(item).find('a').attr('aria-disabled') != "true") {
+                    data.append('permit_id[]', $(item).attr('data-id'))
+                }
             })
+
+
 
             fetch(url, {
                     method: 'POST',
@@ -101,12 +115,12 @@
                     if (resp.error == 1) {
                         Swal.fire('ผิดพลาด', resp.txt, 'warning')
                     } else {
-                        
-                        swalalert('success','รหัสพร้อมใช้งาน')
-                        .then((result) => {
-                            update_verify(resp.data.ID, resp.data.USERNAME)
-                            dataReload()
-                        })
+
+                        swalalert('success', 'รหัสพร้อมใช้งาน')
+                            .then((result) => {
+                                update_verify(resp.data.ID, resp.data.USERNAME)
+                                dataReload()
+                            })
                     }
 
                 });
@@ -421,8 +435,9 @@
                     .find('[name=name_us]').val(data.NAME_US).end()
                     .find('[name=lastname_th]').val(data.LASTNAME).end()
                     .find('[name=lastname_us]').val(data.LASTNAME_US).end()
-                    .find('[name=input_username]').val(data.USERNAME).end()
-                    .find('[name=input_password]').attr('disabled','disabled').end()
+                    .find('[name=input_username]').val(data.USERNAME)
+                    .attr('disabled', 'disabled').end()
+                    .find('[name=input_password]').attr('disabled', 'disabled').end()
 
                 //
                 // create role
@@ -444,6 +459,19 @@
 
                 } else {
                     create_html_checkjstree(data.PERMIT)
+                }
+                
+                if (data.PERMIT_NOROLE.length) {
+                    let js_checkbox
+                    let js_id
+
+                    $.each(data.PERMIT_NOROLE,function(key, item) {
+                        js_checkbox = $(modal_body_form)
+                            .find('.jstree-grid-container li[aria-level=2][data-id='+item.ID+']')
+
+                        js_id = js_checkbox.attr('id')
+                        js_checkbox.jstree("check_node", "#"+js_id)
+                    })
                 }
 
                 break
@@ -478,7 +506,7 @@
 
     function create_html_checkjstree(data = null, disable = null) {
         jstree_clear()
-        
+
         if (data) {
             let permit_id
 
@@ -555,7 +583,7 @@
     //  Base Function
     //  =========================
     //  =========================
-    
+
 
     //  *
     //  * Form
@@ -731,27 +759,27 @@
     //  =========================
     //  =========================
 
-   /*  $(document).on('click', '.btn-insert', function(e) {
-        e.preventDefault()
+    /*  $(document).on('click', '.btn-insert', function(e) {
+         e.preventDefault()
 
-        let error = 0
-        let validvalue = [
-            '#id_input_1',
-            '#id_input_2',
-            '#id_input_3',
-        ]
+         let error = 0
+         let validvalue = [
+             '#id_input_1',
+             '#id_input_2',
+             '#id_input_3',
+         ]
 
-        validvalue.forEach(function(item) {
-            if (!$(item).val()) {
-                error = 1
+         validvalue.forEach(function(item) {
+             if (!$(item).val()) {
+                 error = 1
 
-                $(item).addClass('bg-warning')
-            }
-        })
+                 $(item).addClass('bg-warning')
+             }
+         })
 
-        if (error === 0) {
-            func_insert(data);
-        }
+         if (error === 0) {
+             func_insert(data);
+         }
 
-    }) */
+     }) */
 </script>

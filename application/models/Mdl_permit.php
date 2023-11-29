@@ -128,8 +128,8 @@ class Mdl_permit extends CI_Model
         }
 
         if(is_array($permit_id)){
-            $permit_id = implode(",", $permit_id);
-            $optionnal['where'][$this->table . '.id in('.$permit_id.')'] = null;
+            $permit_set = implode(",", $permit_id);
+            $optionnal['where'][$this->table . '.id in('.$permit_set.')'] = null;
         }else{
             $optionnal['where'][$this->table . '.id'] = $permit_id;
         }
