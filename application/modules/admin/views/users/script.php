@@ -29,21 +29,12 @@
             $.each(a, function(index, item) {
 
                 if ($(item).find('a').attr('aria-disabled') != "true") {
-                    console.log('false=' + $(item))
 
                     data.push({
                         'name': 'permit_id[]',
                         'value': $(item).attr('data-id')
                     })
-                } else {
-                    console.log('true=' + $(item))
                 }
-                /* if ($(item).find('a').attr('aria-disabled') != "true") {
-                    data.push({
-                        'name': 'permit_id[]',
-                        'value': $(item).attr('data-id')
-                    })
-                } */
 
             })
             let func
@@ -97,7 +88,7 @@
             // permit
             let a = $('.jstree-grid-container li[aria-level=2][aria-selected=true]')
             $.each(a, function(index, item) {
-                
+
                 if ($(item).find('a').attr('aria-disabled') != "true") {
                     data.append('permit_id[]', $(item).attr('data-id'))
                 }
@@ -407,6 +398,7 @@
                     .find('.username').text(data.USERNAME).end()
                     .find('.jstree-grid-container').html(data.PERMIT_HTML).end()
 
+
                 // create role
                 create_html_select2()
 
@@ -427,7 +419,7 @@
                     })
                 }
 
-                $('[data-plugin=jstree]').jstree()
+                // $('[data-plugin=jstree]').jstree()
                 break
             case 'edit':
                 $(modal_body_form)
@@ -460,18 +452,9 @@
                 } else {
                     create_html_checkjstree(data.PERMIT)
                 }
-                
+
                 if (data.PERMIT_NOROLE.length) {
-                    let js_checkbox
-                    let js_id
-
-                    $.each(data.PERMIT_NOROLE,function(key, item) {
-                        js_checkbox = $(modal_body_form)
-                            .find('.jstree-grid-container li[aria-level=2][data-id='+item.ID+']')
-
-                        js_id = js_checkbox.attr('id')
-                        js_checkbox.jstree("check_node", "#"+js_id)
-                    })
+                    create_permit_norole(data.PERMIT_NOROLE)
                 }
 
                 break
@@ -482,6 +465,21 @@
         $(modal_roles).modal()
 
         modalLayout(action)
+    }
+
+    function create_permit_norole(data = null) {
+        if (data.length) {
+            let js_checkbox
+            let js_id
+
+            $.each(data, function(key, item) {
+                js_checkbox = $(modal_body_form)
+                    .find('.jstree-grid-container li[aria-level=2][data-id=' + item.ID + ']')
+
+                js_id = js_checkbox.attr('id')
+                js_checkbox.jstree("check_node", "#" + js_id)
+            })
+        }
     }
 
     function create_html_select2() {

@@ -172,12 +172,18 @@ class Ctl_user extends MY_Controller
 
 
         $permit_all = $array_permit;
-       
 
-        
+
         // permit id
         $array_permit_only = $this->roles->get_dataPermitOnly($user_login, null, "result_array");
-
+        // print_r($array_permit_only);
+        if ($array_permit_only) {
+            foreach ($array_permit_only as $index => $column) {
+                $key_name = $column['MENUS_CODE'];
+                $permit_all[$key_name][] = $array_permit_only[$index];
+            }
+        }
+        // print_r($permit_all);
         $data->PERMIT = $permit_all;
         $data->PERMIT_HTML = html_roles_jstree($permit_all);
         $data->ROLES = $array_roles_child;

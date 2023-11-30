@@ -185,8 +185,6 @@
                         .find('.jstree-grid-container li[aria-level=2][data-id=' + aria_id + ']')
                     js_id = js_checkbox.attr('id')
                     js_checkbox.jstree("check_node", "#" + js_id)
-
-
                 })
             }
         }
