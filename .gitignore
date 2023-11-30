@@ -20,3 +20,5 @@ gulpfile.js
 /node_modules/
 /dist/
 /asset/image/*
+help_markdown.md
+guild.php
