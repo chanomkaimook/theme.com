@@ -47,14 +47,15 @@
                     </li> -->
 
                     <!-- Profile -->
-                    <li class="<?= check_permit_menu('profile') ?>">
+                    
+                    <li>
                         <a href="#">
                             <i class="fas fa-user"></i>
                             <span>ข้อมูลส่วนตัว</span>
                             <span class="menu-arrow"></span>
                         </a>
                         <ul class="nav-second-level" aria-expanded="false">
-                            <li><a href="<?= site_url('profile/ctl_profile/') ?>" data-show="ข้อมูลผู้ใช้">ข้อมูลผู้ใช้</a></li>
+                            <li><a href="<?= site_url('profile/ctl_page/') ?>" data-show="ข้อมูลผู้ใช้">ข้อมูลผู้ใช้</a></li>
                         </ul>
                     </li>
 

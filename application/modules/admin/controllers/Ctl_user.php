@@ -19,6 +19,20 @@ class Ctl_user extends MY_Controller
         // $this->load->model('mdl_register');
         // $this->load->model('mdl_staff');
 
+        $this->middleware(
+            array(
+                'access'    => [
+                    // 'index'     => ['bill','quotation'],
+                    // 'view'      => ['bill.view','bill.insert']
+                ],
+                'need'       => ['administrator'],
+                'except'    => [
+                    // 'index'      => ['workorder','bill.view','bill'],
+                    // 'view'      => [],
+                ]
+            )
+        );
+
         $this->load->library('Permit');
 
         // set language
