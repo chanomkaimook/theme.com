@@ -27,12 +27,13 @@
                             "sub_menu"  => array(
                                 "quotation.view",
                                 // "bill.view",
-                                "bill",
+                                "bill.insert",
                                 "workorder.view"
                             )
                         );
+
                     ?>
-                    <li class="<?= check_permit_menu($menu_path_quotation['main_menu']) ?>">
+                    <!-- <li class="<?= check_permit_groupmenu($menu_path_quotation) ?>">
                         <a href="javascript: void(0);">
                             <i class="fe-file-text"></i>
                             <span> เอกสาร </span>
@@ -43,22 +44,7 @@
                             <li class="<?= check_permit_menu($menu_path_quotation['sub_menu'][1]) ?>"><a href="<?= site_url('bill/ctl_bill'); ?>" data-show="document bills">ใบขอรับบริการ</a></li>
                             <li class="<?= check_permit_menu($menu_path_quotation['sub_menu'][2]) ?>"><a href="<?= site_url('bill/ctl_workorder'); ?>" data-show="work orders">Work Order</a></li>
                         </ul>
-                    </li>
-
-                    <li class="<?= check_permit_menu('ticket') ?>">
-                        <a href="#">
-                            <i class="fas fa-calendar-alt"></i>
-                            <span> ใบงาน </span>
-                            <span class="menu-arrow"></span>
-                        </a>
-                        <ul class="nav-second-level" aria-expanded="false">
-                            <li><a href="<?= site_url('ticket/ctl_ticket/formadd') ?>" data-show="สร้างใบงาน">สร้างใบงาน</a></li>
-                            <li><a href="<?= site_url('ticket/ctl_ticket/') ?>" data-show="ตารางงาน">ตารางงาน</a></li>
-                            <!-- <li><a href="<?= site_url('calendar/ctl_manage') ?>" data-show="จัดการรอบ">ปฏิทิน</a></li> -->
-                            <!-- <li><a href="<?= site_url('calendar/ctl_customer') ?>" data-show="Timeline">Timeline</a></li> -->
-                            <!-- <li><a href="<?= site_url('calendar/ctl_round') ?>" data-show="รายงานผล">รายงานผล</a></li> -->
-                        </ul>
-                    </li>
+                    </li> -->
 
                     <!-- Profile -->
                     <li class="<?= check_permit_menu('profile') ?>">

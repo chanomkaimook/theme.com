@@ -15,7 +15,19 @@ class Ctl_page extends MY_Controller
         $modelname = 'mdl_page';
         $this->load->model(array('mdl_page'));
 
-        // $this->middleware();
+        $this->middleware(
+            array(
+                'access'    => [
+                    // 'index'     => ['bill','quotation'],
+                    // 'view'      => ['bill.view','bill.insert']
+                ],
+                // 'need'       => ['bill','quotation'],
+                'except'    => [
+                    // 'index'      => ['workorder','bill.view','bill'],
+                    // 'view'      => [],
+                ]
+            )
+        );
 
         // setting
         $this->model = $this->$modelname;
@@ -24,8 +36,6 @@ class Ctl_page extends MY_Controller
 
     public function index()
     {
-        // $data['time'] = $this->mdl_round_time->get_data();
-
         $this->template->set_layout('lay_datatable');
         $this->template->title($this->title);
         /* $this->template->set_partial(
