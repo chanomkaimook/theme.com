@@ -402,9 +402,9 @@
                 // create role
                 create_html_select2()
 
-                test()
+                create_roles()
 
-                async function test() {
+                async function create_roles() {
                     let data_array_html = ""
                     await new Promise((resolve, reject) => {
                         resolve(
@@ -412,7 +412,7 @@
                                 data_array_html += create_html_roles(textCapitalize(item.ROLES_CODE))
                             })
                         )
-
+                        create_html_select2
                     })
                     await new Promise((resolve, reject) => {
                         $(modal_body_view).find('.user_role').html(data_array_html)

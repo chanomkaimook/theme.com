@@ -9,7 +9,7 @@
             <div class="card-box">
 
                 <!-- Modal -->
-                <?php require_once(FCPATH.'/application/modules/admin/views/users/form/view.php'); ?>
+                <?php require_once('form/view.php'); ?>
 
             </div>
         </div>
@@ -27,30 +27,24 @@
 <script>
     $(document).ready(function() {
 
-
-        async_get_data(2)
+        let user_id = document.getElementById('hidden_user_id').value
+        /* async_get_data(user_id)
+            .then((resp) => {
+                modalActive(resp, 'view')
+            })
+            .then(() => {
+                modalLoading_clear()
+            }) */
+        // async_get_data(user_id)
+        async_get_data(21)
         .then((resp)=>{
             console.log(resp)
+            modalActive(resp, 'view')
         })
 
         
     })
 
-    //  *
-    //  * CRUD
-    //  * read
-    //  * 
-    //  * get data
-    //  *
-    async function async_get_data(id = null) {
-        let url = new URL(path('admin/ctl_user/get_user'), domain)
-        if (id) {
-            url.searchParams.append('id', id)
-        }
-
-        let response = await fetch(url)
-        let result = await response.json()
-
-        return result
-    }
 </script>
+<?php include('script.php') ?>
+<?php include('script_crud.php') ?>

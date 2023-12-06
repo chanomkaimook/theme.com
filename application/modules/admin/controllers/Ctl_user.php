@@ -193,10 +193,12 @@ class Ctl_user extends MY_Controller
             }
         }
 
-        $data->PERMIT = $permit_all;
-        $data->PERMIT_HTML = html_roles_jstree($permit_all);
-        $data->ROLES = $array_roles_child;
-        $data->PERMIT_NOROLE = $array_permit_only;
+        if($data){
+            $data->PERMIT = $permit_all;
+            $data->PERMIT_HTML = html_roles_jstree($permit_all);
+            $data->ROLES = $array_roles_child;
+            $data->PERMIT_NOROLE = $array_permit_only;
+        }
 
         $result = $data;
         echo json_encode($result);

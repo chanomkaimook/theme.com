@@ -23,9 +23,9 @@
 
     //  *
     //  * CRUD
-    //  * update
+    //  * insert
     //  * 
-    //  * update data 
+    //  * insert data 
     //  *
     async function async_insert_data(data = []) {
         let url = new URL(path(url_moduleControl + '/insert_data'), domain)
