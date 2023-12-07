@@ -36,9 +36,9 @@
                 modalLoading_clear()
             }) */
         // async_get_data(user_id)
-        async_get_data(21)
+        async_get_data(user_id)
         .then((resp)=>{
-            console.log(resp)
+            // console.log(resp)
             modalActive(resp, 'view')
         })
 

@@ -47,7 +47,6 @@
                     </li> -->
 
                     <!-- Profile -->
-                    
                     <li>
                         <a href="#">
                             <i class="fas fa-user"></i>

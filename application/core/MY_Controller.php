@@ -180,8 +180,10 @@ class MY_Controller extends CI_Controller
 
 						//
 						// except value to null
-						unset($data_need);
-						unset($data_access);
+						// unset($data_need);
+						// unset($data_access);
+						$data_need = [];
+						$data_access = [];
 					}
 				}
 			}

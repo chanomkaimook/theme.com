@@ -27,8 +27,7 @@ class Ctl_user extends MY_Controller
                 ],
                 'need'       => ['administrator'],
                 'except'    => [
-                    // 'index'      => ['workorder','bill.view','bill'],
-                    // 'view'      => [],
+                    'get_user'      => [],
                 ]
             )
         );

@@ -13,7 +13,7 @@ class Ctl_page extends MY_Controller
     {
         parent::__construct();
         $modelname = 'mdl_page';
-        $this->load->model(array('mdl_page'));
+        $this->load->model(array('page/mdl_page'));
 
         $this->middleware(
             array(

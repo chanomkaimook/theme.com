@@ -170,54 +170,56 @@
     //  * @data = array[key=>[column=>value]]
     //  *
     function modalActive(data = [], action = 'view') {
-        console.log(data.ROLES)
-        if (action != 'add' && data.NAME) {
-            let header = data.NAME
-            $(modal).find('.modal_text_header').html(header)
+        if (data) {
+            if (action != 'add' && data.NAME) {
+                let header = data.NAME
+                $(modal).find('.modal_text_header').html(header)
+            }
+
+            switch (action) {
+                case 'view':
+                    $('.form-group')
+                        .find('.name_th').text(data.NAME).end()
+                        .find('.name_us').text(data.NAME_US).end()
+                        .find('.lastname_th').text(data.LASTNAME).end()
+                        .find('.lastname_us').text(data.LASTNAME_US).end()
+                        .find('.username').text(data.USERNAME).end()
+                        .find('.jstree-grid-container').html(data.PERMIT_HTML).end()
+
+                    // create role
+                    create_html_select2()
+
+                    create_roles()
+
+                    async function create_roles() {
+                        let data_array_html = ""
+                        await new Promise((resolve, reject) => {
+                            resolve(
+                                data.ROLES.map(function(item) {
+                                    data_array_html += create_html_roles(textCapitalize(item.ROLES_CODE))
+                                })
+                            )
+                        })
+                        await new Promise((resolve, reject) => {
+                            $('.form-group').find('.user_role').html(data_array_html)
+                        })
+                    }
+
+                    break
+                case 'edit':
+                    $(modal_body_form)
+                        .find('[name=label_1]').val(data[0].WORKSTATUS).end()
+
+                    break
+                default:
+                    break
+            }
+
+            $(modal_view_name).modal()
+
+            modalLayout(action)
         }
 
-        switch (action) {
-            case 'view':
-                $('.form-group')
-                    .find('.name_th').text(data.NAME).end()
-                    .find('.name_us').text(data.NAME_US).end()
-                    .find('.lastname_th').text(data.LASTNAME).end()
-                    .find('.lastname_us').text(data.LASTNAME_US).end()
-                    .find('.username').text(data.USERNAME).end()
-                    .find('.jstree-grid-container').html(data.PERMIT_HTML).end()
-
-                // create role
-                create_html_select2()
-
-                create_roles()
-
-                async function create_roles() {
-                    let data_array_html = ""
-                    await new Promise((resolve, reject) => {
-                        resolve(
-                            data.ROLES.map(function(item) {
-                                data_array_html += create_html_roles(textCapitalize(item.ROLES_CODE))
-                            })
-                        )
-                    })
-                    await new Promise((resolve, reject) => {
-                        $('.form-group').find('.user_role').html(data_array_html)
-                    })
-                }
-
-                break
-            case 'edit':
-                $(modal_body_form)
-                    .find('[name=label_1]').val(data[0].WORKSTATUS).end()
-
-                break
-            default:
-                break
-        }
-
-        $(modal_view_name).modal()
-
-        modalLayout(action)
     }
 
     function create_html_select2() {
