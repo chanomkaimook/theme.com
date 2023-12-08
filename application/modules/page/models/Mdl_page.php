@@ -77,7 +77,7 @@ class Mdl_page extends CI_Model
     {
         # code...
         $sql = (object) $this->get_sql($id, $optionnal, $type);
-        if($this->fildstatus){
+        if ($this->fildstatus) {
             $sql->where($this->table . '.' . $this->fildstatus, 1);
         }
 
@@ -106,26 +106,56 @@ class Mdl_page extends CI_Model
 
         $result = false;
 
-        if ($array_to_find) {
-            $array_text_error = $array_to_find;
-        } else {
-            $array_text_error = array(
-                'label_2'       => 'ชื่อ',
-                'label_3'       => 'code',
-            );
-        }
-
-        if (is_array($array_text_error) && count($array_text_error)) {
-            if ($text = check_value_valid($array_text_error, $arrayset)) {
-                $result = array(
-                    'error' => 1,
-                    'txt'   => 'โปรดระบุ ' . $text,
+        if ($arrayset) {
+            if ($array_to_find) {
+                $array_text_error = $array_to_find;
+            } else {
+                $array_text_error = array(
+                    'label_2'       => 'ชื่อ',
+                    'label_3'       => 'code',
                 );
+            }
 
-                return $result;
+            if (is_array($array_text_error) && count($array_text_error)) {
+                if ($text = check_value_valid($array_text_error, $arrayset)) {
+                    $result = array(
+                        'error' => 1,
+                        'txt'   => 'โปรดระบุ ' . $text,
+                    );
+
+                    return $result;
+                }
             }
         }
 
+        return $result;
+    }
+
+    /**
+     * Check duplicate
+     *
+     * @param array|null $arraywhere = array where query
+     * @param string|null $valueshow = value for show when error
+     * @param string|null $table = table name for check
+     * @return void
+     */
+    function check_dup($arraywhere, string $valueshow = null, string $table = null)
+    {
+        $result = false;
+
+        if ($arraywhere && $valueshow) {
+
+            if (!$table) {
+                $table = $this->table;
+            }
+
+            if (check_dup($arraywhere, $table)) {
+                $result = array(
+                    'error' => 1,
+                    'txt'   => $valueshow . ' ซ้ำในระบบ ',
+                );
+            }
+        }
 
         return $result;
     }
@@ -146,6 +176,14 @@ class Mdl_page extends CI_Model
 
         $request = $_POST;
         if ($return = $this->check_value_valid($request)) {
+            return $return;
+        }
+
+        $array_chk_dup = array(
+            'name' => $request['item_name'],
+            'status' => 1
+        );
+        if ($return = $this->check_dup($array_chk_dup, $request['item_name'])) {
             return $return;
         }
 
@@ -196,6 +234,20 @@ class Mdl_page extends CI_Model
     {
         $item_id = $this->input->post('item_id');
 
+        $request = $_POST;
+        if ($return = $this->check_value_valid($request)) {
+            return $return;
+        }
+
+        $array_chk_dup = array(
+            'name' => $request['item_name'],
+            'status' => 1,
+            'id !=' => $item_id,
+        );
+        if ($return = $this->check_dup($array_chk_dup, $request['item_name'])) {
+            return $return;
+        }
+        
         if ($data_update && is_array($data_update)) {
             $this->db->where('id', $item_id);
             $this->db->update($this->table, $data_update);
@@ -252,7 +304,7 @@ class Mdl_page extends CI_Model
             'user_update'  => $this->userlogin,
         );
 
-        if($this->fildstatus){
+        if ($this->fildstatus) {
             $data_array[$this->fildstatus]  = 0;
         }
 
