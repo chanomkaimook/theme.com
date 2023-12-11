@@ -5,6 +5,7 @@ class Mdl_page extends CI_Model
 
 {
     private $table = "blank";
+    private $offview = "status_offview";
     private $fildstatus = "status";
 
     public function __construct()
@@ -77,9 +78,55 @@ class Mdl_page extends CI_Model
     {
         # code...
         $sql = (object) $this->get_sql($id, $optionnal, $type);
-        if($this->fildstatus){
+        if ($this->fildstatus) {
             $sql->where($this->table . '.' . $this->fildstatus, 1);
         }
+
+        $query = $sql->get();
+
+        if ($id) {
+            return $query->row();
+        } else {
+            return $query->$type();
+        }
+    }
+
+    //  *
+    //  * CRUD
+    //  * read
+    //  * 
+    //  * get data only for display (not data delete and not data hide)
+    //  *
+    public function get_dataDisplay(int $id = null, array $optionnal = null, string $type = "result")
+    {
+        # code...
+        $sql = (object) $this->get_sql($id, $optionnal, $type);
+
+        if ($this->offview) {
+            $sql->where($this->table . '.' . $this->offview . ' is null', null, false);
+        }
+
+        if ($this->fildstatus) {
+            $sql->where($this->table . '.' . $this->fildstatus, 1);
+        }
+
+        $query = $sql->get();
+
+        if ($id) {
+            return $query->row();
+        } else {
+            return $query->$type();
+        }
+    }
+
+    public function get_dataShowForEdit(int $id = null, array $optionnal = null, string $type = "result")
+    {
+        # code...
+        $sql = (object) $this->get_sql($id, $optionnal, $type);
+        if ($this->fildstatus) {
+            $sql->where($this->table . '.' . $this->fildstatus, 1);
+        }
+        $sql->where($this->table . '.noedit', null);
 
         $query = $sql->get();
 
@@ -110,8 +157,7 @@ class Mdl_page extends CI_Model
             $array_text_error = $array_to_find;
         } else {
             $array_text_error = array(
-                'label_2'       => 'ชื่อ',
-                'label_3'       => 'code',
+                'item_name'       => 'ชื่อ',
             );
         }
 
@@ -165,7 +211,7 @@ class Mdl_page extends CI_Model
     //  * 
     //  * insert data
     //  *
-    public function insert_data()
+    public function insert_data($data_insert = null)
     {
 
         $result = array(
@@ -186,33 +232,37 @@ class Mdl_page extends CI_Model
             return $return;
         }
 
-        if (textNull($this->input->post('label_6'))) {
-            $data = array(
-                'code'  => textNull($this->input->post('label_2')),
-                'name'  => textNull($this->input->post('label_6')),
-                'workstatus'  => $this->input->post('label_1'),
-
-                'user_starts'  => $this->userlogin,
-            );
-
-            $this->db->insert($this->table, $data);
+        if ($data_insert && is_array($data_insert)) {
+            $this->db->insert($this->table, $data_insert);
             $new_id = $this->db->insert_id();
+        } else {
+            $item_name = textNull($this->input->post('item_name'));
+
+            if ($item_name) {
+                $data = array(
+                    'name'          => $item_name,
+
+                    'user_starts'  => $this->userlogin,
+                );
+
+                $this->db->insert($this->table, $data);
+                $new_id = $this->db->insert_id();
+            }
+        }
+
+        if ($new_id) {
 
             // keep log
             log_data(array('insert ' . $this->table, 'insert', $this->db->last_query()));
 
-            if ($new_id) {
-
-                $result = array(
-                    'error'     => 0,
-                    'txt'       => 'ทำรายการสำเร็จ',
-                    'data'      => array(
-                        'id'    => $new_id
-                    )
-                );
-            }
+            $result = array(
+                'error'     => 0,
+                'txt'       => 'ทำรายการสำเร็จ',
+                'data'      => array(
+                    'id'    => $new_id
+                )
+            );
         }
-
 
         return $result;
     }
@@ -223,53 +273,59 @@ class Mdl_page extends CI_Model
     //  * 
     //  * update data
     //  *
-    public function update_data()
+    public function update_data($data_update = null)
     {
+        $result = false;
         $item_id = $this->input->post('item_id');
 
-        /* $begin_date = "";
-        if ($this->input->post('item_begin_date')) {
-            $ex = explode('-', $this->input->post('item_begin_date'));
-            $begin_date = $ex[2] . "-" . $ex[1] . "-" . $ex[0];
-        } */
+        if ($item_id) {
+            $request = $_POST;
+            if ($return = $this->check_value_valid($request)) {
+                return $return;
+            }
 
-        $request = $_POST;
-        if ($return = $this->check_value_valid($request)) {
-            return $return;
+            $array_chk_dup = array(
+                'name' => $request['item_name'],
+                'status' => 1,
+                'id !=' => $item_id,
+            );
+            if ($return = $this->check_dup($array_chk_dup, $request['item_name'])) {
+                return $return;
+            }
+
+            if ($data_update && is_array($data_update)) {
+                $this->db->where('id', $item_id);
+                $this->db->update($this->table, $data_update);
+            } else {
+                $item_name = textNull($this->input->post('item_name'));
+
+                $data = array(
+                    'name'          => $item_name,
+
+                    'date_update'  => date('Y-m-d H:i:s'),
+                    'user_update'  => $this->userlogin,
+                );
+
+                if ($this->offview) {
+                    $status_offview = textNull($this->input->post('status_offview'));
+                    $data['status_offview'] = $status_offview;
+                }
+
+                $this->db->where('id', $item_id);
+                $this->db->update($this->table, $data);
+            }
+
+            // keep log
+            log_data(array('update ' . $this->table, 'update', $this->db->last_query()));
+
+            $result = array(
+                'error'     => 0,
+                'txt'       => 'ทำรายการสำเร็จ',
+                'data'      => array(
+                    'id'    => $item_id
+                )
+            );
         }
-        
-        $array_chk_dup = array(
-            'name' => $request['item_name'],
-            'status' => 1,
-            'id !=' => $item_id,
-        );
-        if ($return = $this->check_dup($array_chk_dup, $request['item_name'])) {
-            return $return;
-        }
-
-        $data = array(
-            'code'  => textNull($this->input->post('label_2')),
-            'name'  => textNull($this->input->post('label_6')),
-            'workstatus'  => $this->input->post('label_1'),
-
-            'date_update'  => date('Y-m-d H:i:s'),
-            'user_update'  => $this->userlogin,
-        );
-
-        $this->db->where('id', $item_id);
-        $this->db->update($this->table, $data);
-
-        // keep log
-        log_data(array('update ' . $this->table, 'update', $this->db->last_query()));
-
-        $result = array(
-            'error'     => 0,
-            'txt'       => 'ทำรายการสำเร็จ',
-            'data'      => array(
-                'id'    => $item_id
-            )
-        );
-
         return $result;
     }
 
@@ -298,7 +354,7 @@ class Mdl_page extends CI_Model
             'user_update'  => $this->userlogin,
         );
 
-        if($this->fildstatus){
+        if ($this->fildstatus) {
             $data_array[$this->fildstatus]  = 0;
         }
 

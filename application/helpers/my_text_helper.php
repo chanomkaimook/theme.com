@@ -74,6 +74,49 @@ function textNull(String $text = null)
   return $result;
 }
 
+/**
+ * format price
+ *
+ * @param String|null $text
+ * @param string $type = int || float
+ * @return void
+ */
+function textMoney(String $text = null, string $type = "int")
+{
+  # code...
+  $result = null;
+
+  $string = textNull($text);
+
+  if ($string) {
+
+    if (filter_var($string, FILTER_VALIDATE_FLOAT)) {
+      $result = number_format((int)$string, 0);
+    } else {
+      $result = number_format((float)$string, 2);
+    }
+    switch($type){
+      case 'float':
+        if (filter_var($string, FILTER_VALIDATE_FLOAT)) {
+          $result = number_format((float)$string, 2);
+        }else{
+          $result = number_format((string)$string, 2);
+        }
+        break;
+        default :
+        if (filter_var($string, FILTER_VALIDATE_FLOAT)) {
+          $result = number_format((float)$string);
+        }else{
+          $result = number_format((string)$string);
+        }
+
+        break;
+    }
+  }
+
+  return $result;
+}
+
 if (!function_exists('mb_ucfirst')) {
   function mb_ucfirst($str, $encoding = "UTF-8", $lower_str_end = false)
   {

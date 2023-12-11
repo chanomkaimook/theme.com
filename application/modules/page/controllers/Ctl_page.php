@@ -127,7 +127,7 @@ class Ctl_page extends MY_Controller
                 );
 
                 $sub_data['DATE_ACTIVE'] = array(
-                    "display"   => toThaiDateTimeString($query_date, 'datetime'),
+                    "display"   => toDateTimeString($query_date, 'datetime'),
                     "timestamp" => date('Y-m-d H:i:s', strtotime($query_date))
                 );
 
