@@ -81,7 +81,7 @@ function textNull(String $text = null)
  * @param string $type = int || float
  * @return void
  */
-function textMoney(String $text = null, string $type = "int")
+function textMoney(String $text = null, string $type = "float")
 {
   # code...
   $result = null;
@@ -89,29 +89,46 @@ function textMoney(String $text = null, string $type = "int")
   $string = textNull($text);
 
   if ($string) {
-
-    if (filter_var($string, FILTER_VALIDATE_FLOAT)) {
-      $result = number_format((int)$string, 0);
-    } else {
-      $result = number_format((float)$string, 2);
-    }
-    switch($type){
-      case 'float':
-        if (filter_var($string, FILTER_VALIDATE_FLOAT)) {
-          $result = number_format((float)$string, 2);
-        }else{
-          $result = number_format((string)$string, 2);
-        }
-        break;
-        default :
+    switch ($type) {
+      case 'int':
         if (filter_var($string, FILTER_VALIDATE_FLOAT)) {
           $result = number_format((float)$string);
-        }else{
+        } else {
           $result = number_format((string)$string);
+        }
+        break;
+        
+      default:
+
+        if (filter_var($string, FILTER_VALIDATE_FLOAT)) {
+          $result = number_format((float)$string, 2);
+        } else {
+          $result = number_format((string)$string, 2);
         }
 
         break;
     }
+  }
+
+  return $result;
+}
+
+/**
+ * format number float
+ *
+ * @param String|null $text
+ * @param string $type = int || float
+ * @return void
+ */
+function textFloat(String $text = null,int $number = 2)
+{
+  # code...
+  $result = null;
+
+  $string = textNull($text);
+
+  if ($string) {
+    $result = number_format((float)$string, $number,null,"");
   }
 
   return $result;
