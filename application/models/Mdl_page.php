@@ -240,7 +240,6 @@ class Mdl_page extends CI_Model
             $this->db->insert($this->table, $data_insert);
             $new_id = $this->db->insert_id();
         } else {
-            $item_name = textNull($this->input->post('item_name'));
 
             if ($item_name) {
                 $data = array(
