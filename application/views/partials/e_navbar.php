@@ -2,6 +2,7 @@
              .gap-1 {
                  gap: 10px;
              }
+
              .gap-2 {
                  gap: 20px;
              }
@@ -227,7 +228,9 @@
                      </button>
                  </li>
              </ul>
-
+             <input type="hidden" name="theme-page-title" value="<?= $pagetitle ? $pagetitle : 'null'; ?>">
+             <input type="hidden" name="theme-breadcrumb" value="<?= $breadcrumb[0] ? $breadcrumb[0] : 'null'; ?>">
+             <input type="hidden" name="theme-breadcrumb" value="<?= $breadcrumb[1] ? $breadcrumb[1] : 'null'; ?>">
 
          </div>
          <!-- end Topbar -->
@@ -389,11 +392,11 @@
                  }
 
                  if (type == 'warning') {
-                     title =  setlang == 'thai' ? 'แจ้งเตือน' : 'Warning'
+                     title = setlang == 'thai' ? 'แจ้งเตือน' : 'Warning'
                  }
 
                  if (type == 'error') {
-                     title =  setlang == 'thai' ? 'ไม่สำเร็จ' : 'Fail'
+                     title = setlang == 'thai' ? 'ไม่สำเร็จ' : 'Fail'
                  }
 
                  return Swal.fire({
