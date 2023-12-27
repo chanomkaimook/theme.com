@@ -31,3 +31,30 @@ function get_percentFromTotal( $total = 0,  $net = 0,  $format = 2)
 
   return $result;
 }
+
+function get_priceVat(float $price = null, int $vat_num = null)
+{
+  //=	 call database	=//
+  $ci = &get_instance();
+
+  if (!$vat_num) {
+    $vat_num = $ci->config->item('vat_num');
+  }
+
+  $result = array();
+
+  if ($vat_num && $price) {
+    $price_beforevat = $price / 1.07;
+    $vat = $price_beforevat * 0.07;
+    $price_aftervat = $price_beforevat + $vat;
+
+    $result = array(
+      'vat'  => textFloat($vat),
+      'vat_num'  => $vat_num,
+      'before_vat'  => textFloat($price_beforevat),
+      'after_vat'  => textFloat($price_aftervat)
+    );
+  }
+
+  return $result;
+}
