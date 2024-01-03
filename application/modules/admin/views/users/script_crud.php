@@ -84,10 +84,10 @@
     async function async_delete_data(item_id = null, remark = null) {
         if (item_id) {
 
-            let url = new URL(path(url_moduleControl + '/delete_data'), domain)
+            let url = new URL(path(url_moduleControl + '/delete_user'), domain)
 
             var data = new FormData()
-            data.append('item_id', item_id)
+            data.append('id', item_id)
             data.append('item_remark', remark)
 
             let method = {
