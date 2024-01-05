@@ -46,12 +46,17 @@
 
             if ($('#item_operator_id').length) {
                 d.hidden_operator_id = document.getElementById('item_operator_id').value
-
             }
 
             if ($('#item_statusbill').length) {
                 d.hidden_statusbill = document.getElementById('item_statusbill').value
+            }
 
+            if(dataarray){
+                dataarray.forEach(function(item,index){
+                    let item_name = item.name
+                    d.item_name = item.value
+                })
             }
         }
     }

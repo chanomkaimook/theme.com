@@ -157,7 +157,7 @@ class Mdl_page extends CI_Model
             $array_text_error = $array_to_find;
         } else {
             $array_text_error = array(
-                'item_name'       => 'ชื่อ',
+                'name'       => 'ชื่อ',
             );
         }
 
@@ -221,8 +221,10 @@ class Mdl_page extends CI_Model
 
         $request = $_POST;
 
-        $item_name = textNull($data_insert['name']) ? $data_insert['name'] : $request['item_name'];
+        $item_code = textNull($data_insert['code']) ? $data_insert['code'] : $request['code'];
+        $item_name = textNull($data_insert['name']) ? $data_insert['name'] : $request['name'];
         $array_chk_dup = array(
+            'code' => $item_code,
             'name' => $item_name,
             'status' => 1
         );
@@ -231,26 +233,28 @@ class Mdl_page extends CI_Model
             return $return;
         }
 
-        if ($return = $this->check_dup($array_chk_dup, $item_name)) {
+        $array_chk_dup1 = array(
+            'code' => $item_code,
+            'status' => 1
+        );
+        if ($return = $this->check_dup($array_chk_dup1, $item_code)) {
             return $return;
         }
+
+        $array_chk_dup2 = array(
+            'name' => $item_name,
+            'status' => 1
+        );
+        if ($return = $this->check_dup($array_chk_dup2, $item_name)) {
+            return $return;
+        }
+
+        $new_id = "";
 
         if ($data_insert && is_array($data_insert)) {
             $data_insert['user_starts'] = $this->userlogin;
             $this->db->insert($this->table, $data_insert);
             $new_id = $this->db->insert_id();
-        } else {
-
-            if ($item_name) {
-                $data = array(
-                    'name'          => $item_name,
-
-                    'user_starts'  => $this->userlogin,
-                );
-
-                $this->db->insert($this->table, $data);
-                $new_id = $this->db->insert_id();
-            }
         }
 
         if ($new_id) {
@@ -276,15 +280,16 @@ class Mdl_page extends CI_Model
     //  * 
     //  * update data
     //  *
-    public function update_data($data_update = null,int $id=null)
+    public function update_data($data_update = null, int $id = null)
     {
         $result = false;
         $item_id = $id ? $id : textNull($this->input->post('item_id'));
 
         if ($item_id) {
             $request = $_POST;
-            
-            $item_name = textNull($data_update['name']) ? $data_update['name'] : $request['item_name'];
+
+            $item_code = textNull($data_update['code']) ? $data_update['code'] : $request['code'];
+            $item_name = textNull($data_update['name']) ? $data_update['name'] : $request['name'];
             $array_chk_dup = array(
                 'name' => $item_name,
                 'status' => 1,
@@ -294,36 +299,29 @@ class Mdl_page extends CI_Model
             if ($return = $this->check_value_valid($array_chk_dup)) {
                 return $return;
             }
-            
+
             if ($return = $this->check_dup($array_chk_dup, $item_name)) {
                 return $return;
             }
 
+            $array_chk_dupcode = array(
+                'code' => $item_code,
+                'status' => 1,
+                'id !=' => $item_id,
+            );
+            if ($return = $this->check_dup($array_chk_dupcode, $item_name)) {
+                return $return;
+            }
+
             if ($data_update && is_array($data_update)) {
+                $data_update['date_update'] = date('Y-m-d H:i:s');
                 $data_update['user_update'] = $this->userlogin;
                 $this->db->where('id', $item_id);
                 $this->db->update($this->table, $data_update);
-            } else {
-                $item_name = textNull($this->input->post('item_name'));
 
-                $data = array(
-                    'name'          => $item_name,
-
-                    'date_update'  => date('Y-m-d H:i:s'),
-                    'user_update'  => $this->userlogin,
-                );
-
-                if ($this->offview) {
-                    $status_offview = textNull($this->input->post('status_offview'));
-                    $data['status_offview'] = $status_offview;
-                }
-
-                $this->db->where('id', $item_id);
-                $this->db->update($this->table, $data);
+                // keep log
+                log_data(array('update ' . $this->table, 'update', $this->db->last_query()));
             }
-
-            // keep log
-            log_data(array('update ' . $this->table, 'update', $this->db->last_query()));
 
             $result = array(
                 'error'     => 0,
@@ -423,12 +421,15 @@ class Mdl_page extends CI_Model
             // $sql->where('date(' . $this->table . '.date_starts) <=', $hidden_end);
 
             $sql->where(
-                '(date(' . $this->table . '.date_starts) >= "'.$hidden_start.'" and
-                date(' . $this->table . '.date_starts) <= "'.$hidden_end.'")
+                '(date(' . $this->table . '.date_starts) >= "' . $hidden_start . '" and
+                date(' . $this->table . '.date_starts) <= "' . $hidden_end . '")
                 or 
-                (date(' . $this->table . '.date_update) >= "'.$hidden_start.'" and
-                date(' . $this->table . '.date_update) <= "'.$hidden_end.'")
-        ',null,false);
+                (date(' . $this->table . '.date_update) >= "' . $hidden_start . '" and
+                date(' . $this->table . '.date_update) <= "' . $hidden_end . '")
+        ',
+                null,
+                false
+            );
         }
 
         if ($id) {
@@ -445,12 +446,32 @@ class Mdl_page extends CI_Model
             }
         }
 
+        if ($request['search']['value']) {
+            $search = $request['search']['value'];
+            $sql->where('('
+                .$this->table.'.code like "%'.$search.'%"
+                or '.$this->table.'.name like "%'.$search.'%"
+                or '.$this->table.'.name_us like "%'.$search.'%"
+            )');
+        }
+
         if ($optionnal['order_by'] && count($optionnal['order_by'])) {
             foreach ($optionnal['order_by'] as $column => $value) {
                 $sql->order_by($column, $value);
             }
         } else {
-            $sql->order_by($this->table . '.id', 'desc');
+            $item_column = "";
+            if($request['order'][0]['column'] && $request['item_name']){
+                if($request['item_name'][$request['order'][0]['column']]){
+                    $item_column = $request['item_name'][$request['order'][0]['column']];
+                }
+            }
+
+            if ($request['order'][0]['dir'] && $item_column) {
+                $sql->order_by($this->table . '.id', $request['order'][0]['dir']);
+            } else {
+                $sql->order_by($this->table . '.id', 'desc');
+            }
         }
 
         if ($optionnal['group_by'] && count($optionnal['group_by'])) {

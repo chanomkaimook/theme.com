@@ -17,7 +17,6 @@
 	$lang['_form_descrip'] = "description";
 	$lang['_form_descrip_th'] = "description TH";
 	$lang['_form_descrip_us'] = "description US";
-	$lang['_form_descrip_us'] = "description US";
 	$lang['_form_password_placeholder'] = "text less than 16 word";
 	$lang['_form_onlyus'] = "english only";
 	
@@ -37,3 +36,4 @@
 	$lang['_total'] = "total";
 	$lang['_username'] = "username";
 	$lang['_password'] = "password";
+	$lang['_remark'] = "remark";
