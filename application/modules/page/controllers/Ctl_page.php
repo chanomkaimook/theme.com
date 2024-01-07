@@ -13,7 +13,7 @@ class Ctl_page extends MY_Controller
     {
         parent::__construct();
         $modelname = 'mdl_page';
-        $this->load->model(array('page/mdl_page'));
+        $this->load->model(array('page/' . $modelname));
 
         $this->middleware(
             array(
@@ -31,7 +31,7 @@ class Ctl_page extends MY_Controller
 
         // setting
         $this->model = $this->$modelname;
-        $this->title = 'Title';
+        $this->title = mb_ucfirst($this->lang->line('__menu_title'));
     }
 
     public function index()
@@ -58,7 +58,6 @@ class Ctl_page extends MY_Controller
         ); */
         $this->template->build('pages/index');
     }
-    
     /**
      *
      * get data to datatable
@@ -74,7 +73,6 @@ class Ctl_page extends MY_Controller
      */
     public function get_dataTable()
     {
-        $this->load->helper('my_date');
 
         $request = $_REQUEST;
 
@@ -87,23 +85,23 @@ class Ctl_page extends MY_Controller
             foreach ($data as $row) {
 
                 $user_active_id = $row->USER_STARTS ? $row->USER_STARTS : $row->USER_UPDATE;
+                $user_active = whois($user_active_id);
 
                 if ($row->DATE_UPDATE) {
                     $query_date = $row->DATE_UPDATE;
-                    $user_active = "(แก้) " . whois($row->USER_UPDATE);
+                    $user_active = $this->lang->line('_text_edit') . " " . $user_active;
                 } else {
                     $query_date = $row->DATE_STARTS;
-                    $user_active =  whois($row->USER_STARTS);
                 }
 
-                $dom_workstatus = workstatus($row->WORKSTATUS, 'status');
+                $dom_workstatus = workstatus($row->WORKSTATUS);
                 $dom_status = status_offview($row->STATUS_OFFVIEW);
 
                 $sub_data = [];
 
                 $sub_data['ID'] = $row->ID;
                 $sub_data['CODE'] = textShow($row->CODE);
-                $sub_data['NAME'] = textLang($row->NAME,$row->NAME_US,false);
+                $sub_data['NAME'] = textLang($row->NAME, $row->NAME_US, false);
 
                 $sub_data['WORKSTATUS'] = array(
                     "display"   => $dom_workstatus,
@@ -127,7 +125,7 @@ class Ctl_page extends MY_Controller
                 );
 
                 $sub_data['DATE_ACTIVE'] = array(
-                    "display"   => toDateTimeString($query_date, 'datetime'),
+                    "display"   => toDateTimeString($query_date, 'datetimehm'),
                     "timestamp" => date('Y-m-d H:i:s', strtotime($query_date))
                 );
 
@@ -156,8 +154,46 @@ class Ctl_page extends MY_Controller
         $item_id = $request['id'];
         $data = $this->model->get_data($item_id);
 
+        if ($data) {
+            if (is_array($data)) {
+                $data_foreach = [];
+                foreach ($data as $key => $row) {
+                    $data_foreach[$key] = $this->previewData($row);
+                }
+
+                $data = $data_foreach;
+            } else {
+                $data = $this->previewData($data);
+            }
+        }
+
         $result = $data;
         echo json_encode($result);
+    }
+
+    function previewData($datas)
+    {
+        $result = "";
+
+        if ($datas) {
+            $user_active_id = $datas->USER_STARTS ? $datas->USER_STARTS : $datas->USER_UPDATE;
+            $user_active = whois($user_active_id);
+
+            if ($datas->DATE_UPDATE) {
+                $query_date = $datas->DATE_UPDATE;
+                $user_active = $this->lang->line('_text_edit') . " " . $user_active;
+            } else {
+                $query_date = $datas->DATE_STARTS;
+            }
+
+            $datas->USER_ACTIVE_ID = $user_active_id;
+            $datas->USER_ACTIVE = $user_active;
+            $datas->DATE_ACTIVE = toDateTimeString($query_date, 'datetimehm');
+
+            $result = $datas;
+        }
+
+        return $result;
     }
 
     //  *
@@ -171,9 +207,15 @@ class Ctl_page extends MY_Controller
         # code...
         if ($this->input->server('REQUEST_METHOD') == 'POST') {
 
-            $returns = $this->model->insert_data();
+            $request = $_REQUEST;
+
+            $data = array(
+                'name'        => textNull($request['name']) ? $request['name'] : null
+            );
+
+            $returns = $this->model->insert_data($data);
             echo json_encode($returns);
-        } 
+        }
     }
 
     //  *
@@ -187,9 +229,15 @@ class Ctl_page extends MY_Controller
         # code...
         if ($this->input->server('REQUEST_METHOD') == 'POST') {
 
-            $returns = $this->model->update_data();
+            $request = $_REQUEST;
+            $item_id = textNull($request['item_id']) ? $request['item_id'] : null;
+            $data = array(
+                'name'        => textNull($request['name']) ? $request['name'] : null
+            );
+
+            $returns = $this->model->update_data($data, $item_id);
             echo json_encode($returns);
-        } 
+        }
     }
 
 
@@ -206,6 +254,6 @@ class Ctl_page extends MY_Controller
 
             $returns = $this->model->delete_data();
             echo json_encode($returns);
-        } 
+        }
     }
 }

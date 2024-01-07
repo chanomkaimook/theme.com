@@ -94,7 +94,6 @@ class MY_Controller extends CI_Controller
 		}
 
 		if ($result == false) {
-			// User is token expire in.  Do something.
 			session_destroy();
 
 			redirect(site_url('login/ctl_login'));

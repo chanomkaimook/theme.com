@@ -1,5 +1,7 @@
 <?php
 
+
+
 defined('BASEPATH') or exit('No direct script access allowed');
 
 require APPPATH . '/libraries/API_Controller.php';
@@ -22,12 +24,13 @@ class Auth extends API_Controller
         $this->_apiConfig([
             'methods' => ['GET'], // Request Execute Only POST and GET Method
         ]);
-
+        $staffs = Staff::count();
         // Data
         $data = array(
             'status' => true,
             'data' => [
                 'message' => 'Hello World',
+                'staffs' => $staffs,
             ]
         );
         $this->api_return($data, 200);
@@ -39,7 +42,7 @@ class Auth extends API_Controller
         $this->_apiConfig([
             'methods' => ['POST'],
         ]);
-        $login =  $this->login_model->checkLogin();
+        $login = $this->login_model->checkLogin();
         if ($login) {
             $payload = [
                 'id' => $login['id'],

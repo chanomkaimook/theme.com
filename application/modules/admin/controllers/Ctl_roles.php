@@ -25,7 +25,7 @@ class Ctl_roles extends MY_Controller
 
         // setting
         $this->model = $this->$modelname;
-        $this->title = $this->lang->line('__menu_settingroles');
+        $this->title = mb_ucfirst($this->lang->line('__menu_settingroles'));
     }
 
     public function index()
@@ -73,7 +73,7 @@ class Ctl_roles extends MY_Controller
      */
     public function get_dataTable()
     {
-        $this->load->helper('my_date');
+
 
         $request = $_REQUEST;
 
@@ -86,13 +86,13 @@ class Ctl_roles extends MY_Controller
             foreach ($data as $row) {
 
                 $user_active_id = $row->USER_STARTS ? $row->USER_STARTS : $row->USER_UPDATE;
+                $user_active = whois($user_active_id);
 
                 if ($row->DATE_UPDATE) {
                     $query_date = $row->DATE_UPDATE;
-                    $user_active = "(แก้) " . whois($row->USER_UPDATE);
+                    $user_active = $this->lang->line('_text_edit') . " " . $user_active;
                 } else {
                     $query_date = $row->DATE_STARTS;
-                    $user_active =  whois($row->USER_STARTS);
                 }
 
                 // $dom_workstatus = workstatus($row->WORKSTATUS, 'status');
@@ -127,7 +127,7 @@ class Ctl_roles extends MY_Controller
                 );
 
                 $sub_data['DATE_ACTIVE'] = array(
-                    "display"   => toThaiDateTimeString($query_date, 'datetime'),
+                    "display"   => toDateTimeString($query_date, 'datetimehm'),
                     "timestamp" => date('Y-m-d H:i:s', strtotime($query_date))
                 );
 

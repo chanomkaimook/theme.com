@@ -27,10 +27,10 @@
         /* var dateTypeVar = $('#datestart-autoclose').datepicker('getDate');
         $.datepicker.formatDate('Y-m-d', dateTypeVar); */
 
-        $(document).on('click', '.button_search', function(reload=true) {
-            if(reload == false){
+        $(document).on('click', '.button_search', function(reload = true) {
+            if (reload == false) {
                 $('#datatable').DataTable().ajax.reload(false);
-            }else{
+            } else {
                 $('#datatable').DataTable().ajax.reload();
             }
         })
@@ -51,9 +51,8 @@
             if ($('#item_statusbill').length) {
                 d.hidden_statusbill = document.getElementById('item_statusbill').value
             }
-
-            if(dataarray){
-                dataarray.forEach(function(item,index){
+            if (dataarray) {
+                dataarray.forEach(function(item, index) {
                     let item_name = item.name
                     d.item_name = item.value
                 })

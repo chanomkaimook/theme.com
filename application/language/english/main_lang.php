@@ -37,3 +37,6 @@
 	$lang['_username'] = "username";
 	$lang['_password'] = "password";
 	$lang['_remark'] = "remark";
+	$lang['_manby'] = "by";
+	$lang['_dateby'] = "date";
+	$lang['_text_edit'] = "(edit)";

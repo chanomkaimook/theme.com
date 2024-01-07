@@ -17,7 +17,7 @@ class Ctl_logout extends MY_Controller
         log_data(array('logout','',''));
 
         $this->session->sess_destroy();
-        redirect(site_url('login/ctl_login/'));
+        redirect('login/ctl_login');
     }
 
 }

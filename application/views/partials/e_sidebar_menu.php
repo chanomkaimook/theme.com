@@ -13,11 +13,11 @@
                     <li>
                         <a href="javascript: void(0);">
                             <i class="fe-airplay"></i>
-                            <span> หน้าหลัก </span>
+                            <span><?= mb_ucfirst($this->lang->line('__menu_menu')) ?></span>
                             <span class="menu-arrow"></span>
                         </a>
                         <ul class="nav-second-level" aria-expanded="false">
-                            <li><a href="<?= site_url('dashboard/ctl_dashboard') ?>" data-show="Dashboard">Dashboard</a></li>
+                            <li><a href="<?= site_url('dashboard/ctl_dashboard') ?>" data-show="<?= mb_ucfirst($this->lang->line('__menu_dashboard')) ?>"><?= mb_ucfirst($this->lang->line('__menu_dashboard')) ?></a></li>
                         </ul>
                     </li>
 
@@ -46,15 +46,27 @@
                         </ul>
                     </li> -->
 
+                    <li class="">
+                        <a href="javascript: void(0);">
+                            <i class="fe-file-text"></i>
+                            <span><?= mb_ucfirst($this->lang->line('__menu_lab')) ?></span>
+                            <span class="menu-arrow"></span>
+                        </a>
+                        <ul class="nav-second-level" aria-expanded="false">
+                            <li class=""><a href="<?= site_url('lab/ctl_page'); ?>" data-show="Lab">Lab</a></li>
+                            <li class=""><a href="<?= site_url('sublab/ctl_page'); ?>" data-show="Sublab">Sublab</a></li>
+                        </ul>
+                    </li>
+
                     <!-- Profile -->
                     <li>
                         <a href="#">
                             <i class="fas fa-user"></i>
-                            <span>ข้อมูลส่วนตัว</span>
+                            <span><?= mb_ucfirst($this->lang->line('__menu_profile')) ?></span>
                             <span class="menu-arrow"></span>
                         </a>
                         <ul class="nav-second-level" aria-expanded="false">
-                            <li><a href="<?= site_url('profile/ctl_page/') ?>" data-show="ข้อมูลผู้ใช้">ข้อมูลผู้ใช้</a></li>
+                            <li><a href="<?= site_url('profile/ctl_page/') ?>" data-show="<?= mb_ucfirst($this->lang->line('__menu_profile')) ?>"><?= mb_ucfirst($this->lang->line('__menu_profile')) ?></a></li>
                         </ul>
                     </li>
 
@@ -62,15 +74,15 @@
                     <li class="<?= check_permit_menu('admin') ?>">
                         <a href="#">
                             <i class="fas fa-tools"></i>
-                            <span><?= $this->lang->line('__menu_admin') ?></span>
+                            <span><?= mb_ucfirst($this->lang->line('__menu_admin')) ?></span>
                             <span class="menu-arrow"></span>
                         </a>
                         <ul class="nav-second-level text-capitalize" aria-expanded="false">
-                            <li><a href="<?= site_url('admin/ctl_register') ?>" data-show="ลงทะเบียน">ลงทะเบียน</a></li>
-                            <li><a href="<?= site_url('admin/ctl_user') ?>" data-show="ผู้ใช้งาน">ผู้ใช้งาน</a></li>
-                            <li><a href="<?= site_url('admin/ctl_roles') ?>" data-show="setting roles"><?= $this->lang->line('__menu_settingroles') ?></a></li>
-                            <li><a href="<?= site_url('staff/ctl_page') ?>" data-show="พนักงาน">พนักงาน</a></li>
-                            <li><a href="<?= site_url('page/ctl_page') ?>" data-show="blank"><?= $this->lang->line('__menu_blank') ?></a></li>
+                            <li><a href="<?= site_url('admin/ctl_register') ?>" data-show="<?= mb_ucfirst($this->lang->line('__menu_register')) ?>"><?= mb_ucfirst($this->lang->line('__menu_register')) ?></a></li>
+                            <li><a href="<?= site_url('admin/ctl_user') ?>" data-show="<?= mb_ucfirst($this->lang->line('__menu_users')) ?>"><?= mb_ucfirst($this->lang->line('__menu_users')) ?></a></li>
+                            <li><a href="<?= site_url('admin/ctl_roles') ?>" data-show="setting roles"><?= mb_ucfirst($this->lang->line('__menu_settingroles')) ?></a></li>
+                            <li><a href="<?= site_url('staff/ctl_page') ?>" data-show="<?= mb_ucfirst($this->lang->line('__menu_employee')) ?>"><?= mb_ucfirst($this->lang->line('__menu_employee')) ?></a></li>
+                            <li><a href="<?= site_url('page/ctl_page') ?>" data-show="<?= mb_ucfirst($this->lang->line('__menu_blank')) ?>"><?= mb_ucfirst($this->lang->line('__menu_blank')) ?></a></li>
                         </ul>
                     </li>
 

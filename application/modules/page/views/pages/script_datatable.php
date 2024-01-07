@@ -3,8 +3,16 @@
         let datatable = $('#datatable')
 
         let last_columntable = datatable.find('th').length - 1
-        let last_defaultSort = last_columntable - 1
+        let last_defaultSort = last_columntable - 3
+        let column_last_array = t()
 
+        function t() {
+            let r = []
+            for (var i = last_defaultSort; i <= last_columntable; i++) {
+                r.push(i)
+            }
+            return r
+        }
         //
         // get data to data table
         //
@@ -15,9 +23,25 @@
         // # datatable_dom     = form e_navbar.php
         // # datatable_button  = form e_navbar.php
         //
+        // # if open server side should be set paramiter
+        // data for set column name from table
+        // e.g.
+        /* data: dataFillterFunc([{
+            name: 'column',
+            value: {
+                0: 'code',
+                1: 'name',
+                2: 'workstatus',
+                3: 'status_offview',
+                4: 'user_active', // find staff to do
+                5: 'date_active' // find date time to do
+            }
+        }, ]) */
         let urlname = new URL(path(url_moduleControl + '/get_dataTable'), domain);
 
         let table = datatable.DataTable({
+            // processing: true,
+            serverSide: true,
             scrollY: dataTableHeight(),
             scrollCollapse: false,
             autoWidth: false,
@@ -30,7 +54,17 @@
                 url: urlname,
                 type: 'get',
                 dataType: 'json',
-                data: dataFillterFunc()
+                data: dataFillterFunc([{
+                    name: 'column',
+                    value: {
+                        0: 'code',
+                        1: 'name',
+                        2: 'workstatus',
+                        3: 'status_offview',
+                        4: 'user_active', // find staff to do
+                        5: 'date_active' // find date time to do
+                    }
+                }, ])
             },
             order: [],
             columnDefs: [{
@@ -43,8 +77,12 @@
                     targets: last_columntable
                 },
                 {
-                    "targets": [2, 3, 4],
+                    "targets": [0, 1],
                     "className": "truncate"
+                },
+                {
+                    "targets": column_last_array,
+                    "width": "80px"
                 },
             ],
             columns: [{
@@ -52,10 +90,17 @@
                     "width": "60px",
                     "render": function(data, type, row, meta) {
                         let code = data
+                        // let url_doc_bill = new URL(path(url_moduleControl+'/document'),domain)
+                        // url_doc_bill.searchParams.append('code',code)
+
+                        code = `<div class="w-100 text-info" data-id="${row.ID}" role="button">
+                        ${data}
+                        </div>`
+
                         if (!code) {
                             code = ""
                         }
-                        return "<b>#" + code + "</b>"
+                        return "<b>" + code + "</b>"
                     }
                 },
                 {
@@ -63,15 +108,6 @@
                     "width": "",
                     "createdCell": function(td, cellData, rowData, row, col) {
                         $(td).css('min-width', '150px')
-                    },
-                    "render": function(data, type, row, meta) {
-
-                        let task = `${data}`
-                        if (row.CODE) {
-                            task += `<a href=# data-target="#modal_ticket" class="text-info" data-toggle="modal" data-code="${row.CODE}">#${row.CODE}</a> `
-                        }
-
-                        return task
                     }
                 },
                 {

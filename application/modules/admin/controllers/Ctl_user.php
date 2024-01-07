@@ -40,7 +40,7 @@ class Ctl_user extends MY_Controller
 
         // setting
         $this->model = $this->$modelname;
-        $this->title = $this->lang->line('__menu_users');
+        $this->title = mb_ucfirst($this->lang->line('__menu_users'));
     }
 
     public function index()
@@ -77,7 +77,7 @@ class Ctl_user extends MY_Controller
 
     public function fetch_data()
     {
-        $this->load->helper('my_date');
+
 
 
         if ($item_id = $this->input->get('id')) {
@@ -95,21 +95,20 @@ class Ctl_user extends MY_Controller
             foreach ($data as $row) {
 
                 $user_active_id = $row->USER_STARTS ? $row->USER_STARTS : $row->USER_UPDATE;
+                $user_active = whois($user_active_id);
 
                 if ($row->DATE_UPDATE) {
                     $query_date = $row->DATE_UPDATE;
-                    $user_active = "(แก้) " . whois($row->USER_UPDATE);
+                    $user_active = $this->lang->line('_text_edit') . " " . $user_active;
                 } else {
                     $query_date = $row->DATE_STARTS;
-                    $user_active =  whois($row->USER_STARTS);
                 }
-
 
                 $dom_status = status_online($row->STATUS);
 
                 $sub_data = [];
-                $date_start = toDateTimeString($row->DATE_STARTS, 'datetime');
-                $date_update = textNull($row->DATE_UPDATE) ? toDateTimeString($row->DATE_UPDATE, 'datetime') : null;
+                $date_start = toDateTimeString($row->DATE_STARTS, 'datetimehm');
+                $date_update = textNull($row->DATE_UPDATE) ? toDateTimeString($row->DATE_UPDATE, 'datetimehm') : null;
 
                 $sub_data['ID'] = $row->ID;
                 $sub_data['NAME'] = textLang($row->NAME, $row->NAME_US, false);

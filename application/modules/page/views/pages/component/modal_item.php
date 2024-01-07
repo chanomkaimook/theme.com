@@ -24,7 +24,7 @@
                 <div class="modal-header">
                     <h4 class="modal-title mt-0 modal_text_header truncate"></h4>
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                    <button type="button" class="btn btn-primary btn-sm" onclick="printDiv('modal_view')">ปริ้น</button>
+                    <!-- <button type="button" class="btn btn-primary btn_print" onclick="printDiv('modal_view')">ปริ้น</button> -->
                     
                     <div>
                         <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">ปิด</button>
@@ -56,3 +56,4 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+<?php //require_once('application/views/partials/e_script_print.php'); ?>

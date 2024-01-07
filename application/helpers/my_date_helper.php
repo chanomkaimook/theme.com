@@ -49,9 +49,12 @@ function toThaiDateTimeString($date, $typereturn = null)
 
   $thai_date_return = $time_day . " " . $thai_month_arr[$time_month] . " " . $time_year;
   $thai_time_return = date('H:i:s', $time);
+  $thai_time_hm = date('H:i', $time);
 
   if ($typereturn == "datetime") {
     $result = $thai_date_return . " " . $thai_time_return;
+  } else if ($typereturn == "datetimehm") {
+    $result = $thai_date_return . " " . $thai_time_hm;
   } else {
     $result = $thai_date_return;
   }
@@ -92,9 +95,12 @@ function toEngDateTimeString($date, $typereturn = null)
 
   $date_return = $time_day . " " . $month_arr[$time_month] . " " . $time_year;
   $time_return = date('H:i:s', $time);
+  $time_hm = date('H:i', $time);
 
   if ($typereturn == "datetime") {
     $result = $date_return . " " . $time_return;
+  } else if ($typereturn == "datetimehm") {
+    $result = $date_return . " " . $time_hm;
   } else {
     $result = $date_return;
   }

@@ -1,26 +1,26 @@
 <div class="row">
     <div class="form-group col-4">
         <label class="text-capitalize">label</label>
-        <h5 class="card-text label_1"></h5>
+        <p class="card-text label_1"></p>
     </div>
     <div class="form-group col-4">
         <label class="text-capitalize">label</label>
-        <h5 class="card-text label_2"></h5>
+        <p class="card-text label_2"></p>
     </div>
     <div class="form-group col-4">
         <label class="text-capitalize">label</label>
-        <h5 class="card-text label_3"></h5>
+        <p class="card-text label_3"></p>
     </div>
 </div>
 
 <div class="row">
     <div class="form-group col-6">
         <label class="text-capitalize">label</label>
-        <h5 class="card-text label_4"></h5>
+        <p class="card-text label_4"></p>
     </div>
     <div class="form-group col-6">
         <label class="text-capitalize">label</label>
-        <h5 class="card-text label_5"></h5>
+        <p class="card-text label_5"></p>
     </div>
 </div>
 

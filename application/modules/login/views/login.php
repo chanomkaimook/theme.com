@@ -27,16 +27,18 @@
     }
 </style>
 
-<?php
-$this->session->sess_destroy();
-if ($this->session->has_userdata('user_code')) {
 
+
+<body>
+<?php
+// $this->session->sess_destroy();
+if ($this->session->has_userdata('user_code')) {
+    echo'<pre>';
     print_r($this->session->userdata());
+    echo '</pre>';
 }
 
 ?>
-
-<body>
     <div class="authentication-bg authentication-bg-pattern d-flex align-items-center pb-0 vh-100">
 
         <div class="account-pages w-100 mt-5 mb-5">

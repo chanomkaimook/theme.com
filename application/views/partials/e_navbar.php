@@ -48,6 +48,10 @@
                  overflow: hidden;
                  text-overflow: ellipsis;
              }
+
+             [role=button] {
+                cursor:pointer
+             }
          </style>
 
          <input type="hidden" id="hidden_user_id" value="<?= $this->session->userdata('user_code'); ?>">

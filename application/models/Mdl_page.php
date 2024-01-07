@@ -438,37 +438,75 @@ class Mdl_page extends CI_Model
 
         if ($optionnal['select']) {
             $sql->select($optionnal['select']);
+        } else {
+            $sql->select($this->table . '.*');
         }
 
         if ($optionnal['where'] && count($optionnal['where'])) {
             foreach ($optionnal['where'] as $column => $value) {
-                $sql->where($column, $value);
+                $sql->where($this->table . '.' . $column, $value);
             }
         }
 
         if ($request['search']['value']) {
             $search = $request['search']['value'];
             $sql->where('('
-                .$this->table.'.code like "%'.$search.'%"
-                or '.$this->table.'.name like "%'.$search.'%"
-                or '.$this->table.'.name_us like "%'.$search.'%"
+                . $this->table . '.code like "%' . $search . '%"
+                or ' . $this->table . '.name like "%' . $search . '%"
+                or ' . $this->table . '.name_us like "%' . $search . '%"
             )');
         }
 
         if ($optionnal['order_by'] && count($optionnal['order_by'])) {
             foreach ($optionnal['order_by'] as $column => $value) {
-                $sql->order_by($column, $value);
+                $sql->order_by($this->table . '.' . $column, $value);
             }
         } else {
             $item_column = "";
-            if($request['order'][0]['column'] && $request['item_name']){
-                if($request['item_name'][$request['order'][0]['column']]){
+            if (is_numeric($request['order'][0]['column']) && $request['item_name']) {
+                if ($request['item_name'][$request['order'][0]['column']]) {
+
                     $item_column = $request['item_name'][$request['order'][0]['column']];
                 }
             }
-
             if ($request['order'][0]['dir'] && $item_column) {
-                $sql->order_by($this->table . '.id', $request['order'][0]['dir']);
+                // for value_active
+                $next = 1;
+                if ($item_column == "user_active") {
+                    $sql->join('staff', $this->table . '.user_starts=staff.id', 'left');
+                    $sql->join('employee', 'staff.employee_id=employee.id', 'left');
+
+                    if ($_COOKIE['langadmin'] == 'thai') {
+                        $item_column = "name";
+                    } else {
+                        $item_column = "name_us";
+                    }
+
+                    $sql->order_by(
+                        'CASE WHEN employee.' . $item_column . ' is not null
+                        THEN employee.' . $item_column . '
+                        ELSE employee.name
+                        END ' . $request['order'][0]['dir'],
+                        null,
+                        false
+                    );
+
+                    $next = 0;
+                }
+                if ($item_column == "date_active") {
+                    $sql->order_by(
+                        'CASE WHEN ' . $this->table . '.date_update is not null
+                        THEN ' . $this->table . '.date_update
+                        ELSE ' . $this->table . '.date_starts
+                        END ' . $request['order'][0]['dir'],
+                        null,
+                        false
+                    );
+                    $next = 0;
+                }
+                if($next == 1){
+                    $sql->order_by($this->table . '.'.$item_column, $request['order'][0]['dir']);
+                }
             } else {
                 $sql->order_by($this->table . '.id', 'desc');
             }
@@ -476,7 +514,7 @@ class Mdl_page extends CI_Model
 
         if ($optionnal['group_by'] && count($optionnal['group_by'])) {
             foreach ($optionnal['group_by'] as $column) {
-                $sql->group_by($column);
+                $sql->group_by($this->table . '.' . $column);
             }
         }
 
