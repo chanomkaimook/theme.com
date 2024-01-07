@@ -42,28 +42,27 @@
             // return false;
             if (item_id) {
                 func = async_update_data(item_id, data)
+
+                func
+                    .then((resp) => {
+                        if (resp.error == 1) {
+                            swalalert('error', resp.data.txt, {
+                                auto: false
+                            })
+                        } else {
+                            swalalert()
+                                .then((result) => {
+
+                                    modalHide()
+
+                                    dataReload()
+
+                                })
+                        }
+                    });
             } else {
                 func = register()
             }
-
-            func
-                .then((resp) => {
-                    if (resp.error == 1) {
-                        swalalert('error', resp.data.txt, {
-                            auto: false
-                        })
-                    } else {
-                        swalalert()
-                            .then((result) => {
-
-                                modalHide()
-
-                                dataReload()
-
-                            })
-                    }
-                });
-
 
             return false
         })

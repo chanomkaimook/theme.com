@@ -119,6 +119,15 @@ class Roles
 			$optional['group_by'] = array('roles.CODE');
 
 			$result = $ci->mdl_roles_control->get_dataRolesOnly($id, $optional, $type);
+
+			if(is_array($id)){
+				if(is_numeric(array_search("1",$id))){
+					$result[] = array(
+						'ROLES_CODE'	=> 'administrator',
+						'ROLES_ID'		=> 1
+					);
+				}
+			}
 		}
 
 		return $result;

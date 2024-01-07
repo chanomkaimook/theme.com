@@ -197,7 +197,9 @@ class Ctl_user extends MY_Controller
             $data->ROLES = $array_roles_child;
             $data->PERMIT_NOROLE = $array_permit_only;
         }
-
+        // echo "<pre>";
+        // print_r($data);
+        // echo "---------------------------";
         $result = $data;
         echo json_encode($result);
     }
