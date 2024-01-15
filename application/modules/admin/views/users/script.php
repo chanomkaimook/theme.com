@@ -709,6 +709,7 @@
             document.getElementsByTagName('form')[key].reset();
         })
 
+        $(modal).find('[name=input_username]').removeAttr('disabled').end()
         $(modal).find('[name=input_password]').removeAttr('disabled').end()
 
         //
