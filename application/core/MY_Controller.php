@@ -207,7 +207,7 @@ class MY_Controller extends CI_Controller
 			if ($data_need && count($data_need) && $result == false) {
 				//
 				// check permit to need
-				
+				$result = true;
 				foreach ($data_need as $row_need) {
 					if (can($row_need,$dataarray) === false) {
 						$result = false;
