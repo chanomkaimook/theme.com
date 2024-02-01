@@ -229,8 +229,10 @@ class MY_Controller extends CI_Controller
 
 						//
 						// check permit
+						$result = false;
 						foreach ($array as $row_permit) {
-							if (can($row_permit,$dataarray) === true && $result === false) {
+							// if (can($row_permit,$dataarray) === true && $result === false) {
+							if (can($row_permit,$dataarray) === true) {
 								$result = true;
 							}
 						}
