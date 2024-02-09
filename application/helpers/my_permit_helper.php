@@ -464,16 +464,18 @@ function check_permit_groupmenu($array = null)
     $result = false;
 
     $staff_id = userlogin();
-    $dataarray = $ci->permit->get_dataPermitSet($staff_id);
+    if ($staff_id) {
+      $dataarray = $ci->permit->get_dataPermitSet($staff_id);
 
-    // loop
-    foreach ($array as $key => $array_in) {
+      // loop
+      foreach ($array as $key => $array_in) {
 
-      if ($array_in && count($array_in)) {
-        foreach ($array_in as $value) {
-          if ($result != true) {
-            if (method_can($value, $dataarray)) {
-              $result = true;
+        if ($array_in && count($array_in)) {
+          foreach ($array_in as $value) {
+            if ($result != true) {
+              if (method_can($value, $dataarray)) {
+                $result = true;
+              }
             }
           }
         }
