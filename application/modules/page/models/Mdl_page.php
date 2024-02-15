@@ -417,19 +417,19 @@ class Mdl_page extends CI_Model
         }
 
         if ($hidden_start && $hidden_end) {
-            // $sql->where('date(' . $this->table . '.date_starts) >=', $hidden_start);
-            // $sql->where('date(' . $this->table . '.date_starts) <=', $hidden_end);
-
-            $sql->where(
-                '(date(' . $this->table . '.date_starts) >= "' . $hidden_start . '" and
-                date(' . $this->table . '.date_starts) <= "' . $hidden_end . '")
-                or 
-                (date(' . $this->table . '.date_update) >= "' . $hidden_start . '" and
-                date(' . $this->table . '.date_update) <= "' . $hidden_end . '")
-        ',
-                null,
-                false
-            );
+            if ($hidden_datetype = textNull($request['hidden_datetype'])) {
+                if ($hidden_datetype == 'date_update') {
+                    // $sql->where('if(date(' . $this->table . '.'.$hidden_datetype.'),date(' . $this->table . '.'.$hidden_datetype.') >='.$hidden_start.',date(' . $this->table . '.date_starts'.') >='.$hidden_start.')',null,false);
+                    $sql->where('(CASE WHEN date(' . $this->table . '.' . $hidden_datetype . ') is not null THEN date(' . $this->table . '.' . $hidden_datetype . ') >="' . $hidden_start . '" ELSE date(' . $this->table . '.date_starts' . ') >="' . $hidden_start . '" END)', null, false);
+                    $sql->where('(CASE WHEN date(' . $this->table . '.' . $hidden_datetype . ') is not null THEN date(' . $this->table . '.' . $hidden_datetype . ') <="' . $hidden_end . '" ELSE date(' . $this->table . '.date_starts' . ') <="' . $hidden_end . '" END)', null, false);
+                } else {
+                    $sql->where('date(' . $this->table . '.' . $hidden_datetype . ') >=', $hidden_start);
+                    $sql->where('date(' . $this->table . '.' . $hidden_datetype . ') <=', $hidden_end);
+                }
+            } else {
+                $sql->where('date(' . $this->table . '.date_starts) >=', $hidden_start);
+                $sql->where('date(' . $this->table . '.date_starts) <=', $hidden_end);
+            }
         }
 
         if ($id) {

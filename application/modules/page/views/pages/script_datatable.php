@@ -19,7 +19,7 @@
         // # domain = form e_navbar.php
         // # url_moduleControl = form e_navbar.php
         // # dataTableHeight() = form e_navbar.php
-        // # dataFillterFunc() = form e_navbar.php
+        // # dataFillterFunc() = form e_script_begin.php
         // # datatable_dom     = form e_navbar.php
         // # datatable_button  = form e_navbar.php
         //
@@ -36,7 +36,14 @@
                 4: 'user_active', // find staff to do
                 5: 'date_active' // find date time to do
             }
-        }, ]) */
+        }, ])
+        data: dataFillterFunc([{
+                name: 'hidden_statuspayment',
+            },
+            {
+                name: 'hidden_statusbill',
+            },
+        ]) */
         let urlname = new URL(path(url_moduleControl + '/get_dataTable'), domain);
 
         let table = datatable.DataTable({

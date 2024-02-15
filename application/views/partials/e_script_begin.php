@@ -54,7 +54,11 @@
             if (dataarray) {
                 dataarray.forEach(function(item, index) {
                     let item_name = item.name
-                    d.item_name = item.value
+                    if(item_name == 'column'){
+                        d.item_name = item.value
+                    }else{
+                        d[item_name] = document.getElementById(item_name).value
+                    }
                 })
             }
         }

@@ -36,6 +36,11 @@ class Ctl_page extends MY_Controller
 
     public function index()
     {
+        // set page title
+        /* $data['pagetitle'] = "ใบเสนอราคา";
+        $data['breadcrumb'] = array('รายการจอง', 'ข้อมูลการจอง');
+        $data['menuactive'] = site_url('bill/ctl_bill'); */
+
         $this->template->set_layout('lay_datatable');
         $this->template->title($this->title);
         /* $this->template->set_partial(
