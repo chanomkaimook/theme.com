@@ -500,10 +500,14 @@ function check_permit_groupmenu($array = null)
  */
 function check_permit_menu($name = null)
 {
-
-  $result = can($name);
+  $ci = &get_instance();
 
   $css_name = '';
+  $result = '';
+
+  if (userlogin()) {
+    $result = can($name);
+  }
 
   if (!$result) {
     $css_name = 'd-none';
