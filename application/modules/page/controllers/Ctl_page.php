@@ -191,9 +191,14 @@ class Ctl_page extends MY_Controller
                 $query_date = $datas->DATE_STARTS;
             }
 
+            $datas->USER_STARTS_ID = $datas->USER_STARTS;
+            $datas->USER_STARTS = whois($datas->USER_STARTS);
+            $datas->DATE_STARTS = toDateTimeString($datas->DATE_STARTS, 'datetimehm');
             $datas->USER_ACTIVE_ID = $user_active_id;
             $datas->USER_ACTIVE = $user_active;
             $datas->DATE_ACTIVE = toDateTimeString($query_date, 'datetimehm');
+            $datas->STATUS_OFFVIEW_ID = "$datas->STATUS_OFFVIEW";
+            $datas->STATUS_OFFVIEW = status_online($datas->STATUS_OFFVIEW);
 
             $result = $datas;
         }

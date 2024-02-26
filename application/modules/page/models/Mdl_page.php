@@ -184,7 +184,7 @@ class Mdl_page extends CI_Model
      * @param string|null $table = table name for check
      * @return void
      */
-    function check_dup($arraywhere, string $valueshow = null, string $table = null)
+    function check_dup($arraywhere, $valueshow = null, string $table = null)
     {
         $result = false;
 
@@ -221,8 +221,8 @@ class Mdl_page extends CI_Model
 
         $request = $_POST;
 
-        $item_code = textNull($data_insert['code']) ? $data_insert['code'] : $request['code'];
-        $item_name = textNull($data_insert['name']) ? $data_insert['name'] : $request['name'];
+        $item_code = textNull($data_insert['code']) ? textNull($data_insert['code']) : textNull($request['code']);
+        $item_name = textNull($data_insert['name']) ? textNull($data_insert['name']) : textNull($request['name']);
         $array_chk_dup = array(
             'code' => $item_code,
             'name' => $item_name,
@@ -288,8 +288,8 @@ class Mdl_page extends CI_Model
         if ($item_id) {
             $request = $_POST;
 
-            $item_code = textNull($data_update['code']) ? $data_update['code'] : $request['code'];
-            $item_name = textNull($data_update['name']) ? $data_update['name'] : $request['name'];
+            $item_code = textNull($data_update['code']) ? textNull($data_update['code']) : textNull($request['code']);
+            $item_name = textNull($data_update['name']) ? textNull($data_update['name']) : textNull($request['name']);
             $array_chk_dup = array(
                 'name' => $item_name,
                 'status' => 1,

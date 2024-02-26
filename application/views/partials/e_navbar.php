@@ -240,6 +240,58 @@
          </div>
          <!-- end Topbar -->
 
+         <div id="modal_notification_all" class="modal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+             <div class="modal-dialog modal-dialog-centered">
+                 <div class="modal-content">
+                     <div class="modal-header">
+                         <h4 class="modal-title mt-0">รายการแจ้งเตือนทั้งหมด <span class="noti_total text-info"></span> รายการ</h4>
+                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                     </div>
+                     <div class="modal-body">
+
+
+                         <div class="list-group notification-list">
+
+                         </div>
+
+
+                     </div>
+
+                     <div class="modal-footer">
+                         <div class="float-left" style="position:absolute;left:15px;">
+                             <a href="javascript:void(0)" class="text-info btn_checkbox_noti_all"><i class="mdi mdi-format-list-triangle lead"></i>เลือกทั้งหมด</a>
+                             <a href="javascript:void(0)" class="text-info ml-2 btn_seen_noti_all"><i class="mdi mdi-check-circle lead"></i>อ่านแล้ว</a>
+                         </div>
+                         <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">ปิด</button>
+                     </div>
+                 </div><!-- /.modal-content -->
+             </div><!-- /.modal-dialog -->
+         </div><!-- /.modal -->
+
+         <div id="modal_loading" class="modal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" data-backdrop="static">
+             <div class="modal-dialog modal-dialog-centered">
+                 <div class="modal-content">
+                     <div class="modal-body">
+                         <div class="sk-circle loading">
+                             <div class="sk-circle1 sk-child"></div>
+                             <div class="sk-circle2 sk-child"></div>
+                             <div class="sk-circle3 sk-child"></div>
+                             <div class="sk-circle4 sk-child"></div>
+                             <div class="sk-circle5 sk-child"></div>
+                             <div class="sk-circle6 sk-child"></div>
+                             <div class="sk-circle7 sk-child"></div>
+                             <div class="sk-circle8 sk-child"></div>
+                             <div class="sk-circle9 sk-child"></div>
+                             <div class="sk-circle10 sk-child"></div>
+                             <div class="sk-circle11 sk-child"></div>
+                             <div class="sk-circle12 sk-child"></div>
+                         </div>
+                     </div>
+
+                 </div><!-- /.modal-content -->
+             </div><!-- /.modal-dialog -->
+         </div><!-- /.modal -->
+         
          <script>
              // check toggle menu
              checkCookieToggleMenu()
