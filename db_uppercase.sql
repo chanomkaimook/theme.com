@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 30, 2024 at 03:13 PM
+-- Generation Time: Mar 04, 2024 at 04:22 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.0.28
 
@@ -21,7 +21,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `db_blank`
+-- Database: `db_uppercase`
 --
 
 -- --------------------------------------------------------
@@ -44,7 +44,7 @@ CREATE TABLE `blank` (
   `REMARK_DELETE` text DEFAULT NULL,
   `STATUS_OFFVIEW` varchar(1) DEFAULT NULL COMMENT '1=off',
   `STATUS` varchar(1) NOT NULL DEFAULT '1' COMMENT '1=on'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci COMMENT='table standard';
 
 --
 -- Dumping data for table `blank`
@@ -69,7 +69,17 @@ CREATE TABLE `ci_sessions` (
   `ip_address` varchar(45) NOT NULL,
   `timestamp` int(10) UNSIGNED NOT NULL DEFAULT 0,
   `data` blob NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci COMMENT='data session system';
+
+--
+-- Dumping data for table `ci_sessions`
+--
+
+INSERT INTO `ci_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES
+('k556c30ealqr0g7eqa1u6eqmoj61s5tp', '127.0.0.1', 1708741334, 0x5f5f63695f6c6173745f726567656e65726174657c693a313730383734313333343b),
+('1skh9b3ll8138jvmt5a5v10qrv8l90k4', '127.0.0.1', 1708741664, 0x5f5f63695f6c6173745f726567656e65726174657c693a313730383734313636343b),
+('3num98mlhtmhi013f5idnovukbq5so8t', '127.0.0.1', 1708742517, 0x5f5f63695f6c6173745f726567656e65726174657c693a313730383734323531373b),
+('v53bun5g8l16dn928bi4vn30kpf1ec5s', '127.0.0.1', 1708742547, 0x5f5f63695f6c6173745f726567656e65726174657c693a313730383734323531373b);
 
 -- --------------------------------------------------------
 
@@ -86,7 +96,7 @@ CREATE TABLE `department` (
   `USER_STARTS` varchar(5) DEFAULT NULL,
   `USER_UPDATE` varchar(5) DEFAULT NULL,
   `STATUS_OFFVIEW` char(1) DEFAULT NULL COMMENT '1=off'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci COMMENT='user department';
 
 -- --------------------------------------------------------
 
@@ -112,7 +122,7 @@ CREATE TABLE `employee` (
   `DATE_UPDATE` datetime DEFAULT NULL,
   `USER_UPDATE` varchar(5) DEFAULT NULL,
   `STATUS` varchar(1) DEFAULT '1'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci COMMENT='data employee';
 
 --
 -- Dumping data for table `employee`
@@ -138,7 +148,7 @@ CREATE TABLE `member` (
   `DATE_UPDATE` datetime DEFAULT NULL,
   `USER_UPDATE` varchar(5) DEFAULT NULL,
   `STATUS` varchar(1) DEFAULT '1'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci COMMENT='data member';
 
 -- --------------------------------------------------------
 
@@ -152,7 +162,7 @@ CREATE TABLE `menus` (
   `CODE` varchar(25) DEFAULT NULL,
   `NAME` varchar(45) DEFAULT NULL,
   `NAME_US` varchar(45) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci COMMENT='menu system';
 
 --
 -- Dumping data for table `menus`
@@ -180,7 +190,7 @@ CREATE TABLE `permit` (
   `NAME_US` varchar(45) DEFAULT NULL,
   `MENUS_ID` int(11) DEFAULT NULL,
   `MENUS_CODE` varchar(25) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci COMMENT='data permit';
 
 --
 -- Dumping data for table `permit`
@@ -231,7 +241,7 @@ CREATE TABLE `permit_control` (
   `USER_STARTS` varchar(5) DEFAULT NULL,
   `USER_UPDATE` varchar(5) DEFAULT NULL,
   `STATUS_OFFVIEW` char(1) DEFAULT NULL COMMENT '1=off'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci COMMENT='user permission';
 
 -- --------------------------------------------------------
 
@@ -242,7 +252,7 @@ CREATE TABLE `permit_control` (
 CREATE TABLE `project` (
   `NAME` varchar(80) NOT NULL,
   `TITLE_NAME` varchar(100) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci COMMENT='data project';
 
 --
 -- Dumping data for table `project`
@@ -271,7 +281,7 @@ CREATE TABLE `roles` (
   `NOEDIT` int(11) DEFAULT NULL COMMENT '1=not edit data',
   `STATUS_OFFVIEW` varchar(1) DEFAULT NULL COMMENT '1=off',
   `REMARK_DELETE` varchar(200) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci COMMENT='data roles';
 
 --
 -- Dumping data for table `roles`
@@ -299,21 +309,7 @@ CREATE TABLE `roles_control` (
   `USER_STARTS` varchar(5) DEFAULT NULL,
   `USER_UPDATE` varchar(5) DEFAULT NULL,
   `STATUS_OFFVIEW` char(1) DEFAULT NULL COMMENT '1=off'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `roles_focus`
---
-
-CREATE TABLE `roles_focus` (
-  `ID` int(11) NOT NULL,
-  `STAFF_CHILD` int(11) DEFAULT NULL COMMENT 'child',
-  `STAFF_OWNER` int(11) DEFAULT NULL COMMENT 'ผู้ดูแล',
-  `DATE_STARTS` timestamp NOT NULL DEFAULT current_timestamp(),
-  `USER_STARTS` varchar(5) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci COMMENT='data role RBAC';
 
 -- --------------------------------------------------------
 
@@ -330,7 +326,7 @@ CREATE TABLE `section` (
   `USER_STARTS` varchar(5) DEFAULT NULL,
   `USER_UPDATE` varchar(5) DEFAULT NULL,
   `STATUS_OFFVIEW` char(1) DEFAULT NULL COMMENT '1=off'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci COMMENT='data sections';
 
 --
 -- Dumping data for table `section`
@@ -380,7 +376,7 @@ CREATE TABLE `staff` (
   `USER_UPDATE` varchar(5) DEFAULT NULL,
   `VERIFY` varchar(5) DEFAULT NULL COMMENT 'staff id',
   `STATUS` varchar(1) DEFAULT '1'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci COMMENT='data users';
 
 --
 -- Dumping data for table `staff`
@@ -406,7 +402,7 @@ CREATE TABLE `status_alias` (
   `USER_STARTS` varchar(5) DEFAULT NULL,
   `USER_UPDATE` varchar(5) DEFAULT NULL,
   `STATUS` tinyint(4) NOT NULL DEFAULT 1
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci COMMENT='data status system';
 
 --
 -- Dumping data for table `status_alias`
@@ -498,12 +494,6 @@ ALTER TABLE `roles_control`
   ADD KEY `ROLES_ID_CHILD` (`ROLES_ID_CHILD`);
 
 --
--- Indexes for table `roles_focus`
---
-ALTER TABLE `roles_focus`
-  ADD PRIMARY KEY (`ID`);
-
---
 -- Indexes for table `section`
 --
 ALTER TABLE `section`
@@ -578,12 +568,6 @@ ALTER TABLE `roles`
 -- AUTO_INCREMENT for table `roles_control`
 --
 ALTER TABLE `roles_control`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `roles_focus`
---
-ALTER TABLE `roles_focus`
   MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
