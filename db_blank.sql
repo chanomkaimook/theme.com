@@ -7,6 +7,9 @@
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.0.28
 
+CREATE DATABASE IF NOT EXISTS `db_uppercase` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+USE `db_uppercase`;
+
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
