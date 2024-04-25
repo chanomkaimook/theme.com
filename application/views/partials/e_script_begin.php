@@ -41,8 +41,12 @@
         let d = []
 
         return function(d) {
-            d.hidden_datestart = document.getElementById('hidden_datestart').value;
-            d.hidden_dateend = document.getElementById('hidden_dateend').value;
+            if ($('#hidden_datestart').length) {
+                d.hidden_datestart = document.getElementById('hidden_datestart').value;
+            }
+            if ($('#hidden_dateend').length) {
+                d.hidden_dateend = document.getElementById('hidden_dateend').value;
+            }
 
             if ($('#item_operator_id').length) {
                 d.hidden_operator_id = document.getElementById('item_operator_id').value
