@@ -338,9 +338,15 @@
              let url_length = url_current.indexOf(url_host);
              let url_newCurrent = url_current.slice(url_length);
              let url_split = url_newCurrent.split("/");
+             let url_moduleControl
 
              // url module/controller
-             let url_moduleControl = `${url_split[1]}/${url_split[2]}`;
+             if (window.location.hostname == 'localhost' || window.location.hostname == '127.0.0.1') {
+                 url_moduleControl = window.location.pathname.split('/')[1] + '/' + window.location.pathname.split('/')[2] + '/' +
+                     window.location.pathname.split('/')[3]
+             } else {
+                 url_moduleControl = `${url_split[1]}/${url_split[2]}`;
+             }
              // =======
              // =======
              let domain = window.location.origin

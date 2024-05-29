@@ -9,8 +9,8 @@
     <meta content="Coderthemes" name="author" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <!-- App favicon -->
-    <link rel="icon" type="image/png" sizes="16x16"  href="<?= base_url('') ?>asset/images/favicon-16x16.png">
-    
+    <link rel="icon" type="image/png" sizes="16x16" href="<?= base_url('') ?>asset/images/favicon-16x16.png">
+
 
     <link href="<?= base_url('') ?>asset/libs/sweetalert2/sweetalert2.min.css" rel="stylesheet" type="text/css" />
 
@@ -30,15 +30,15 @@
 
 
 <body>
-<?php
-// $this->session->sess_destroy();
-if ($this->session->has_userdata('user_code')) {
-    echo'<pre>';
-    print_r($this->session->userdata());
-    echo '</pre>';
-}
+    <?php
+    // $this->session->sess_destroy();
+    if ($this->session->has_userdata('user_code')) {
+        echo '<pre>';
+        print_r($this->session->userdata());
+        echo '</pre>';
+    }
 
-?>
+    ?>
     <div class="authentication-bg authentication-bg-pattern d-flex align-items-center pb-0 vh-100">
 
         <div class="account-pages w-100 mt-5 mb-5">
@@ -115,7 +115,11 @@ if ($this->session->has_userdata('user_code')) {
     <script>
         // url
         // let domain = window.location.protocol + '//' + window.location.hostname + '/' + window.location.pathname.split('/')[1] + '/'
-        let domain = window.location.origin
+        // let domain = window.location.origin
+        let domain = window.location.protocol + '//' + window.location.hostname + '/'
+        if (window.location.hostname == 'localhost' || window.location.hostname == '127.0.0.1') {
+            domain = window.location.protocol + '//' + window.location.hostname + '/' + window.location.pathname.split('/')[1] + '/'
+        }
         $(document).ready(function() {
 
             $(document).on('submit', '#login', function() {
