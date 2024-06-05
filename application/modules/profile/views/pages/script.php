@@ -178,6 +178,14 @@
 
             switch (action) {
                 case 'view':
+
+                    if (data.SECTION) {
+                        $('.form-group').find('.section').text(data.SECTION).end()
+                    }
+                    if (data.POSITION) {
+                        $('.form-group').find('.position').text(data.POSITION).end()
+                    }
+
                     $('.form-group')
                         .find('.name_th').text(data.NAME).end()
                         .find('.name_us').text(data.NAME_US).end()
@@ -288,6 +296,24 @@
     //  Base Function
     //  =========================
     //  =========================
+
+    //  *
+    //  * Form
+    //  * read
+    //  * 
+    //  * open form view data
+    //  * #async_get_data() = script_crud.php
+    //  *
+    function get_data(item_id = 0) {
+        // item_id = 0
+        async_get_data(item_id)
+            .then((resp) => {
+                modalActive(resp, 'view')
+            })
+            .then(() => {
+                modalLoading_clear()
+            })
+    }
 
     //  *
     //  * Form

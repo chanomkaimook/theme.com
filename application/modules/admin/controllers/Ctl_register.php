@@ -45,7 +45,7 @@ class Ctl_register extends MY_Controller
                 $sub_data['LASTNAME'] = $row->LASTNAME;
                 $sub_data['USERNAME'] = $row->USERNAME;
                 $sub_data['DATE_START'] = $row->DATE_START;
-                $sub_data['DATE_START_TEXT'] = toDateTimeString($row->DATE_START, 'datetimehm');
+                $sub_data['DATE_START_TEXT'] = toDateTimeString($row->DATE_STARTS, 'datetimehm');
                 $sub_data['VERIFY'] = $row->VERIFY;
 
                 $data_result[] = $sub_data;

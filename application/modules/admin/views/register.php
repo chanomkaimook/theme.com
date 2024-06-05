@@ -8,7 +8,6 @@
                 <table id="datatable_staff" class="table dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                     <thead>
                         <tr>
-                            <th>สิทธิ์</th>
                             <th>ชื่อ</th>
                             <th>นามสกุล</th>
                             <th>username</th>
@@ -41,10 +40,8 @@
                 dataType: "json",
 
             },
-            order: [[ 4, 'asc' ]],
-            columns: [{
-                    "data": "ROLE",
-                },
+            order: [[ 3, 'asc' ]],
+            columns: [
                 {
                     "data": "NAME",
                 },
@@ -63,7 +60,7 @@
             ],
             "createdRow": function(row, data, index) {
                 let table_btn_verify = `<button type="button" class="btn btn-warning btn_verify" data-id="${data['ID']}" data-username="${data['USERNAME']}" data-name="${data['NAME']}" data-lastname="${data['LASTNAME']}">อนุญาต</button>`
-                $('td', row).eq(5).html(table_btn_verify)
+                $('td', row).eq(4).html(table_btn_verify)
 
             },
             dom: datatable_dom,

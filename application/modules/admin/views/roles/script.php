@@ -404,7 +404,7 @@
                 let item_id
 
                 resp.map(function(item) {
-                    item_value = textCapitalize(item.CODE)
+                    item_value = textCapitalize(setlang == 'thai' ? item.NAME : item.NAME_US) 
                     item_id = item.ID
                     data_array += `<option value="${item_id}">${item_value}</option>`
                 })

@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.1
+-- version 5.1.4-dev+20220503.2d475d6680
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: Mar 04, 2024 at 04:22 PM
+-- Host: localhost
+-- Generation Time: May 24, 2024 at 10:33 AM
 -- Server version: 10.4.28-MariaDB
--- PHP Version: 8.0.28
+-- PHP Version: 8.0.18
 
 CREATE DATABASE IF NOT EXISTS `db_uppercase` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 USE `db_uppercase`;
@@ -37,10 +37,10 @@ CREATE TABLE `blank` (
   `NAME` varchar(60) DEFAULT NULL,
   `NAME_US` varchar(60) DEFAULT NULL,
   `WORKSTATUS` varchar(2) DEFAULT NULL,
-  `USER_STARTS` int(11) NOT NULL,
   `DATE_STARTS` datetime NOT NULL DEFAULT current_timestamp(),
-  `USER_UPDATE` int(11) DEFAULT NULL,
   `DATE_UPDATE` datetime DEFAULT NULL,
+  `USER_STARTS` int(11) DEFAULT NULL,
+  `USER_UPDATE` int(11) DEFAULT NULL,
   `REMARK_DELETE` text DEFAULT NULL,
   `STATUS_OFFVIEW` varchar(1) DEFAULT NULL COMMENT '1=off',
   `STATUS` varchar(1) NOT NULL DEFAULT '1' COMMENT '1=on'
@@ -50,13 +50,13 @@ CREATE TABLE `blank` (
 -- Dumping data for table `blank`
 --
 
-INSERT INTO `blank` (`ID`, `ORDERS`, `CODE`, `NAME`, `NAME_US`, `WORKSTATUS`, `USER_STARTS`, `DATE_STARTS`, `USER_UPDATE`, `DATE_UPDATE`, `REMARK_DELETE`, `STATUS_OFFVIEW`, `STATUS`) VALUES
-(1, NULL, NULL, 'data blank1', NULL, NULL, 1, '2023-01-21 15:19:40', 1, '2023-06-25 21:12:15', NULL, '1', '1'),
-(2, NULL, 'A002', 'data blank2', 'english data 2', '1', 1, '2023-02-26 16:20:29', 1, '2023-06-25 18:34:43', 'das', NULL, '1'),
-(3, NULL, 'A003', 'data blank3', NULL, '2', 1, '2023-01-11 13:20:54', NULL, NULL, NULL, NULL, '1'),
-(4, NULL, 'A004', 'data blank4', NULL, '3', 1, '2023-03-26 15:20:54', NULL, NULL, NULL, NULL, '1'),
-(5, NULL, 'A005', 'data blank5', NULL, '4', 1, '2023-04-30 08:20:54', 1, '2023-06-26 01:14:09', NULL, NULL, '1'),
-(6, NULL, 'A006', 'delete', NULL, '4', 1, '2023-05-30 09:20:54', NULL, NULL, NULL, NULL, '0');
+INSERT INTO `blank` (`ID`, `ORDERS`, `CODE`, `NAME`, `NAME_US`, `WORKSTATUS`, `DATE_STARTS`, `DATE_UPDATE`, `USER_STARTS`, `USER_UPDATE`, `REMARK_DELETE`, `STATUS_OFFVIEW`, `STATUS`) VALUES
+(1, NULL, NULL, 'data blank1', NULL, NULL, '2023-01-21 15:19:40', '2023-06-25 21:12:15', 1, 1, NULL, '1', '1'),
+(2, NULL, 'A002', 'data blank2', 'english data 2', '1', '2023-02-26 16:20:29', '2023-06-25 18:34:43', 1, 1, 'das', NULL, '1'),
+(3, NULL, 'A003', 'data blank3', NULL, '2', '2023-01-11 13:20:54', NULL, 1, NULL, NULL, NULL, '1'),
+(4, NULL, 'A004', 'data blank4', NULL, '3', '2023-03-26 15:20:54', NULL, 1, NULL, NULL, NULL, '1'),
+(5, NULL, 'A005', 'data blank5', NULL, '4', '2023-04-30 08:20:54', '2023-06-26 01:14:09', 1, 1, NULL, NULL, '1'),
+(6, NULL, 'A006', 'delete', NULL, '4', '2023-05-30 09:20:54', NULL, 1, NULL, NULL, NULL, '0');
 
 -- --------------------------------------------------------
 
@@ -93,8 +93,8 @@ CREATE TABLE `department` (
   `NAME` varchar(25) DEFAULT NULL,
   `DATE_STARTS` timestamp NOT NULL DEFAULT current_timestamp(),
   `DATE_UPDATE` datetime DEFAULT NULL,
-  `USER_STARTS` varchar(5) DEFAULT NULL,
-  `USER_UPDATE` varchar(5) DEFAULT NULL,
+  `USER_STARTS` int(11) DEFAULT NULL,
+  `USER_UPDATE` int(11) DEFAULT NULL,
   `STATUS_OFFVIEW` char(1) DEFAULT NULL COMMENT '1=off'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci COMMENT='user department';
 
@@ -115,12 +115,11 @@ CREATE TABLE `employee` (
   `MARRIED` varchar(1) DEFAULT NULL COMMENT '1=แต่งงานแล้ว',
   `EMAIL` varchar(60) DEFAULT NULL,
   `POSITION` varchar(60) DEFAULT NULL,
-  `POSITION_NAME` varchar(150) DEFAULT NULL,
   `DEPARTMENT` varchar(60) DEFAULT NULL,
   `SECTION` varchar(60) DEFAULT NULL,
   `DATE_START` datetime NOT NULL DEFAULT current_timestamp(),
   `DATE_UPDATE` datetime DEFAULT NULL,
-  `USER_UPDATE` varchar(5) DEFAULT NULL,
+  `USER_UPDATE` int(11) DEFAULT NULL,
   `STATUS` varchar(1) DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci COMMENT='data employee';
 
@@ -128,8 +127,8 @@ CREATE TABLE `employee` (
 -- Dumping data for table `employee`
 --
 
-INSERT INTO `employee` (`ID`, `CODE`, `PREFIX`, `NAME`, `LASTNAME`, `NAME_US`, `LASTNAME_US`, `MARRIED`, `EMAIL`, `POSITION`, `POSITION_NAME`, `DEPARTMENT`, `SECTION`, `DATE_START`, `DATE_UPDATE`, `USER_UPDATE`, `STATUS`) VALUES
-(0, NULL, NULL, 'admin', NULL, 'bdminsss', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2023-12-01 14:20:00', NULL, NULL, '1');
+INSERT INTO `employee` (`ID`, `CODE`, `PREFIX`, `NAME`, `LASTNAME`, `NAME_US`, `LASTNAME_US`, `MARRIED`, `EMAIL`, `POSITION`, `DEPARTMENT`, `SECTION`, `DATE_START`, `DATE_UPDATE`, `USER_UPDATE`, `STATUS`) VALUES
+(0, NULL, NULL, 'admin', NULL, 'bdminsss', NULL, NULL, NULL, NULL, NULL, NULL, '2023-12-01 14:20:00', NULL, NULL, '1');
 
 -- --------------------------------------------------------
 
@@ -146,7 +145,7 @@ CREATE TABLE `member` (
   `SECTION` varchar(60) DEFAULT NULL,
   `DATE_START` datetime NOT NULL DEFAULT current_timestamp(),
   `DATE_UPDATE` datetime DEFAULT NULL,
-  `USER_UPDATE` varchar(5) DEFAULT NULL,
+  `USER_UPDATE` int(11) DEFAULT NULL,
   `STATUS` varchar(1) DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci COMMENT='data member';
 
@@ -238,8 +237,8 @@ CREATE TABLE `permit_control` (
   `PERIOD_END` datetime DEFAULT NULL COMMENT 'ระยะเวลาสิ้นสุด',
   `DATE_STARTS` timestamp NOT NULL DEFAULT current_timestamp(),
   `DATE_UPDATE` datetime DEFAULT NULL,
-  `USER_STARTS` varchar(5) DEFAULT NULL,
-  `USER_UPDATE` varchar(5) DEFAULT NULL,
+  `USER_STARTS` int(11) DEFAULT NULL,
+  `USER_UPDATE` int(11) DEFAULT NULL,
   `STATUS_OFFVIEW` char(1) DEFAULT NULL COMMENT '1=off'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci COMMENT='user permission';
 
@@ -276,8 +275,8 @@ CREATE TABLE `roles` (
   `DESCRIPTION_US` text DEFAULT NULL,
   `DATE_STARTS` timestamp NOT NULL DEFAULT current_timestamp(),
   `DATE_UPDATE` datetime DEFAULT NULL,
-  `USER_STARTS` varchar(5) DEFAULT NULL,
-  `USER_UPDATE` varchar(5) DEFAULT NULL,
+  `USER_STARTS` int(11) DEFAULT NULL,
+  `USER_UPDATE` int(11) DEFAULT NULL,
   `NOEDIT` int(11) DEFAULT NULL COMMENT '1=not edit data',
   `STATUS_OFFVIEW` varchar(1) DEFAULT NULL COMMENT '1=off',
   `REMARK_DELETE` varchar(200) DEFAULT NULL
@@ -306,8 +305,8 @@ CREATE TABLE `roles_control` (
   `PERIOD_END` datetime DEFAULT NULL COMMENT 'ระยะเวลาสิ้นสุด',
   `DATE_STARTS` timestamp NOT NULL DEFAULT current_timestamp(),
   `DATE_UPDATE` datetime DEFAULT NULL,
-  `USER_STARTS` varchar(5) DEFAULT NULL,
-  `USER_UPDATE` varchar(5) DEFAULT NULL,
+  `USER_STARTS` int(11) DEFAULT NULL,
+  `USER_UPDATE` int(11) DEFAULT NULL,
   `STATUS_OFFVIEW` char(1) DEFAULT NULL COMMENT '1=off'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci COMMENT='data role RBAC';
 
@@ -323,8 +322,8 @@ CREATE TABLE `section` (
   `NAME` varchar(25) DEFAULT NULL,
   `DATE_STARTS` timestamp NOT NULL DEFAULT current_timestamp(),
   `DATE_UPDATE` datetime DEFAULT NULL,
-  `USER_STARTS` varchar(5) DEFAULT NULL,
-  `USER_UPDATE` varchar(5) DEFAULT NULL,
+  `USER_STARTS` int(11) DEFAULT NULL,
+  `USER_UPDATE` int(11) DEFAULT NULL,
   `STATUS_OFFVIEW` char(1) DEFAULT NULL COMMENT '1=off'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci COMMENT='data sections';
 
@@ -371,9 +370,9 @@ CREATE TABLE `staff` (
   `PERIOD_BEGIN` datetime DEFAULT NULL COMMENT 'ระยะเวลาเริ่มต้น',
   `PERIOD_END` datetime DEFAULT NULL COMMENT 'ระยะเวลาสิ้นสุด',
   `DATE_STARTS` datetime NOT NULL DEFAULT current_timestamp(),
-  `USER_STARTS` varchar(5) DEFAULT NULL,
   `DATE_UPDATE` datetime DEFAULT NULL,
-  `USER_UPDATE` varchar(5) DEFAULT NULL,
+  `USER_STARTS` int(11) DEFAULT NULL,
+  `USER_UPDATE` int(11) DEFAULT NULL,
   `VERIFY` varchar(5) DEFAULT NULL COMMENT 'staff id',
   `STATUS` varchar(1) DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci COMMENT='data users';
@@ -382,8 +381,8 @@ CREATE TABLE `staff` (
 -- Dumping data for table `staff`
 --
 
-INSERT INTO `staff` (`ID`, `EMPLOYEE_ID`, `USERNAME`, `PASSWORD`, `ARIA`, `PERIOD_BEGIN`, `PERIOD_END`, `DATE_STARTS`, `USER_STARTS`, `DATE_UPDATE`, `USER_UPDATE`, `VERIFY`, `STATUS`) VALUES
-(1, 0, 'madmin', '157e0d1fecf41286b7e09898311c68d9', NULL, NULL, NULL, '2023-01-31 08:56:02', NULL, '2023-01-31 13:04:05', '1', '1', '1');
+INSERT INTO `staff` (`ID`, `EMPLOYEE_ID`, `USERNAME`, `PASSWORD`, `ARIA`, `PERIOD_BEGIN`, `PERIOD_END`, `DATE_STARTS`, `DATE_UPDATE`, `USER_STARTS`, `USER_UPDATE`, `VERIFY`, `STATUS`) VALUES
+(1, 0, 'madmin', '157e0d1fecf41286b7e09898311c68d9', NULL, NULL, NULL, '2023-01-31 08:56:02', '2023-01-31 13:04:05', NULL, 1, '1', '1');
 
 -- --------------------------------------------------------
 
@@ -399,8 +398,8 @@ CREATE TABLE `status_alias` (
   `ALIAS` varchar(15) DEFAULT NULL COMMENT 'ประเภทสถานะ',
   `DATE_STARTS` timestamp NOT NULL DEFAULT current_timestamp(),
   `DATE_UPDATE` datetime DEFAULT NULL,
-  `USER_STARTS` varchar(5) DEFAULT NULL,
-  `USER_UPDATE` varchar(5) DEFAULT NULL,
+  `USER_STARTS` int(11) DEFAULT NULL,
+  `USER_UPDATE` int(11) DEFAULT NULL,
   `STATUS` tinyint(4) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci COMMENT='data status system';
 
@@ -409,11 +408,11 @@ CREATE TABLE `status_alias` (
 --
 
 INSERT INTO `status_alias` (`ID`, `ORDERS`, `NAME`, `NAME_US`, `ALIAS`, `DATE_STARTS`, `DATE_UPDATE`, `USER_STARTS`, `USER_UPDATE`, `STATUS`) VALUES
-(1, NULL, 'รอ', 'pending', 'document', '2023-02-06 07:05:17', NULL, '1', NULL, 1),
-(2, NULL, 'กำลัง', 'process', 'document', '2023-02-06 07:05:17', NULL, '1', NULL, 1),
-(3, NULL, 'สำเร็จ', 'success', 'document', '2023-02-06 07:05:17', NULL, '1', NULL, 1),
-(4, NULL, 'ยกเลิก', 'cancel', 'document', '2023-02-06 07:05:17', NULL, '1', NULL, 1),
-(5, NULL, 'ลบ', 'delete', 'document', '2023-02-06 07:05:17', NULL, '1', NULL, 1);
+(1, NULL, 'รอ', 'pending', 'document', '2023-02-06 07:05:17', NULL, 1, NULL, 1),
+(2, NULL, 'กำลัง', 'process', 'document', '2023-02-06 07:05:17', NULL, 1, NULL, 1),
+(3, NULL, 'สำเร็จ', 'success', 'document', '2023-02-06 07:05:17', NULL, 1, NULL, 1),
+(4, NULL, 'ยกเลิก', 'cancel', 'document', '2023-02-06 07:05:17', NULL, 1, NULL, 1),
+(5, NULL, 'ลบ', 'delete', 'document', '2023-02-06 07:05:17', NULL, 1, NULL, 1);
 
 --
 -- Indexes for dumped tables
@@ -423,7 +422,9 @@ INSERT INTO `status_alias` (`ID`, `ORDERS`, `NAME`, `NAME_US`, `ALIAS`, `DATE_ST
 -- Indexes for table `blank`
 --
 ALTER TABLE `blank`
-  ADD PRIMARY KEY (`ID`);
+  ADD PRIMARY KEY (`ID`),
+  ADD KEY `USER_STARTS` (`USER_STARTS`),
+  ADD KEY `USER_UPDATE` (`USER_UPDATE`);
 
 --
 -- Indexes for table `ci_sessions`
@@ -435,25 +436,30 @@ ALTER TABLE `ci_sessions`
 -- Indexes for table `department`
 --
 ALTER TABLE `department`
-  ADD PRIMARY KEY (`ID`);
+  ADD PRIMARY KEY (`ID`),
+  ADD KEY `USER_UPDATE` (`USER_UPDATE`),
+  ADD KEY `USER_STARTS` (`USER_STARTS`);
 
 --
 -- Indexes for table `employee`
 --
 ALTER TABLE `employee`
-  ADD PRIMARY KEY (`ID`);
+  ADD PRIMARY KEY (`ID`),
+  ADD KEY `USER_UPDATE` (`USER_UPDATE`);
 
 --
 -- Indexes for table `member`
 --
 ALTER TABLE `member`
-  ADD PRIMARY KEY (`ID`);
+  ADD PRIMARY KEY (`ID`),
+  ADD KEY `USER_UPDATE` (`USER_UPDATE`);
 
 --
 -- Indexes for table `menus`
 --
 ALTER TABLE `menus`
   ADD PRIMARY KEY (`ID`);
+ALTER TABLE `menus` ADD FULLTEXT KEY `CODE` (`CODE`);
 
 --
 -- Indexes for table `permit`
@@ -470,7 +476,9 @@ ALTER TABLE `permit_control`
   ADD PRIMARY KEY (`ID`),
   ADD KEY `STAFF_ID` (`STAFF_ID`),
   ADD KEY `ROLES_ID` (`ROLES_ID`),
-  ADD KEY `PERMIT_ID` (`PERMIT_ID`);
+  ADD KEY `PERMIT_ID` (`PERMIT_ID`),
+  ADD KEY `USER_STARTS` (`USER_STARTS`),
+  ADD KEY `USER_UPDATE` (`USER_UPDATE`);
 
 --
 -- Indexes for table `project`
@@ -482,7 +490,9 @@ ALTER TABLE `project`
 -- Indexes for table `roles`
 --
 ALTER TABLE `roles`
-  ADD PRIMARY KEY (`ID`);
+  ADD PRIMARY KEY (`ID`),
+  ADD KEY `USER_STARTS` (`USER_STARTS`),
+  ADD KEY `USER_UPDATE` (`USER_UPDATE`);
 
 --
 -- Indexes for table `roles_control`
@@ -491,26 +501,34 @@ ALTER TABLE `roles_control`
   ADD PRIMARY KEY (`ID`),
   ADD KEY `ROLES_ID` (`ROLES_ID`),
   ADD KEY `PERMIT_ID` (`PERMIT_ID`),
-  ADD KEY `ROLES_ID_CHILD` (`ROLES_ID_CHILD`);
+  ADD KEY `ROLES_ID_CHILD` (`ROLES_ID_CHILD`),
+  ADD KEY `USER_STARTS` (`USER_STARTS`),
+  ADD KEY `USER_UPDATE` (`USER_UPDATE`);
 
 --
 -- Indexes for table `section`
 --
 ALTER TABLE `section`
-  ADD PRIMARY KEY (`ID`);
+  ADD PRIMARY KEY (`ID`),
+  ADD KEY `USER_STARTS` (`USER_STARTS`),
+  ADD KEY `USER_UPDATE` (`USER_UPDATE`);
 
 --
 -- Indexes for table `staff`
 --
 ALTER TABLE `staff`
   ADD PRIMARY KEY (`ID`),
-  ADD KEY `EMPLOYEE_ID` (`EMPLOYEE_ID`);
+  ADD KEY `EMPLOYEE_ID` (`EMPLOYEE_ID`),
+  ADD KEY `USER_STARTS` (`USER_STARTS`),
+  ADD KEY `USER_UPDATE` (`USER_UPDATE`);
 
 --
 -- Indexes for table `status_alias`
 --
 ALTER TABLE `status_alias`
-  ADD PRIMARY KEY (`ID`);
+  ADD PRIMARY KEY (`ID`),
+  ADD KEY `USER_STARTS` (`USER_STARTS`),
+  ADD KEY `USER_UPDATE` (`USER_UPDATE`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -587,6 +605,91 @@ ALTER TABLE `staff`
 --
 ALTER TABLE `status_alias`
   MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `blank`
+--
+ALTER TABLE `blank`
+  ADD CONSTRAINT `blank_ibfk_1` FOREIGN KEY (`USER_STARTS`) REFERENCES `staff` (`ID`),
+  ADD CONSTRAINT `blank_ibfk_2` FOREIGN KEY (`USER_UPDATE`) REFERENCES `staff` (`ID`);
+
+--
+-- Constraints for table `department`
+--
+ALTER TABLE `department`
+  ADD CONSTRAINT `department_ibfk_1` FOREIGN KEY (`USER_STARTS`) REFERENCES `staff` (`ID`),
+  ADD CONSTRAINT `department_ibfk_2` FOREIGN KEY (`USER_UPDATE`) REFERENCES `staff` (`ID`);
+
+--
+-- Constraints for table `employee`
+--
+ALTER TABLE `employee`
+  ADD CONSTRAINT `employee_ibfk_1` FOREIGN KEY (`USER_UPDATE`) REFERENCES `staff` (`ID`);
+
+--
+-- Constraints for table `member`
+--
+ALTER TABLE `member`
+  ADD CONSTRAINT `member_ibfk_1` FOREIGN KEY (`USER_UPDATE`) REFERENCES `staff` (`ID`);
+
+--
+-- Constraints for table `permit`
+--
+ALTER TABLE `permit`
+  ADD CONSTRAINT `permit_ibfk_1` FOREIGN KEY (`MENUS_ID`) REFERENCES `menus` (`ID`);
+
+--
+-- Constraints for table `permit_control`
+--
+ALTER TABLE `permit_control`
+  ADD CONSTRAINT `permit_control_ibfk_1` FOREIGN KEY (`PERMIT_ID`) REFERENCES `permit` (`ID`),
+  ADD CONSTRAINT `permit_control_ibfk_2` FOREIGN KEY (`ROLES_ID`) REFERENCES `roles` (`ID`),
+  ADD CONSTRAINT `permit_control_ibfk_3` FOREIGN KEY (`STAFF_ID`) REFERENCES `staff` (`ID`),
+  ADD CONSTRAINT `permit_control_ibfk_4` FOREIGN KEY (`USER_STARTS`) REFERENCES `staff` (`ID`),
+  ADD CONSTRAINT `permit_control_ibfk_5` FOREIGN KEY (`USER_UPDATE`) REFERENCES `staff` (`ID`);
+
+--
+-- Constraints for table `roles`
+--
+ALTER TABLE `roles`
+  ADD CONSTRAINT `roles_ibfk_1` FOREIGN KEY (`USER_STARTS`) REFERENCES `staff` (`ID`),
+  ADD CONSTRAINT `roles_ibfk_2` FOREIGN KEY (`USER_UPDATE`) REFERENCES `staff` (`ID`);
+
+--
+-- Constraints for table `roles_control`
+--
+ALTER TABLE `roles_control`
+  ADD CONSTRAINT `roles_control_ibfk_1` FOREIGN KEY (`PERMIT_ID`) REFERENCES `permit` (`ID`),
+  ADD CONSTRAINT `roles_control_ibfk_2` FOREIGN KEY (`ROLES_ID`) REFERENCES `roles` (`ID`),
+  ADD CONSTRAINT `roles_control_ibfk_3` FOREIGN KEY (`ROLES_ID_CHILD`) REFERENCES `roles` (`ID`),
+  ADD CONSTRAINT `roles_control_ibfk_4` FOREIGN KEY (`USER_STARTS`) REFERENCES `staff` (`ID`),
+  ADD CONSTRAINT `roles_control_ibfk_5` FOREIGN KEY (`USER_UPDATE`) REFERENCES `staff` (`ID`);
+
+--
+-- Constraints for table `section`
+--
+ALTER TABLE `section`
+  ADD CONSTRAINT `section_ibfk_1` FOREIGN KEY (`USER_STARTS`) REFERENCES `staff` (`ID`),
+  ADD CONSTRAINT `section_ibfk_2` FOREIGN KEY (`USER_UPDATE`) REFERENCES `staff` (`ID`);
+
+--
+-- Constraints for table `staff`
+--
+ALTER TABLE `staff`
+  ADD CONSTRAINT `staff_ibfk_1` FOREIGN KEY (`USER_STARTS`) REFERENCES `staff` (`ID`),
+  ADD CONSTRAINT `staff_ibfk_2` FOREIGN KEY (`USER_UPDATE`) REFERENCES `staff` (`ID`),
+  ADD CONSTRAINT `staff_ibfk_3` FOREIGN KEY (`EMPLOYEE_ID`) REFERENCES `employee` (`ID`);
+
+--
+-- Constraints for table `status_alias`
+--
+ALTER TABLE `status_alias`
+  ADD CONSTRAINT `status_alias_ibfk_1` FOREIGN KEY (`USER_STARTS`) REFERENCES `staff` (`ID`),
+  ADD CONSTRAINT `status_alias_ibfk_2` FOREIGN KEY (`USER_UPDATE`) REFERENCES `staff` (`ID`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

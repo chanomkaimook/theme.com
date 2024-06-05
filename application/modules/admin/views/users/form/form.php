@@ -42,7 +42,7 @@
         <select name="user_role[]" id="user_role" class="form-control" data-toggle="select2" multiple="multiple" data-placeholder="ระบุสิทธิ์ได้มากกว่า 1">
             <?php
             foreach ($role as $row_role) :
-                $aria = mb_ucfirst($row_role->NAME);
+                $aria = mb_ucfirst(textLang($row_role->NAME,$row_role->NAME_US));
             ?>
                 <option value="<?= $row_role->ID; ?>"><?= $aria; ?></option>
             <?php

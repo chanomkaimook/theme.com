@@ -13,6 +13,17 @@
 
 <script>
     $(document).ready(function() {
+        // insert loader when begin load page
+        $('.content div.begin_loader').find('.card-box').parent('div').prepend(loader)
+        $('.content div.begin_loader').find('.card-box').css('display', 'none')
+
+        function ScaleSlider() {
+            $('#datatable').dataTable().fnAdjustColumnSizing();
+        }
+        // $(window).bind("load", ScaleSlider);
+        $(window).bind("resize", ScaleSlider);
+        $(window).bind("orientationchange", ScaleSlider);
+        
         // inisialize datepicker
         $("#datestart-autoclose").datepicker({
             autoclose: !0,

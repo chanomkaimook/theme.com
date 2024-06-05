@@ -52,6 +52,25 @@
              [role=button] {
                  cursor: pointer
              }
+
+             /* set for .center-content */
+             ._block-content {
+                 position: relative;
+                 height: calc(100vh - 35vh);
+             }
+
+             .center-content {
+                 left: 50%;
+                 position: absolute;
+                 top: 50%;
+                 transform: translate(-50%, -50%);
+             }
+
+             @media (min-width: 768px) {
+                 ._block-content {
+                     height: calc(100vh - 22vh);
+                 }
+             }
          </style>
 
          <input type="hidden" id="hidden_user_id" value="<?= $this->session->userdata('user_code'); ?>">
@@ -306,6 +325,9 @@
                  setlang = getCookie("langadmin")
              }
 
+             //  Set timeout
+             let setTimeoutValue = 100
+
              //
              // Language
              let table_column_view = {
@@ -406,6 +428,10 @@
                                         <div class="sk-circle11 sk-child"></div>
                                         <div class="sk-circle12 sk-child"></div>
                                     </div>`
+
+             let loader = `<div class="_block-content">
+             <div class="loader center-content">${loading}</div>
+             </div>`
 
              let swal_autoClose = 2000
              let swal_confirmButton = '#64c5b1'
@@ -560,6 +586,20 @@
                  }
 
                  return pathname
+             }
+
+             // 
+             // nameToShow @string name element to show after hide loading
+             // nameToHide @string name element to hide (loading)
+             function loading_clear(nameToShow = null, nameToHide = null) {
+                 if (!nameToHide) {
+                     nameToHide = "._block-content"
+                 }
+
+                 $(nameToHide).hide()
+                 setTimeout(() => {
+                     $(nameToShow).fadeIn()
+                 }, setTimeoutValue);
              }
 
              // height value data table
