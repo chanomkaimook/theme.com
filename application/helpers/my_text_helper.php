@@ -134,7 +134,7 @@ function textFloat(String $text = null,int $number = 2)
   return $result;
 }
 
-if (!function_exists('mb_ucfirst')) {
+// if (!function_exists('mb_ucfirst')) {
   function mb_ucfirst($str, $encoding = "UTF-8", $lower_str_end = false)
   {
     $first_letter = mb_strtoupper(mb_substr($str, 0, 1, $encoding), $encoding);
@@ -147,4 +147,4 @@ if (!function_exists('mb_ucfirst')) {
     $str = $first_letter . $str_end;
     return $str;
   }
-}
+// }

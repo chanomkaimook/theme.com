@@ -461,59 +461,22 @@ function check_permit_groupmenu($array = null)
 
     $ci->load->library('Permit');
 
-    $result = false;
+    $result = [];
 
     $staff_id = userlogin();
     if ($staff_id) {
       $dataarray = $ci->permit->get_dataPermitSet($staff_id);
 
       // loop
-      foreach ($array as $key => $array_in) {
-
-        if ($array_in && count($array_in)) {
-          foreach ($array_in as $value) {
-            if ($result != true) {
-              if (method_can($value, $dataarray)) {
-                $result = true;
-              }
-            }
-          }
+      foreach ($array as $value) {
+        if (method_can($value, $dataarray)) {
+          $result[] = $value;
         }
       }
     }
   }
 
-  $css_name = '';
-
-  if (!$result) {
-    $css_name = 'd-none';
-  }
-
-  return $css_name;
-}
-
-/**
- * check menu permit
- *
- * @param array|string|null $name = role name || permit name 
- * @return void
- */
-function check_permit_menu($name = null)
-{
-  $ci = &get_instance();
-
-  $css_name = '';
-  $result = '';
-
-  if (userlogin()) {
-    $result = can($name);
-  }
-
-  if (!$result) {
-    $css_name = 'd-none';
-  }
-
-  return $css_name;
+  return $result;
 }
 
 function check_userlive()
