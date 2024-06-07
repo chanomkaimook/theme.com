@@ -194,6 +194,9 @@
                         .find('.username').text(data.USERNAME).end()
                         .find('.jstree-grid-container').html(data.PERMIT_HTML).end()
 
+                    //  show icon profile   
+                    showIconProfile(data.NAME_US, data.LASTNAME_US)
+
                     // create role
                     create_html_select2()
 

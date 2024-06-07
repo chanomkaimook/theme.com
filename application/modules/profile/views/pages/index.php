@@ -1,3 +1,16 @@
+<style>
+    #profileImage {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        background: #CCC;
+        font-size: 35px;
+        color: #fff;
+        text-align: center;
+        line-height: 150px;
+        margin: 20px 0;
+    }
+</style>
 <div class="content">
     <input type="hidden" id="hidden_task_id">
     <!-- Start Content-->

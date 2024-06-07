@@ -22,7 +22,7 @@ class Caching
 		return $result;
 	}
 
-	public function save(string $var = "", string $data, int $time = null)
+	public function save(string $var = "", $data, int $time = null)
 	{
 		$this->ci->load->config('jwt');
 

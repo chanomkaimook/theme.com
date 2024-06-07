@@ -36,6 +36,9 @@ class Ctl_page extends MY_Controller
 
     public function index()
     {
+        // $this->load->library('benmark');
+        // $ben_start = $this->benmark->start();
+
         // set page title
         /* $data['pagetitle'] = "ใบเสนอราคา";
         $data['breadcrumb'] = array('รายการจอง', 'ข้อมูลการจอง');
@@ -62,6 +65,10 @@ class Ctl_page extends MY_Controller
             )
         ); */
         $this->template->build('pages/index');
+
+
+        // $ben_stop = $this->benmark->stop();
+        // echo "Timing controller = " . $ben_stop;
     }
     /**
      *

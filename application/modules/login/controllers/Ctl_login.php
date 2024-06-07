@@ -25,8 +25,13 @@ class Ctl_login extends MY_Controller
     }
 
     public function test() {
-        var_dump($this->caching->get('foo'));
-        echo 'Show cache! ='.$this->caching->get('foo');
+        $cache = $this->caching->get('authdetail'.$this->session->userdata('user_code'));
+        // var_dump($cache);
+        echo 'Show cache! '.$this->session->userdata('user_code').'=';
+        echo "<pre>";
+        print_r($cache);
+        echo "</pre>";
+
     }
 
     public function test_update() {
@@ -34,7 +39,19 @@ class Ctl_login extends MY_Controller
         if (!$foo = $this->cache->get('foo')) {
             echo 'Create cache!<br />';
             
-            $foo = "i'have create cache";
+            // $foo = "i'have create cache";
+            $foo = array(
+                'roles_id'  => array(
+                    "rid01",
+                    "rid02",
+                    "rid03"
+                ),
+                'permit_id'  => array(
+                    0   => 'permit01',
+                    1   => 'permit02',
+                    2   => 'permit03'
+                ),
+            );
             // Save into the cache for 5 minutes
             $this->cache->save('foo', $foo, 10);
         }else{

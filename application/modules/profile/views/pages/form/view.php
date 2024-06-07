@@ -3,7 +3,9 @@
     <div class="col-md-4">
         <div class="member-card text-center">
             <div class="member-thumb mb-2 mx-auto">
-                <img src="<?= base_url('asset/images/users/avatar-6.jpg'); ?>" class="rounded-circle img-thumbnail" alt="profile-image">
+
+                <div id="profileImage" data-profileImage="1" class="rounded-circle bordered mx-auto"> </div>
+                <!-- <img src="<?= base_url('asset/images/users/avatar-6.jpg'); ?>" class="rounded-circle img-thumbnail" alt="profile-image"> -->
             </div>
             <div class="form-group">
                 <h4 class="mb-1">

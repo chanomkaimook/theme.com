@@ -179,7 +179,10 @@ function method_find_checkarray($name = null, int $staff_id = null, string $key_
     if ($dataarray) {
       $data_permit = $dataarray;
     } else {
-      $data_permit = $ci->permit->get_dataPermitSet($staff_id);
+      // check cache auth
+      if (!$data_permit = $ci->cache->get('authdetail'.$staff_id)) {
+        $data_permit = $ci->permit->get_dataPermitSet($staff_id);
+      }
     }
     $array_permitset = $data_permit[$key_array_name];
 
@@ -349,7 +352,10 @@ function can($name = null, array $dataarray = null)
 
   if (!$dataarray) {
     $staff_id = userlogin();
-    $dataarray = $ci->permit->get_dataPermitSet($staff_id);
+    // check cache auth
+    if (!$dataarray = $ci->cache->get('authdetail'.$staff_id)) {
+      $dataarray = $ci->permit->get_dataPermitSet($staff_id);
+    }
   }
 
   if ($name) {
@@ -465,7 +471,10 @@ function check_permit_groupmenu($array = null)
 
     $staff_id = userlogin();
     if ($staff_id) {
-      $dataarray = $ci->permit->get_dataPermitSet($staff_id);
+      // check cache auth
+      if (!$dataarray = $ci->cache->get('authdetail'.$staff_id)) {
+        $dataarray = $ci->permit->get_dataPermitSet($staff_id);
+      }
 
       // loop
       foreach ($array as $value) {
@@ -518,7 +527,10 @@ function check_adminRole(int $staff_id = null)
 
   $ci->load->library('Permit');
 
-  $data_permit = $ci->permit->get_dataPermitSet($staff_id);
+  // check cache auth
+  if(!$data_permit = $ci->cache->get('authdetail'.$staff_id)){
+    $data_permit = $ci->permit->get_dataPermitSet($staff_id);
+  }
 
   $array_permitset = $data_permit['roles_name_list'];
 
@@ -573,7 +585,10 @@ function my_permit(int $staff_id = null)
   }
 
   $ci->load->library('Permit');
-  $result = $ci->permit->get_dataPermitSet($staff_id);
+  // check cache auth
+  if(!$result = $ci->cache->get('authdetail'.$staff_id)){
+    $result = $ci->permit->get_dataPermitSet($staff_id);
+  }
 
   return $result;
 }

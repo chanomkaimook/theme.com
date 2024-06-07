@@ -32,8 +32,9 @@ class Permit
 	 *
 	 * @param integer|null $staff_id
 	 * @return array $result = [role_id,permit_id,permit_name]
+	 * @param boolean $force_save_cache = true = create new cache only
 	 */
-	function get_dataPermitSet(int $staff_id = null)
+	function get_dataPermitSet(int $staff_id = null,bool $force_save_cache = false)
 	{
 		// variable for ban or allow
 		$permit_allow = [];
@@ -112,6 +113,11 @@ class Permit
 			'permit_name_list'	=> array_unique($permit_name_list),
 			'menu_name_list'	=> array_unique($menu_name_list)
 		);
+
+		// save to cache
+		if(!$this->ci->cache->get('authdetail'.$staff_id || $force_save_cache === true)){
+			$this->ci->caching->save('authdetail'.$staff_id, $result);
+		}
 
 		return $result;
 	}

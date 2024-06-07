@@ -17,13 +17,34 @@
         $('.content div.begin_loader').find('.card-box').parent('div').prepend(loader)
         $('.content div.begin_loader').find('.card-box').css('display', 'none')
 
+        // datatable change size on web
         function ScaleSlider() {
             $('#datatable').dataTable().fnAdjustColumnSizing();
         }
         // $(window).bind("load", ScaleSlider);
         $(window).bind("resize", ScaleSlider);
         $(window).bind("orientationchange", ScaleSlider);
-        
+
+        // profileImage color
+        let profileImage = $('[data-profileImage]')
+        // console.log(profileImage.length)
+        if (profileImage.length) {
+            console.log(profileImage.text())
+            profileImage.css('background', '#5553ce')
+
+            /**
+             * #64c5b1
+             * #00aced
+             * #32c861
+             * #5553ce
+             * #ffa91c
+             * #cb2027
+             * #f06292
+             * #6c757d
+             * #ccc
+             */
+        }
+
         // inisialize datepicker
         $("#datestart-autoclose").datepicker({
             autoclose: !0,
@@ -47,6 +68,18 @@
         })
     })
 
+    function showIconProfile(name, lastname) {
+        let one_name = ""
+        let one_lastname = ""
+        if (name) {
+            one_name = name.charAt(0)
+        }
+        if (lastname) {
+            one_lastname = lastname.charAt(0)
+        }
+        var intials = one_name.toUpperCase() + one_lastname.toUpperCase();
+        var profileImage = $('[data-profileImage]').text(intials);
+    }
 
     function dataFillterFunc(dataarray = []) {
         let d = []
@@ -69,9 +102,9 @@
             if (dataarray) {
                 dataarray.forEach(function(item, index) {
                     let item_name = item.name
-                    if(item_name == 'column'){
+                    if (item_name == 'column') {
                         d.item_name = item.value
-                    }else{
+                    } else {
                         d[item_name] = document.getElementById(item_name).value
                     }
                 })
