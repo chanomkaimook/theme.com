@@ -25,26 +25,6 @@
         $(window).bind("resize", ScaleSlider);
         $(window).bind("orientationchange", ScaleSlider);
 
-        // profileImage color
-        let profileImage = $('[data-profileImage]')
-        // console.log(profileImage.length)
-        if (profileImage.length) {
-            console.log(profileImage.text())
-            profileImage.css('background', '#5553ce')
-
-            /**
-             * #64c5b1
-             * #00aced
-             * #32c861
-             * #5553ce
-             * #ffa91c
-             * #cb2027
-             * #f06292
-             * #6c757d
-             * #ccc
-             */
-        }
-
         // inisialize datepicker
         $("#datestart-autoclose").datepicker({
             autoclose: !0,
@@ -78,7 +58,47 @@
             one_lastname = lastname.charAt(0)
         }
         var intials = one_name.toUpperCase() + one_lastname.toUpperCase();
-        var profileImage = $('[data-profileImage]').text(intials);
+        $('[data-profileImage]').text(intials);
+
+        // profileImage color
+        let profileImage = $('[data-profileImage]')
+
+        if (profileImage.length) {
+            let textLowerCase = profileImage.text().toLowerCase()
+
+            /**
+             * #64c5b1
+             * #00aced
+             * #32c861
+             * #5553ce
+             * #ffa91c
+             * #cb2027
+             * #f06292
+             * #6c757d
+             * #ccc
+             */
+            let codeColorProfile = "#ccc";
+            switch(textLowerCase){
+                case 'a'||'j'||'s' : codeColorProfile = "#64c5b1"
+                    break
+                case 'b'||'k'||'t' : codeColorProfile = "#00aced";console.log(codeColorProfile)
+                    break
+                case 'c'||'l'||'u' : codeColorProfile = "#32c861"
+                    break
+                case 'd'||'m'||'v' : codeColorProfile = "#5553ce"
+                    break
+                case 'e'||'n'||'w' : codeColorProfile = "#ffa91c"
+                    break
+                case 'f'||'o'||'x' : codeColorProfile = "#cb2027"
+                    break
+                case 'g'||'p'||'y' : codeColorProfile = "#f06292"
+                    break
+                case 'h'||'q'||'z' : codeColorProfile = "#6c757d"
+                    break   
+            }
+
+            profileImage.css('background', codeColorProfile)
+        }
     }
 
     function dataFillterFunc(dataarray = []) {

@@ -450,11 +450,26 @@ class Mdl_page extends CI_Model
 
         if ($request['search']['value']) {
             $search = $request['search']['value'];
-            $sql->where('('
-                . $this->table . '.code like "%' . $search . '%"
+
+            if ($request['item_name'] && $length_item_name = count($request['item_name'])) {
+                $sql_where_search = '';
+                for ($l = 0; $l < $length_item_name; $l++) {
+                    if ($l != 0) {
+                        $sql_where_search .= ' or ';
+                    }
+                    $sql_where_search .= $this->table . '.' . $request['item_name'][$l] . ' like "%' . $search . '%"';
+                }
+
+                if ($sql_where_search) {
+                    $sql->where('(' . $sql_where_search . ')');
+                }
+            } else {
+                $sql->where('('
+                    . $this->table . '.code like "%' . $search . '%"
                 or ' . $this->table . '.name like "%' . $search . '%"
                 or ' . $this->table . '.name_us like "%' . $search . '%"
             )');
+            }
         }
 
         if ($optionnal['order_by'] && count($optionnal['order_by'])) {
@@ -504,8 +519,8 @@ class Mdl_page extends CI_Model
                     );
                     $next = 0;
                 }
-                if($next == 1){
-                    $sql->order_by($this->table . '.'.$item_column, $request['order'][0]['dir']);
+                if ($next == 1) {
+                    $sql->order_by($this->table . '.' . $item_column, $request['order'][0]['dir']);
                 }
             } else {
                 $sql->order_by($this->table . '.id', 'desc');
@@ -523,7 +538,7 @@ class Mdl_page extends CI_Model
                 $sql->limit($optionnal['limit']);
             } else {
 
-                if (isset($request['start']) && isset($request['length'])) {
+                if (isset($request['start']) && isset($request['length']) && $request['length'] != -1) {
                     $sql->limit($request['length'], $request['start']);
                 } else {
                     // $sql->limit(10, 0);
