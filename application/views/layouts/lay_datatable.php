@@ -75,7 +75,7 @@ $path_script_end = 'application/views/partials/e_script_end.php';
     <!-- Responsive examples -->
     <script src="<?= base_url('') ?>asset/libs/datatables/dataTables.responsive.min.js"></script>
     <script src="<?= base_url('') ?>asset/libs/datatables/responsive.bootstrap4.min.js"></script>
-    
+
     <?php
     echo $template['partials']['footerscript'];
     ?>
@@ -86,6 +86,17 @@ $path_script_end = 'application/views/partials/e_script_end.php';
     <!-- Script End -->
     <?php include($path_script_end); ?>
 
+    <script>
+        // datatable change size on web
+        function ScaleSlider() {
+            if ($('#datatable').length) {
+                $('#datatable').dataTable().fnAdjustColumnSizing();
+            }
+        }
+        // $(window).bind("load", ScaleSlider);
+        $(window).bind("resize", ScaleSlider);
+        $(window).bind("orientationchange", ScaleSlider);
+    </script>
 </body>
 
 </html>

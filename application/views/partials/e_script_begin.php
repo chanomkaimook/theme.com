@@ -17,14 +17,6 @@
         $('.content div.begin_loader').find('.card-box').parent('div').prepend(loader)
         $('.content div.begin_loader').find('.card-box').css('display', 'none')
 
-        // datatable change size on web
-        function ScaleSlider() {
-            $('#datatable').dataTable().fnAdjustColumnSizing();
-        }
-        // $(window).bind("load", ScaleSlider);
-        $(window).bind("resize", ScaleSlider);
-        $(window).bind("orientationchange", ScaleSlider);
-
         // inisialize datepicker
         $("#datestart-autoclose").datepicker({
             autoclose: !0,
@@ -78,23 +70,31 @@
              * #ccc
              */
             let codeColorProfile = "#ccc";
-            switch(textLowerCase){
-                case 'a'||'j'||'s' : codeColorProfile = "#64c5b1"
+            switch (textLowerCase) {
+                case 'a' || 'j' || 's':
+                    codeColorProfile = "#64c5b1"
                     break
-                case 'b'||'k'||'t' : codeColorProfile = "#00aced"
+                case 'b' || 'k' || 't':
+                    codeColorProfile = "#00aced"
                     break
-                case 'c'||'l'||'u' : codeColorProfile = "#32c861"
+                case 'c' || 'l' || 'u':
+                    codeColorProfile = "#32c861"
                     break
-                case 'd'||'m'||'v' : codeColorProfile = "#5553ce"
+                case 'd' || 'm' || 'v':
+                    codeColorProfile = "#5553ce"
                     break
-                case 'e'||'n'||'w' : codeColorProfile = "#ffa91c"
+                case 'e' || 'n' || 'w':
+                    codeColorProfile = "#ffa91c"
                     break
-                case 'f'||'o'||'x' : codeColorProfile = "#cb2027"
+                case 'f' || 'o' || 'x':
+                    codeColorProfile = "#cb2027"
                     break
-                case 'g'||'p'||'y' : codeColorProfile = "#f06292"
+                case 'g' || 'p' || 'y':
+                    codeColorProfile = "#f06292"
                     break
-                case 'h'||'q'||'z' : codeColorProfile = "#6c757d"
-                    break   
+                case 'h' || 'q' || 'z':
+                    codeColorProfile = "#6c757d"
+                    break
             }
 
             profileImage.css('background', codeColorProfile)
