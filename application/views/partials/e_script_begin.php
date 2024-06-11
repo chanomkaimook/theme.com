@@ -81,7 +81,7 @@
             switch(textLowerCase){
                 case 'a'||'j'||'s' : codeColorProfile = "#64c5b1"
                     break
-                case 'b'||'k'||'t' : codeColorProfile = "#00aced";console.log(codeColorProfile)
+                case 'b'||'k'||'t' : codeColorProfile = "#00aced"
                     break
                 case 'c'||'l'||'u' : codeColorProfile = "#32c861"
                     break

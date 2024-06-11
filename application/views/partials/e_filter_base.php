@@ -3,7 +3,7 @@
 
         <?php include('application/views/partials/dom_filter_collaspe.php'); ?>
 
-        <div id="collapseOne" class="collapse show d-md-block" aria-labelledby="headingOne" data-parent="#accordion">
+        <div id="collapseOne" class="collapse d-md-block" aria-labelledby="headingOne" data-parent="#accordion">
 
             <div class="d-sm-flex">
                 <div class="filter">

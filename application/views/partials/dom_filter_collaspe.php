@@ -1,4 +1,4 @@
-<a href="#collapseOne" class="collapsed d-md-none mx-2" data-toggle="collapse" aria-expanded="true" aria-controls="collapseOne">
+<a href="#collapseOne" class="collapsed d-md-none" data-toggle="collapse" aria-expanded="false" aria-controls="collapseOne">
     <div class="m-1 d-flex justify-content-between">
         <div class="">
             <strong>Fillter Tool</strong>
