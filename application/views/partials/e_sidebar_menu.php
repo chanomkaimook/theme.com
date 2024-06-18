@@ -58,26 +58,18 @@ $site_url = site_url();
                 <?php
                 // 
                 // settings menu
-                $array_menu_main = [];
                 $array_menu_sub = [];
-                $menu_main_array['main_menu'] = array(
-                    "role",
-                );
                 $menu_main_array['sub_menu'] = array(
                     "page.view",
                 );
 
-                $array_menu_main = (array) check_permit_groupmenu($menu_main_array['main_menu']);
                 $array_menu_sub = (array) check_permit_groupmenu($menu_main_array['sub_menu']);
 
-                /* echo "<pre>";
-                    print_r($array_menu_main);
-                    echo "</pre>";
+                /*
                     echo "<pre>";
                     print_r($array_menu_sub);
-                    echo "</pre>"; */
-                // echo array_search('uploaders', $array_menu_main);
-                // die;
+                    echo "</pre>";
+                    die; */
                 ?>
 
                 <?php
@@ -107,11 +99,11 @@ $site_url = site_url();
                 <?php
                 /* $css_page_li = "d-none";
                     $css_page_ul_collapse = "mm-collapse";
-                    $_menu_page[] = array("หน้าเริ่มต้น", "list/ctl_page");
+                    $_menu_page[] = array("pages.permit","หน้าเริ่มต้น", "list/ctl_page");
 
                     for ($i = 0; $i < 1; $i++) {
                         $css_page[$i] = "d-none";
-                        if (check_for_show_menu($_menu_page[$i][0], $array_menu_main)) {
+                        if (check_for_show_menu($_menu_page[$i][0], $array_menu_sub)) {
                             $css_page_li = "";
                             $css_page[$i] = "";
                         }
@@ -160,7 +152,7 @@ $site_url = site_url();
                 $_menu_admin[] = array(mb_ucfirst($this->lang->line('__menu_employee')), "staff/ctl_page");
                 $_menu_admin[] = array(mb_ucfirst($this->lang->line('__menu_blank')), "page/ctl_page");
 
-                if (check_for_show_menu("admin", $array_menu_main)) {
+                if (check_for_show_menu("admin", $array_menu_sub)) {
                     $css_admin_li = "";
                 }
                 for ($i = 0; $i < count($_menu_admin); $i++) {

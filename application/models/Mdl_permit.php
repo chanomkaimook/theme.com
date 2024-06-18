@@ -153,7 +153,7 @@ class Mdl_permit extends CI_Model
      * @param string $type
      * @return void
      */
-    public function get_dataNorequest(int $id = null, string $type = "result")
+    public function get_dataNorequest(int $id = null, string $type = "row")
     {
         if ($id) {
             $sql = (object) $this->db->from($this->table)
