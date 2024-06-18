@@ -70,7 +70,7 @@
              * #ccc
              */
             let codeColorProfile = "#ccc";
-            switch(textLowerCase){
+            switch(textLowerCase.charAt(0)){
                 case 'a' :
                 case 'j' :
                 case 's' : codeColorProfile = "#64c5b1"
