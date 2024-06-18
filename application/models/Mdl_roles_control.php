@@ -118,17 +118,17 @@ class Mdl_roles_control extends CI_Model
             " . $menus . ".name_us as MENUS_NAME_US";
         }
 
-        if(is_array($roles_id)){
+        if (is_array($roles_id)) {
             $roles_id = implode(",", $roles_id);
-            $optionnal['where'][$this->table . '.roles_id in('.$roles_id.')'] = null;
-        }else{
+            $optionnal['where'][$this->table . '.roles_id in(' . $roles_id . ')'] = null;
+        } else {
             $optionnal['where'][$this->table . '.roles_id'] = $roles_id;
         }
-        
+
         $optionnal['where'][$this->table . '.roles_id_child is null'] = null;
 
         $optionnal['group_by'] = array(
-            $this->table.'.permit_id'
+            $this->table . '.permit_id'
         );
         $optionnal['order_by'] = array(
             $menus . '.sort' => 'asc',
@@ -140,6 +140,61 @@ class Mdl_roles_control extends CI_Model
             ->join($permit, $permit . '.id=' . $this->table . '.permit_id', 'left')
             ->join($menus, $menus . '.id=' . $permit . '.menus_id', 'left')
             ->where($this->table . '.' . $this->fildstatus, null);
+        $query = $sql->get();
+
+        return $query->$type();
+    }
+
+    /**
+     * get data and not use request (GET,POST,PUT,DELETE)
+     *
+     * @param integer|null $id = role id
+     * @param string $type
+     * @return void
+     */
+    public function get_dataNorequest($roles_id = null, string $type = "result")
+    {
+        # code...
+        $roles = $this->roles;
+        $permit = $this->permit;
+        $menus = $this->menu;
+        $select = "*,
+            " . $roles . ".id as ROLES_ID,
+            " . $roles . ".code as ROLES_CODE,
+            " . $permit . ".code as CODE,
+            " . $permit . ".name as NAME,
+            " . $permit . ".name_us as NAME_US,
+            " . $menus . ".name as MENUS_NAME,
+            " . $menus . ".name_us as MENUS_NAME_US";
+
+        if (is_array($roles_id)) {
+            $roles_id = implode(",", $roles_id);
+            $optionnal['where'][$this->table . '.roles_id in(' . $roles_id . ')'] = null;
+        } else {
+            $optionnal['where'][$this->table . '.roles_id'] = $roles_id;
+        }
+
+        $optionnal['where'][$this->table . '.roles_id_child is null'] = null;
+
+        $optionnal['group_by'] = array(
+            $this->table . '.permit_id'
+        );
+        $optionnal['order_by'] = array(
+            $menus . '.sort' => 'asc',
+            $permit . '.sort' => 'asc',
+        );
+
+        $sql = (object) $this->db->select($select)
+            ->from($this->table);
+        $sql->join($roles, $roles . '.id=' . $this->table . '.roles_id', 'left')
+            ->join($permit, $permit . '.id=' . $this->table . '.permit_id', 'left')
+            ->join($menus, $menus . '.id=' . $permit . '.menus_id', 'left')
+            ->where($this->table . '.' . $this->fildstatus, null);
+        if (is_array($roles_id)) {
+            $sql->where($this->table . '.roles_id in(' . $roles_id . ')', null, false);
+        } else {
+            $sql->where($this->table . '.roles_id', $roles_id);
+        }
         $query = $sql->get();
 
         return $query->$type();
@@ -163,13 +218,13 @@ class Mdl_roles_control extends CI_Model
             " . $roles . ".code as ROLES_CODE";
         }
 
-        if(is_array($roles_id)){
+        if (is_array($roles_id)) {
             $roles_id = implode(",", $roles_id);
-            $optionnal['where'][$this->table . '.roles_id in('.$roles_id.')'] = null;
-        }else{
+            $optionnal['where'][$this->table . '.roles_id in(' . $roles_id . ')'] = null;
+        } else {
             $optionnal['where'][$this->table . '.roles_id'] = $roles_id;
         }
-    
+
         $optionnal['where'][$this->table . '.roles_id_child is null'] = null;
         $sql = (object) $this->get_sql(null, $optionnal, $type);
         $sql->join($roles, $roles . '.id=' . $this->table . '.roles_id', 'left');
@@ -196,12 +251,12 @@ class Mdl_roles_control extends CI_Model
             $optionnal['select'] = $this->table . ".*,
             " . $roles . ".code as ROLES_CODE";
         }
-        if(is_array($roles_id)){
-            $optionnal['where'][$this->table . '.roles_id in('.$roles_id.')'] = null;
-        }else{
+        if (is_array($roles_id)) {
+            $optionnal['where'][$this->table . '.roles_id in(' . $roles_id . ')'] = null;
+        } else {
             $optionnal['where'][$this->table . '.roles_id'] = $roles_id;
         }
-    
+
         $optionnal['where'][$this->table . '.roles_id_child is not null'] = null;
         $sql = (object) $this->get_sql(null, $optionnal, $type);
         $sql->join($roles, $roles . '.id=' . $this->table . '.roles_id_child', 'left');
@@ -228,10 +283,10 @@ class Mdl_roles_control extends CI_Model
             $optionnal['select'] = $this->table . ".roles_id_child";
         }
 
-        if(is_array($roles_id)){
+        if (is_array($roles_id)) {
             $roles_id = implode(",", $roles_id);
-            $optionnal['where'][$this->table . '.roles_id in('.$roles_id.')'] = null;
-        }else{
+            $optionnal['where'][$this->table . '.roles_id in(' . $roles_id . ')'] = null;
+        } else {
             $optionnal['where'][$this->table . '.roles_id'] = $roles_id;
         }
 
@@ -266,11 +321,11 @@ class Mdl_roles_control extends CI_Model
     {
         $query = "";
 
-        if($item_id){
+        if ($item_id) {
             $roles = $this->roles;
             $permit = $this->permit;
             $menus = $this->menu;
-    
+
             $optionnals['select'] = "*,
                         " . $roles . ".code as ROLES_CODE,
                         " . $permit . ".code as CODE,
@@ -278,18 +333,18 @@ class Mdl_roles_control extends CI_Model
                         " . $permit . ".name_us as NAME_US,
                         " . $menus . ".name as MENUS_NAME,
                         " . $menus . ".name_us as MENUS_NAME_US";
-    
+
             $optionnals['where'][$this->table . '.roles_id in (' . $item_id . ')'] = null;
             $optionnals['where'][$this->table . '.roles_id_child is null'] = null;
-    
+
             $optionnals['group_by'] = array(
-                $this->table.'.permit_id'
+                $this->table . '.permit_id'
             );
             $optionnals['order_by'] = array(
                 $menus . '.sort' => 'asc',
                 $permit . '.sort' => 'asc',
             );
-    
+
             $sql = (object) $this->get_sql(null, $optionnals);
             $sql->join($roles, $roles . '.id=' . $this->table . '.roles_id', 'left')
                 ->join($permit, $permit . '.id=' . $this->table . '.permit_id', 'left')
@@ -297,7 +352,7 @@ class Mdl_roles_control extends CI_Model
                 ->where($this->table . '.' . $this->fildstatus, null);
             $query = $sql->get();
         }
-        
+
         return $query;
     }
 

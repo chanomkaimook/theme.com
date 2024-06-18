@@ -602,6 +602,21 @@
                  }, setTimeoutValue);
              }
 
+             //  
+             // theme modal loading show/hide
+             // 
+             function _modalLoading() {
+                 if ($(modalloadingTheme).length) {
+                     $(modalloadingTheme).modal('show')
+                 }
+             }
+
+             function _modalLoading_clear() {
+                 if ($(modalloadingTheme).length) {
+                     $(modalloadingTheme).modal('hide')
+                 }
+             }
+
              // height value data table
              // fix for datatable height to fit
              function dataTableHeight() {

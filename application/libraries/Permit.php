@@ -54,7 +54,7 @@ class Permit
 		}
 
 		if ($staff_id) {
-			$query_permit = $this->control->get_dataStaff($staff_id);
+			$query_permit = $this->control->get_dataStaffNoRequest($staff_id);
 
 			if ($query_permit) {
 				foreach ($query_permit as $row_permit) {
@@ -67,7 +67,7 @@ class Permit
 							$roles_name_list[] =  "administrator";
 						}
 
-						$q_in_1 = $this->roles->get_dataRoles($role_id);
+						$q_in_1 = $this->roles->get_dataNorequest($role_id);
 
 						if ($q_in_1) {
 							foreach ($q_in_1 as $row_in_1) {
@@ -87,7 +87,7 @@ class Permit
 
 					if ($row_permit->PERMIT_ID) {
 						$permit_id = $row_permit->PERMIT_ID;
-						$row_in_2 = $this->permit->get_data($permit_id);
+						$row_in_2 = $this->permit->get_dataNorequest($permit_id);
 
 						if ($row_in_2) {
 

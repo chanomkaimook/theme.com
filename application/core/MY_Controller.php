@@ -198,7 +198,7 @@ class MY_Controller extends CI_Controller
 			if (!$data_access[$this->_method] && !count($data_need)) {
 				$result = true;
 			} else {
-				$dataarray = $this->permit->get_dataPermitSet($this->session->userdata($this->userlogin));
+				$dataarray = $this->permit->get_dataPermitSet();
 			}
 
 			//

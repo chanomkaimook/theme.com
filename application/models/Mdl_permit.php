@@ -63,7 +63,7 @@ class Mdl_permit extends CI_Model
         # code...
         $optionnal['select'] = 'count(' . $this->table . '.id) as total';
 
-        $data = (object) $this->get_data($id, $optionnal,'row');
+        $data = (object) $this->get_data($id, $optionnal, 'row');
         $num = $data->total;
 
         return $num;
@@ -84,17 +84,17 @@ class Mdl_permit extends CI_Model
      */
     public function get_dataJoinMenus(int $id = null, array $optionnal = null, string $type = "result")
     {
-        $optionnal['select'] = $this->table.".*,
+        $optionnal['select'] = $this->table . ".*,
         menus.name as MENUS_NAME,
         menus.name_us as MENUS_NAME_US
         ";
 
         $optionnal['order_by'] = array(
             'menus.sort' => 'asc',
-            $this->table.'.sort' => 'asc',
+            $this->table . '.sort' => 'asc',
         );
         $sql = (object) $this->get_sql($id, $optionnal);
-        $sql->join('menus',$this->table.'.menus_id=menus.id','left');
+        $sql->join('menus', $this->table . '.menus_id=menus.id', 'left');
         $query = $sql->get();
 
         if ($id) {
@@ -118,7 +118,7 @@ class Mdl_permit extends CI_Model
         $menus = $this->menu;
 
         if (!$optionnal['select']) {
-            $optionnal['select'] = $this->table.".*,
+            $optionnal['select'] = $this->table . ".*,
             " . $this->table . ".id as PERMIT_ID,
             " . $this->table . ".code as CODE,
             " . $this->table . ".name as NAME,
@@ -127,10 +127,10 @@ class Mdl_permit extends CI_Model
             " . $menus . ".name_us as MENUS_NAME_US";
         }
 
-        if(is_array($permit_id)){
+        if (is_array($permit_id)) {
             $permit_set = implode(",", $permit_id);
-            $optionnal['where'][$this->table . '.id in('.$permit_set.')'] = null;
-        }else{
+            $optionnal['where'][$this->table . '.id in(' . $permit_set . ')'] = null;
+        } else {
             $optionnal['where'][$this->table . '.id'] = $permit_id;
         }
 
@@ -144,6 +144,26 @@ class Mdl_permit extends CI_Model
         $query = $sql->get();
 
         return $query->$type();
+    }
+
+    /**
+     * get data and not use request (GET,POST,PUT,DELETE)
+     *
+     * @param integer|null $id = permit id
+     * @param string $type
+     * @return void
+     */
+    public function get_dataNorequest(int $id = null, string $type = "result")
+    {
+        if ($id) {
+            $sql = (object) $this->db->from($this->table)
+                ->where('id', $id);
+            $query = $sql->get();
+
+            return $query->$type();
+        }
+
+        return null;
     }
     //  =========================
     //  =========================

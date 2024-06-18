@@ -108,6 +108,25 @@ class Mdl_permit_control extends CI_Model
         return $query->$type();
     }
 
+    /**
+     * get data and not use request (GET,POST,PUT,DELETE)
+     *
+     * @param integer|null $id = staff id
+     * @param string $type
+     * @return void
+     */
+    public function get_dataStaffNoRequest(int $id = null, string $type = "result")
+    {
+        if (!$id) {
+            $id = $this->userlogin;
+        }
+        $sql = (object) $this->db->from($this->table)
+            ->where('staff_id', $id);
+        $query = $sql->get();
+
+        return $query->$type();
+    }
+
     //  *
     //  * CRUD
     //  * insert
