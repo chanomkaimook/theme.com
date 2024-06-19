@@ -10,9 +10,10 @@ class Error_404 extends MY_Controller
 
     public function index()
 	{
-        // $this->load->view('error_404');
-        $this->template->set_layout('lay_main');
+        $this->output->set_status_header('404');
+        $this->load->view('error_404');
+       /*  $this->template->set_layout('lay_main');
         $this->template->title('404');	
-        $this->template->build('error_404');
+        $this->template->build('error_404'); */
     }
 }
