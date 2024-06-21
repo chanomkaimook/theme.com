@@ -97,7 +97,7 @@ function textMoney(String $text = null, string $type = "float")
           $result = number_format((string)$string);
         }
         break;
-        
+
       default:
 
         if (filter_var($string, FILTER_VALIDATE_FLOAT)) {
@@ -120,7 +120,7 @@ function textMoney(String $text = null, string $type = "float")
  * @param string $type = int || float
  * @return void
  */
-function textFloat(String $text = null,int $number = 2)
+function textFloat(String $text = null, int $number = 2)
 {
   # code...
   $result = null;
@@ -128,13 +128,30 @@ function textFloat(String $text = null,int $number = 2)
   $string = textNull($text);
 
   if ($string) {
-    $result = number_format((float)$string, $number,null,"");
+    $result = number_format((float)$string, $number, null, "");
   }
 
   return $result;
 }
 
-// if (!function_exists('mb_ucfirst')) {
+/**
+ * convert data string to number
+ *  e.g 4,250.99 = 4250.99 
+ *      -5,112 = -5112 
+ * 
+ * @param [type] $str
+ * @return void
+ */
+function convertToNumber(string $str = null)
+{
+  if ($str) {
+    return preg_replace("/([^0-9\\.\\-])/i", "", $str);
+  } else {
+    return $str;
+  }
+}
+
+if (!function_exists('mb_ucfirst')) {
   function mb_ucfirst($str, $encoding = "UTF-8", $lower_str_end = false)
   {
     $first_letter = mb_strtoupper(mb_substr($str, 0, 1, $encoding), $encoding);
@@ -147,4 +164,4 @@ function textFloat(String $text = null,int $number = 2)
     $str = $first_letter . $str_end;
     return $str;
   }
-// }
+}
