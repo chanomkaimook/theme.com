@@ -12,6 +12,7 @@ user_guide_src/cilexer/pycilexer.egg-info/*
 
 #codeigniter 3
 application/logs/*
+asset/upload/*
 !application/logs/index.html
 !application/logs/.htaccess
 /vendor/
@@ -22,3 +23,4 @@ gulpfile.js
 /asset/image/*
 help_markdown.md
 guild.php
+.env

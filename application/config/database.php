@@ -76,6 +76,7 @@ $timezone = isset($_ENV['TIMEZONE']) ?  $_ENV['TIMEZONE'] : 'Asia/Bangkok';
 date_default_timezone_set($timezone);
 
 $db['default'] = array(
+	'env' => ENVIRONMENT,
 	'dsn'	=> '',
 	'hostname' => isset($_ENV['DB_HOSTNAME']) ?  $_ENV['DB_HOSTNAME'] : 'localhost',
 	'username' => isset($_ENV['DB_USERNAME']) ?  $_ENV['DB_USERNAME'] : 'root',
