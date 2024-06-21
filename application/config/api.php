@@ -21,7 +21,7 @@ $config['api_key_post_name'] = 'key';
 /**
  * Set API Timezone 
  */
-$config['api_timezone'] = 'Asia/Bangkok';
+$config['api_timezone'] = isset($_ENV['TIMEZONE']) ?  $_ENV['TIMEZONE'] : 'Asia/Bangkok';
 
 
 /**

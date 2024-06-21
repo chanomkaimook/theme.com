@@ -71,16 +71,6 @@ CREATE TABLE `ci_sessions` (
   `data` blob NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci COMMENT='data session system';
 
---
--- Dumping data for table `ci_sessions`
---
-
-INSERT INTO `ci_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES
-('k556c30ealqr0g7eqa1u6eqmoj61s5tp', '127.0.0.1', 1708741334, 0x5f5f63695f6c6173745f726567656e65726174657c693a313730383734313333343b),
-('1skh9b3ll8138jvmt5a5v10qrv8l90k4', '127.0.0.1', 1708741664, 0x5f5f63695f6c6173745f726567656e65726174657c693a313730383734313636343b),
-('3num98mlhtmhi013f5idnovukbq5so8t', '127.0.0.1', 1708742517, 0x5f5f63695f6c6173745f726567656e65726174657c693a313730383734323531373b),
-('v53bun5g8l16dn928bi4vn30kpf1ec5s', '127.0.0.1', 1708742547, 0x5f5f63695f6c6173745f726567656e65726174657c693a313730383734323531373b);
-
 -- --------------------------------------------------------
 
 --

@@ -1,5 +1,5 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
 /*
 | -------------------------------------------------------------------
@@ -72,22 +72,24 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 */
 $active_group = 'default';
 $query_builder = TRUE;
+$timezone = isset($_ENV['TIMEZONE']) ?  $_ENV['TIMEZONE'] : 'Asia/Bangkok';
+date_default_timezone_set($timezone);
 
 $db['default'] = array(
 	'dsn'	=> '',
-	'hostname' => 'localhost',
-	'username' => 'root',
-	'password' => '',
-	'database' => 'db_uppercase',
-	'port'     => '3306',
+	'hostname' => isset($_ENV['DB_HOSTNAME']) ?  $_ENV['DB_HOSTNAME'] : 'localhost',
+	'username' => isset($_ENV['DB_USERNAME']) ?  $_ENV['DB_USERNAME'] : 'root',
+	'password' => isset($_ENV['DB_PASSWORD']) ?  $_ENV['DB_PASSWORD'] : 'pass',
+	'database' => isset($_ENV['DB_DATABASE']) ?  $_ENV['DB_DATABASE'] : 'db',
+	'port' => isset($_ENV['DB_PORT']) ?  $_ENV['DB_PORT'] : '3306',
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',
 	'pconnect' => FALSE,
 	'db_debug' => (ENVIRONMENT !== 'production'),
 	'cache_on' => FALSE,
 	'cachedir' => 'dbcache',
-	'char_set' => 'utf8',
-	'dbcollat' => 'utf8_general_ci',
+	'char_set' => isset($_ENV['DB_CHAT_SET']) ?  $_ENV['DB_CHAT_SET'] : 'utf8',
+	'dbcollat' => isset($_ENV['DB_COLLATION']) ?  $_ENV['DB_COLLATION'] : 'utf8_general_ci',
 	'swap_pre' => '',
 	'encrypt' => FALSE,
 	'compress' => FALSE,

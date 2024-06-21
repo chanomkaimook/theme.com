@@ -331,11 +331,13 @@
                 // swal_setConfirm()
             )
             .then((result) => {
-                if (result.value && result.value !== true) {
-                    let remark = result.value.trim()
-                    confirm_delete(item_id, remark)
-                } else {
-                    confirm_delete(item_id)
+                if (!result.dismiss) {
+                    if (result.value && result.value !== true) {
+                        let remark = result.value.trim()
+                        confirm_delete(item_id, remark)
+                    } else {
+                        confirm_delete(item_id)
+                    }
                 }
             })
 

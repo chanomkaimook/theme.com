@@ -28,7 +28,7 @@
                             <th>Email</th>
                             <th>เบอร์ติดต่อ</th>
                             <th>ประเภท</th>
-                            <th>วันอัพเดต</th>
+                            <th>วันทำรายการ</th>
                             <th class="hidden-sm">Action</th>
                         </tr>
                     </thead>
@@ -117,7 +117,7 @@
                 },
                 {
                     "data": {
-                        _: 'USER_ACTIVE.display', // default show
+                        _: 'DATE_ACTIVE.display', // default show
                     }
                 },
                 {
