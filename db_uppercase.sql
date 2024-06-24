@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.1.4-dev+20220503.2d475d6680
+-- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost
--- Generation Time: May 24, 2024 at 10:33 AM
+-- Host: 127.0.0.1
+-- Generation Time: Jun 23, 2024 at 06:50 PM
 -- Server version: 10.4.28-MariaDB
--- PHP Version: 8.0.18
+-- PHP Version: 8.0.28
 
 CREATE DATABASE IF NOT EXISTS `db_uppercase` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 USE `db_uppercase`;
@@ -70,6 +70,13 @@ CREATE TABLE `ci_sessions` (
   `timestamp` int(10) UNSIGNED NOT NULL DEFAULT 0,
   `data` blob NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci COMMENT='data session system';
+
+--
+-- Dumping data for table `ci_sessions`
+--
+
+INSERT INTO `ci_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES
+('3kgudeiv9t28n8n5cte3bkdine9p1lir', '127.0.0.1', 1718809040, 0x5f5f63695f6c6173745f726567656e65726174657c693a313731383830393033363b757365725f636f64657c733a313a2231223b757365725f656d707c733a313a2230223b757365725f6e616d657c733a363a2261646d696e20223b6465706172746d656e747c4e3b6465706172746d656e745f69647c4e3b73656374696f6e7c4e3b73656374696f6e5f69647c4e3b617574686f72697a6174696f6e7c733a3133323a2265794a30655841694f694a4b563151694c434a68624763694f694a49557a49314e694a392e65794a7a6447466d5a6c39705a434936496a45694c434a4255456c6656456c4e525349364d5463784f4467774f5441304d48302e73776e73356762722d38424f33554c646c7746372d7165776b524844524f4a797469574431437655435445223b);
 
 -- --------------------------------------------------------
 
@@ -357,6 +364,7 @@ CREATE TABLE `staff` (
   `USERNAME` varchar(12) NOT NULL,
   `PASSWORD` text NOT NULL,
   `ARIA` varchar(8) DEFAULT NULL COMMENT 'ประเภทการตั้งระยะเวลา ban,assign	',
+  `PROFILE_IMG_PATH` text DEFAULT NULL COMMENT 'ที่อยู่รูปโปรไฟล์',
   `PERIOD_BEGIN` datetime DEFAULT NULL COMMENT 'ระยะเวลาเริ่มต้น',
   `PERIOD_END` datetime DEFAULT NULL COMMENT 'ระยะเวลาสิ้นสุด',
   `DATE_STARTS` datetime NOT NULL DEFAULT current_timestamp(),
@@ -371,8 +379,8 @@ CREATE TABLE `staff` (
 -- Dumping data for table `staff`
 --
 
-INSERT INTO `staff` (`ID`, `EMPLOYEE_ID`, `USERNAME`, `PASSWORD`, `ARIA`, `PERIOD_BEGIN`, `PERIOD_END`, `DATE_STARTS`, `DATE_UPDATE`, `USER_STARTS`, `USER_UPDATE`, `VERIFY`, `STATUS`) VALUES
-(1, 0, 'madmin', '157e0d1fecf41286b7e09898311c68d9', NULL, NULL, NULL, '2023-01-31 08:56:02', '2023-01-31 13:04:05', NULL, 1, '1', '1');
+INSERT INTO `staff` (`ID`, `EMPLOYEE_ID`, `USERNAME`, `PASSWORD`, `ARIA`, `PROFILE_IMG_PATH`, `PERIOD_BEGIN`, `PERIOD_END`, `DATE_STARTS`, `DATE_UPDATE`, `USER_STARTS`, `USER_UPDATE`, `VERIFY`, `STATUS`) VALUES
+(1, 0, 'madmin', '157e0d1fecf41286b7e09898311c68d9', NULL, NULL, NULL, NULL, '2023-01-31 08:56:02', '2023-01-31 13:04:05', NULL, 1, '1', '1');
 
 -- --------------------------------------------------------
 
