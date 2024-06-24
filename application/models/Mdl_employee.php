@@ -5,6 +5,7 @@ class Mdl_employee extends CI_Model
 
 {
     private $table = "employee";
+    private $path = FCPATH . 'asset/image/profile';
 
     public function __construct()
     {
@@ -135,22 +136,61 @@ class Mdl_employee extends CI_Model
     //  *
     public function update_data()
     {
-        $item_id = $this->input->post('item_id');
+        $item_id = $this->session->userdata('user_emp');
+        $date_update = date('Y-m-d H:i:s');
+        $user_update = $this->userlogin;
 
         $data = array(
-            'code'  => textShow($this->input->post('label_2')),
-            'name'  => textShow($this->input->post('label_6')),
-            'workstatus'  => $this->input->post('label_1'),
-
-            'date_update'  => date('Y-m-d H:i:s'),
-            'user_update'  => $this->session->userdata('user_code'),
+            'NAME' => textNull($this->input->post('name_th')),
+            'NAME_US' => textNull($this->input->post('name_us')),
+            'LASTNAME' => textNull($this->input->post('lastname_th')),
+            'LASTNAME_US' => textNull($this->input->post('lastname_us')),
+            'SECTION' => textNull($this->input->post('section_text')),
+            'POSITION' => textNull($this->input->post('position')),
+            'DATE_UPDATE' =>   $date_update,
+            'USER_UPDATE' =>   $user_update,
         );
+
+        // if upload images
+        if ($_FILES) {
+            $this->load->library('image');
+
+            $file = $_FILES;
+
+            // 12= icon 90px,image 360px
+            $upload_image =  $this->image->upload_image($file['image'], array($this->path),12);
+            if ($upload_image['error']) {
+                $result = array(
+                    'error'     => $upload_image['error'],
+                    'txt'       => $upload_image['txt']
+                );
+
+                return $result;
+            }
+
+            //
+            // upload image
+            $data_update_profile = array(
+                'profile_img_path'  => $upload_image['data'][0]
+            );
+            $this->load->model('mdl_staff');
+            $this->mdl_staff->update_data($data_update_profile,array('id'=>$user_update));
+
+            // update session img
+            $this->session->set_userdata('user_img',$upload_image['data'][0]);
+        }
 
         $this->db->where('id', $item_id);
         $this->db->update($this->table, $data);
 
+         // update session infomation
+         $user_name_new = whois($user_update);
+         $this->session->set_userdata('user_name',$user_name_new);
+         $this->session->set_userdata('section',$this->input->post('section_text'));
+
         // keep log
         log_data(array('update ' . $this->table, 'update', $this->db->last_query()));
+
 
         $result = array(
             'error'     => 0,
@@ -234,8 +274,8 @@ class Mdl_employee extends CI_Model
         $hidden_end = "";
 
         $sql = $this->db->from($this->table)
-            ->where('employee.id >',0);
-        
+            ->where('employee.id >', 0);
+
         if (textShow($request['hidden_datestart'])) {
             $hidden_start = textShow($request['hidden_datestart']);
         }

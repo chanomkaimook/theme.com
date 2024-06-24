@@ -28,10 +28,11 @@
     //  * update data 
     //  *
     async function async_update_data(item_id = null, data = []) {
-        let url = new URL(path('admin/ctl_user/update_data'), domain)
+        let url = new URL(path('profile/ctl_page/update_data'), domain)
 
         let body = new FormData();
         body.append('item_id', item_id)
+        body.append('section_text', $('#section option:selected').text())
 
         if(data.length){
             data.forEach(function(item,index){

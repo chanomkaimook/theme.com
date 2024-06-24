@@ -29,6 +29,7 @@ class Mdl_user extends CI_Model
             staff.ID as ID,
             staff.USERNAME as USERNAME,
             staff.VERIFY as VERIFY,
+            staff.PROFILE_IMG_PATH as IMG,
             staff.DATE_STARTS as DATE_STARTS,
             staff.DATE_UPDATE as DATE_UPDATE,
             staff.STATUS as STATUS,

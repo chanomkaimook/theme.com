@@ -85,9 +85,8 @@ class Ctl_login extends MY_Controller
                         'user_emp' => $result['data']->EMPLOYEE_ID,
                         'user_name' => $result['data']->NAME . " " . $result['data']->LASTNAME,
                         'department'    => $result['data']->DEPARTMENT,
-                        'department_id' => $result['data']->DEPARTMENT_ID,
                         'section'       => $result['data']->SECTION,
-                        'section_id'    => $result['data']->SECTION_ID,
+                        'user_img'    => $result['data']->IMG,
 
                         'authorization'         => $result['token'],
                     );

@@ -44,6 +44,9 @@
 
 
     $(document).ready(function() {
+        // create select2 for section 
+        $('[data-toggle=select2]').select2()
+
         //  =========================
         //  =========================
         //  Event
@@ -64,6 +67,17 @@
             let item_id = $(modal).find(form_hidden_id).val()
 
             let data = $(form_name).serializeArray()
+
+            if (f.find('[type=file]').length && f.find('[type=file]')[0].files.length) {
+                let countImage = f.find('[type=file]')[0].files.length
+                for (var i = 0; i < countImage; i++) {
+                    data.push({
+                        name: 'image[]',
+                        value: f.find('[type=file]')[0].files[i]
+                    })
+                }
+            }
+
             let func
 
             if (item_id) {
@@ -186,6 +200,22 @@
                         $('.form-group').find('.position').text(data.POSITION).end()
                     }
 
+                    if (data.IMG) {
+
+                        let base_img_profile = $('[name=base_img_profile]').val()
+                        let creatImagePreviews = creatImagePreview(base_img_profile + "/360/" + data.IMG)
+                        $('.member-card').find('#profileImage').html(creatImagePreviews).end()
+                        $(modal).find('#profileImage').html(creatImagePreviews).end()
+
+                        // element from index.php
+                        $('#image_temp').addClass('d-none')
+                        $('.profile-edit-toggle').removeClass('d-none')
+
+                    } else {
+                        //  show icon profile   
+                        showIconProfile(data.NAME_US, data.LASTNAME_US)
+                    }
+
                     $('.form-group')
                         .find('.name_th').text(data.NAME).end()
                         .find('.name_us').text(data.NAME_US).end()
@@ -194,11 +224,6 @@
                         .find('.username').text(data.USERNAME).end()
                         .find('.jstree-grid-container').html(data.PERMIT_HTML).end()
 
-                    //  show icon profile   
-                    showIconProfile(data.NAME_US, data.LASTNAME_US)
-
-                    // create role
-                    create_html_select2()
 
                     create_roles()
 
@@ -219,38 +244,25 @@
                     break
                 case 'edit':
                     $(modal_body_form)
-                        .find('[name=label_1]').val(data[0].WORKSTATUS).end()
+                        .find('[name=name_th]').val(data.NAME).end()
+                        .find('[name=lastname_th]').val(data.LASTNAME).end()
+                        .find('[name=name_us]').val(data.NAME_US).end()
+                        .find('[name=lastname_us]').val(data.LASTNAME_US).end()
+                        .find('[name=position]').val(data.POSITION).end()
+
+                    if (data.SECTION) {
+                        let select_id = $('#section option:contains(' + data.SECTION + ')').val()
+                        $('#section').val(select_id).triggerHandler('change')
+                    }
 
                     break
                 default:
                     break
             }
 
-            $(modal_view_name).modal()
-
             modalLayout(action)
         }
 
-    }
-
-    function create_html_select2() {
-        let url_role = new URL('admin/ctl_roles/get_dataRole', domain)
-        fetch(url_role)
-            .then(res => res.json())
-            .then(resp => {
-                let data_array = ""
-                let item_value
-                let item_id
-
-                resp.map(function(item) {
-                    item_value = textCapitalize(item.CODE)
-                    item_id = item.ID
-                    data_array += `<option value="${item_id}">${item_value}</option>`
-                })
-                $('[data-toggle=select2]')
-                    .html(data_array).select2()
-
-            })
     }
 
     function create_html_roles(text = null) {
@@ -276,16 +288,48 @@
         if (action == 'view') {
             $(modal_body_view).removeClass('d-none')
             $(modal_body_form).addClass('d-none')
-
-            btn_edit.show()
-            btn_submit.hide()
         } else {
             $(modal_body_view).addClass('d-none')
             $(modal_body_form).removeClass('d-none')
-
-            btn_edit.hide()
-            btn_submit.show()
         }
+    }
+
+    // *
+    // * Image profile
+    // *
+    //
+    // event select image to preview
+    if ($('#imgFile').length) {
+        imgFile.onchange = (evt) => {
+            let countImage = imgFile.files.length
+            if (countImage >= 1) {
+
+                // hide dom file image
+                imgFile.classList.add("d-none");
+
+                let html_image = ""
+                html_image = creatImagePreview(URL.createObjectURL(imgFile.files[0]))
+                image_temp.innerHTML = html_image
+
+                // element from index.php
+                $('#image_temp').removeClass('d-none')
+                $('.profile-edit-toggle').addClass('d-none')
+            } else {
+                image_temp.innerHTML = ""
+            }
+        }
+    }
+
+    //
+    // create preview image
+    function creatImagePreview(image = "") {
+        let html_image = ""
+        if (image) {
+            html_image += `<div style="background:url('${image}') no-repeat;
+            background-size: cover;background-position: center;" class="rounded-circle h-100" ></div>`
+        }
+
+        return html_image
     }
 
     //  =========================
@@ -326,6 +370,9 @@
     //  * #async_get_data() = script_crud.php
     //  *
     function edit_data(item_id = 0) {
+
+        $(modal_view_name).modal()
+
         // item_id = 0
         async_get_data(item_id)
             .then((resp) => {
@@ -346,11 +393,8 @@
     function dataReload(reload = true) {
         modalHide()
 
-        if (reload == false) {
-            $(datatable_name).DataTable().ajax.reload(false)
-        } else {
-            $(datatable_name).DataTable().ajax.reload()
-        }
+        // from index.php
+        getstarted()
     }
 
     //  *
@@ -365,6 +409,12 @@
         form.forEach((item, key) => {
             document.getElementsByTagName('form')[key].reset();
         })
+
+        $('[data-toggle=select2]').val(null).trigger('change')
+
+        // read modal image profile lastime
+        let profile_lastime = $('#profileImage').html()
+        $('#image_temp').html(profile_lastime)
     }
 
     //  *

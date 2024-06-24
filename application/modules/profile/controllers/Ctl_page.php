@@ -12,8 +12,8 @@ class Ctl_page extends MY_Controller
     public function __construct()
     {
         parent::__construct();
-        $modelname = 'mdl_page';
-        $this->load->model(array('mdl_page'));
+        $modelname = 'mdl_employee';
+        $this->load->model(array('mdl_employee'));
 
         $this->middleware(
             array(
@@ -44,6 +44,8 @@ class Ctl_page extends MY_Controller
         $this->load->library('roles');
         $array_permit = $this->roles->get_dataJS();
         $data['permit'] = $array_permit;
+        $sections = $this->db->from('section')->where('status_offview is null',null,false)->get();
+        $data['sections'] = $sections->result();
 
         $this->template->set_layout('lay_main');
         $this->template->title($this->title);

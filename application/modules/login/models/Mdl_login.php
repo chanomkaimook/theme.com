@@ -25,6 +25,7 @@ class mdl_login extends CI_Model
 
                 staff.ID as ID,
                 staff.USERNAME as USERNAME,
+                staff.PROFILE_IMG_PATH as IMG,
                 staff.DATE_STARTS as DATE_STARTS,
                 section.ID as SECTION_ID,
                 department.ID as DEPARTMENT_ID,

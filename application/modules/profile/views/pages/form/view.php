@@ -3,9 +3,19 @@
     <div class="col-md-4">
         <div class="member-card text-center">
             <div class="member-thumb mb-2 mx-auto">
+                <?php
+                if ($this->session->userdata('user_img')) {
+                ?>
+                    <div id="profileImage" class="mx-auto">
 
-                <div id="profileImage" data-profileImage="1" class="rounded-circle bordered mx-auto"> </div>
-                <!-- <img src="<?= base_url('asset/images/users/avatar-6.jpg'); ?>" class="rounded-circle img-thumbnail" alt="profile-image"> -->
+                    </div>
+                <?php
+                } else {
+                ?>
+                    <div id="profileImage" data-profileImage="1" class="rounded-circle bordered mx-auto"></div>
+                <?php
+                }
+                ?>
             </div>
             <div class="form-group">
                 <h4 class="mb-1">
@@ -49,7 +59,7 @@
 
         <div class="row">
             <div class="form-group col-md-12">
-                <label for=""><?= mb_ucfirst($this->lang->line('form_roles_label_rolechild')) ?></label>
+                <label class="text-capitalize"><?= mb_ucfirst($this->lang->line('form_roles_label_rolechild')) ?></label>
                 <div class="card-text d-flex user_roles gap-1">
                     <!-- <div class="btn btn-light rounded-pill px-2">บัญชี</div> -->
                 </div>
