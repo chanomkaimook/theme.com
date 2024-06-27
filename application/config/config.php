@@ -536,10 +536,17 @@ $config['modules_locations'] = array(APPPATH . 'modules/' => '../modules/', );
 /**
  * set paramiter for project
  */
+//  set path
+$config['base_profile'] = $config['base_url']."/asset/image/profile/";
+$config['base_profile_90'] = $config['base_url']."/asset/image/profile/90/";
+$config['base_profile_360'] = $config['base_url']."/asset/image/profile/360/";
+$config['base_img'] = $config['base_url']."/myasset/";
+
+// HTML
+$config['favicon_path'] = $config['base_img']."/favicon/favicon.ico";
+
 // set id master admin
 $config['masteradmin_id'] = array(1);
+
+// set vat for calculate
 $config['vat_num'] = 7;
-$config['base_profile'] = "/asset/image/profile/";
-$config['base_profile_90'] = "/asset/image/profile/90/";
-$config['base_profile_360'] = "/asset/image/profile/360/";
-$config['base_upload'] = "asset/upload/";
