@@ -203,29 +203,31 @@
                  </style>
                  <li class="dropdown notification-list">
                      <a class="nav-link dropdown-toggle nav-user mr-0 waves-effect waves-light" data-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
-                         <div class="d-flex">
-                             <?php
-                                if ($this->session->userdata('user_img')) {
-                                ?>
-                                 <!-- <img src="<?= base_url('asset/images/users/avatar-1.jpg') ?>" class="rounded-circle"> -->
-
+                         <?php
+                            if ($this->session->userdata('user_img')) {
+                            ?>
+                             <!-- <img src="<?= base_url('asset/images/users/avatar-1.jpg') ?>" class="rounded-circle"> -->
+                             <div class="d-flex">
                                  <div style="background:url('<?= $this->config->item('base_profile_90') . $this->session->userdata('user_img'); ?>') no-repeat;
                                     background-size: cover;background-position: center; width:32px;height:32px;margin-top: 9px;" class="rounded-circle icons-user-img"></div>
-
-                             <?php
-                                } else {
-                                ?>
-                                 <span class="icon-user"></span>
-                             <?php
-                                }
-                                ?>
+                                 <span class="pro-user-name ml-1">
+                                     <?php
+                                        echo $this->session->userdata('user_name');
+                                        ?> <i class="mdi mdi-chevron-down"></i>
+                                 </span>
+                             </div>
+                         <?php
+                            } else {
+                            ?>
+                             <span class="icon-user"></span>
                              <span class="pro-user-name ml-1">
                                  <?php
                                     echo $this->session->userdata('user_name');
                                     ?> <i class="mdi mdi-chevron-down"></i>
                              </span>
-
-                         </div>
+                         <?php
+                            }
+                            ?>
                      </a>
                      <div class="dropdown-menu dropdown-menu-right profile-dropdown ">
                          <!-- item-->
