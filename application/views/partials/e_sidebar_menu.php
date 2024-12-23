@@ -92,7 +92,11 @@ $site_url = site_url();
                         <span class="menu-arrow"></span>
                     </a>
                     <ul class="nav-second-level <?= $css_dashboard_ul_collapse; ?>" aria-expanded="false">
-                        <li class="<?= $css_dashboard[0]; ?>"><a href="<?= $site_url . $_menu_dashboard[0][1] ?>" data-show="<?= $_menu_dashboard[0][0] ?>"><?= $_menu_dashboard[0][0] ?></a></li>
+                        <li class="<?= $css_dashboard[0]; ?>">
+                            <a href="<?= $site_url . $_menu_dashboard[0][1] ?>" data-show="<?= $_menu_dashboard[0][0] ?>">
+                                <span><?= $_menu_dashboard[0][0] ?></span>
+                            </a>
+                        </li>
                     </ul>
                 </li>
 
@@ -133,13 +137,17 @@ $site_url = site_url();
                 }
                 ?>
                 <li>
-                    <a href="#">
+                    <a href="javascript: void(0);">
                         <i class="fas fa-user"></i>
                         <span><?= mb_ucfirst($this->lang->line('__menu_profile')) ?></span>
                         <span class="menu-arrow"></span>
                     </a>
                     <ul class="nav-second-level <?= $css_profile_ul_collapse; ?>" aria-expanded="false">
-                        <li><a href="<?= $site_url . $_menu_profile[0][1] ?>" data-show="<?= $_menu_profile[0][0] ?>"><?= $_menu_profile[0][0] ?></a></li>
+                        <li>
+                            <a href="<?= $site_url . $_menu_profile[0][1] ?>" data-show="<?= $_menu_profile[0][0] ?>">
+                                <span><?= $_menu_profile[0][0] ?></span>
+                            </a>
+                        </li>
                     </ul>
                 </li>
 
@@ -151,6 +159,7 @@ $site_url = site_url();
                 $_menu_admin[] = array(mb_ucfirst($this->lang->line('__menu_settingroles')), "admin/ctl_roles");
                 $_menu_admin[] = array(mb_ucfirst($this->lang->line('__menu_employee')), "staff/ctl_page");
                 $_menu_admin[] = array(mb_ucfirst($this->lang->line('__menu_blank')), "page/ctl_page");
+                $_menu_admin[] = array(mb_ucfirst($this->lang->line('__menu_blank')), "page/ctl_page/pagestab");
 
                 if (check_for_show_menu("admin", $array_menu_sub)) {
                     $css_admin_li = "";
@@ -169,11 +178,12 @@ $site_url = site_url();
                         <span class="menu-arrow"></span>
                     </a>
                     <ul class="nav-second-level <?= $css_admin_ul_collapse; ?> text-capitalize" aria-expanded="false">
-                        <li><a href="<?= $site_url . $_menu_admin[0][1] ?>" data-show="<?= mb_ucfirst($this->lang->line('__menu_register')) ?>"><?= mb_ucfirst($this->lang->line('__menu_register')) ?></a></li>
-                        <li><a href="<?= $site_url . $_menu_admin[1][1] ?>" data-show="<?= mb_ucfirst($this->lang->line('__menu_users')) ?>"><?= mb_ucfirst($this->lang->line('__menu_users')) ?></a></li>
-                        <li><a href="<?= $site_url . $_menu_admin[2][1] ?>" data-show="setting roles"><?= mb_ucfirst($this->lang->line('__menu_settingroles')) ?></a></li>
-                        <li><a href="<?= $site_url . $_menu_admin[3][1] ?>" data-show="<?= mb_ucfirst($this->lang->line('__menu_employee')) ?>"><?= mb_ucfirst($this->lang->line('__menu_employee')) ?></a></li>
-                        <li><a href="<?= $site_url . $_menu_admin[4][1] ?>" data-show="<?= mb_ucfirst($this->lang->line('__menu_blank')) ?>"><?= mb_ucfirst($this->lang->line('__menu_blank')) ?></a></li>
+                        <li><a href="<?= $site_url . $_menu_admin[0][1] ?>" data-show="<?= mb_ucfirst($this->lang->line('__menu_register')) ?>"><span><?= mb_ucfirst($this->lang->line('__menu_register')) ?></span></a></li>
+                        <li><a href="<?= $site_url . $_menu_admin[1][1] ?>" data-show="<?= mb_ucfirst($this->lang->line('__menu_users')) ?>"><span><?= mb_ucfirst($this->lang->line('__menu_users')) ?></span></a></li>
+                        <li><a href="<?= $site_url . $_menu_admin[2][1] ?>" data-show="setting roles"><span><?= mb_ucfirst($this->lang->line('__menu_settingroles')) ?></span></a></li>
+                        <li><a href="<?= $site_url . $_menu_admin[3][1] ?>" data-show="<?= mb_ucfirst($this->lang->line('__menu_employee')) ?>"><span><?= mb_ucfirst($this->lang->line('__menu_employee')) ?></span></a></li>
+                        <li><a href="<?= $site_url . $_menu_admin[4][1] ?>" data-show="<?= mb_ucfirst($this->lang->line('__menu_blank')) ?>"><span><?= mb_ucfirst($this->lang->line('__menu_blank')) ?></span></a></li>
+                        <li><a href="<?= $site_url . $_menu_admin[5][1] ?>" data-show="หน้าตั้งต้น Tab">หน้าตั้งต้น Tab</a></li>
                     </ul>
                 </li>
 

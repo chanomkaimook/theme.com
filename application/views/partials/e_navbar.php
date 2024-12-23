@@ -386,11 +386,17 @@
 
              // url module/controller
              if (window.location.hostname == 'localhost' || window.location.hostname == '127.0.0.1') {
-                 url_moduleControl = window.location.pathname.split('/')[1] + '/' + window.location.pathname.split('/')[2] + '/' +
-                     window.location.pathname.split('/')[3]
-             } else {
-                 url_moduleControl = `${url_split[1]}/${url_split[2]}`;
-             }
+                 
+                 url_moduleControl = window.location.pathname.split('/')[1] + '/' + window.location.pathname.split('/')[2]
+                 let path3
+                  if (window.location.pathname.split('/')[3]) {
+                     url_moduleControl = window.location.pathname.split('/')[1] + '/' + window.location.pathname.split('/')[2] + '/' +
+                     path3
+                  }
+ 
+              } else {
+                  url_moduleControl = window.location.pathname;
+              }
              // =======
              // =======
              let domain = window.location.protocol + '//' + window.location.hostname + '/'

@@ -70,6 +70,20 @@ class Ctl_page extends MY_Controller
         // $ben_stop = $this->benmark->stop();
         // echo "Timing controller = " . $ben_stop;
     }
+
+    public function pagestab()
+    {
+        // $this->load->library('benmark');
+        // $ben_start = $this->benmark->start();
+
+        $this->template->set_layout('lay_datatable');
+        $this->template->title($this->title);
+        $this->template->build('pagestab/index');
+
+
+        // $ben_stop = $this->benmark->stop();
+        // echo "Timing controller = " . $ben_stop;
+    }
     /**
      *
      * get data to datatable

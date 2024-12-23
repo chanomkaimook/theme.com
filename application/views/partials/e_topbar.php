@@ -7,7 +7,7 @@
 </style>
 <div id="topbar" class="row">
     <div class="col-12">
-        <div class="page-title-box d-none d-sm-block">
+        <div class="page-title-box">
             <div class="page-title-right">
                 <ol class="breadcrumb m-0">
                     <li class="breadcrumb-item"><a href="javascript: void(0);"></a></li>
